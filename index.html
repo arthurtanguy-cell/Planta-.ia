@@ -445,7 +445,7 @@ html.bigtext .band:not(#carte),html.bigtext .stepintro,html.bigtext .steps,html.
     <div class="idshots" id="idShots"></div>
     <div class="chips"><button type="button" id="idAdd">📷 Ajouter une photo</button><button type="button" class="pri" id="idGo" disabled>Identifier</button></div>
     <input type="file" id="idFile" accept="image/*" capture="environment" multiple hidden>
-    <details class="adv" id="idSet"><summary>Moteur d’identification</summary><div class="frow"><label>Moteur<select id="idEngine"><option value="plantnet">Pl@ntNet (clé gratuite)</option><option value="claude">Claude (réglages de l’assistant)</option></select></label><label id="idKeyRow">Clé API Pl@ntNet<input id="idKey" type="password" autocomplete="off" placeholder="2b10…"></label></div>
+    <p class="okk" id="idShared" hidden>Identification Pl@ntNet prête : aucune clé à saisir.</p><details class="adv" id="idSet"><summary>Moteur d’identification</summary><div class="frow"><label>Moteur<select id="idEngine"><option value="plantnet">Pl@ntNet (clé gratuite)</option><option value="claude">Claude (réglages de l’assistant)</option></select></label><label id="idKeyRow">Clé API Pl@ntNet<input id="idKey" type="password" autocomplete="off" placeholder="2b10…"></label></div>
       <p class="note">Pl@ntNet : créez un compte gratuit sur my.plantnet.org, puis dans « Settings » cochez « expose my API key » et ajoutez l’adresse de votre site dans les domaines autorisés. L’usage non commercial est gratuit jusqu’à 500 identifications par jour. La clé reste dans ce navigateur.</p></details>
     <p class="note">Pas de photo sous la main ? Ajoutez une plante que vous connaissez : <select id="idMan" aria-label="Plante indicatrice"></select> <button type="button" id="idManB">Ajouter</button></p></div>
    <div class="card"><h4>2. Résultat</h4><div id="idResult"><p class="empty">Ajoutez une photo puis cliquez sur « Identifier ».</p></div></div></div>
@@ -3136,6 +3136,11 @@ Claude (réglages de l’assistant)	Claude (instellingen van de assistent)	Claud
 voir l’onglet « Identification	zie het tabblad « Identificatie	see the “Identification
 Ajoutez une photo puis cliquez sur « Identifier	Voeg een foto toe en klik op « Herkennen	Add a photo then click “Identify
 Éliminez les plantes invasives relevées (Renouée asiatique	Verwijder de genoteerde invasieve planten (Aziatische duizendknoop	Remove the invasive plants recorded (Asian knotweed
+Identification Pl@ntNet prête : aucune clé à saisir	Pl@ntNet-herkenning klaar: geen sleutel nodig	Pl@ntNet identification ready: no key needed
+facultatif : clé partagée du site active	optioneel: gedeelde sleutel van de site actief	optional: the site’s shared key is active
+Encore # identifications disponibles aujourd’hui	Vandaag nog # herkenningen beschikbaar	# identifications left today
+le quota quotidien d’identifications du site est atteint	Het dagelijkse herkenningsquotum van de site is bereikt	the site’s daily identification quota has been reached
+réessayez demain, ou ajoutez votre propre clé Pl@ntNet dans « Moteur d’identification »	probeer morgen opnieuw, of voeg uw eigen Pl@ntNet-sleutel toe bij « Herkenningsdienst »	try again tomorrow, or add your own Pl@ntNet key under “Identification engine”
 </script>
 <footer class="band foot"><div class="in">
   <b>Sources de données</b>
@@ -6480,19 +6485,22 @@ const IND=[
  ['Veronica persica','Véronique de Perse','f','','r',0,'',0,'Sol cultivé fertile.']];
 const indOf=latin=>{const w=String(latin||'').replace(/ ×/,'').split(/\s+/);const two=w.slice(0,2).join(' ');return IND.find(x=>x[0]===two)||IND.find(x=>!x[0].includes(' ')&&x[0]===w[0])};
 S.idents=[];const IDS={shots:[],busy:false,res:null};
+/* ===== CLÉ Pl@ntNet PARTAGÉE : collez votre clé entre les apostrophes ci-dessous ===== */
+const PLANTNET_CLE_DU_SITE='';
+/* ==================================================================================== */
 const IDSET={engine:'plantnet',key:''};try{Object.assign(IDSET,JSON.parse(localStorage.getItem('plantania:idset')||'{}'))}catch(e){}
 const ORG={auto:'Automatique',leaf:'Feuille',flower:'Fleur',fruit:'Fruit',bark:'Écorce',habit:'Plante entière'};
 async function shrink(file,max){const img=await new Promise((ok,ko)=>{const i=new Image();i.onload=()=>ok(i);i.onerror=ko;i.src=URL.createObjectURL(file)});const k=Math.min(1,max/Math.max(img.width,img.height)),c=document.createElement('canvas');c.width=Math.round(img.width*k);c.height=Math.round(img.height*k);c.getContext('2d').drawImage(img,0,0,c.width,c.height);
   return{url:c.toDataURL('image/jpeg',0.82),blob:await new Promise(ok=>c.toBlob(ok,'image/jpeg',0.82))}}
 function renderShots(){$('#idShots').innerHTML=IDS.shots.length?IDS.shots.map((s,i)=>`<figure><img src="${s.url}" alt="Photo ${i+1}"><select data-org="${i}" aria-label="Partie photographiée">${opts(ORG,s.organ)}</select><button type="button" data-rmshot="${i}" aria-label="Retirer la photo">×</button></figure>`).join(''):'<p class="note">Une seule plante par identification, en gros plan et bien nette : feuille, fleur, fruit ou écorce (jusqu’à 5 photos de la même plante).</p>';
-  $('#idGo').disabled=!IDS.shots.length||IDS.busy;$('#idEngine').value=IDSET.engine;$('#idKey').value=IDSET.key;$('#idKeyRow').hidden=IDSET.engine!=='plantnet'}
+  $('#idGo').disabled=!IDS.shots.length||IDS.busy;$('#idEngine').value=IDSET.engine;$('#idKey').value=IDSET.key;$('#idKeyRow').hidden=IDSET.engine!=='plantnet';$('#idKey').placeholder=PLANTNET_CLE_DU_SITE?'facultatif : clé partagée du site active':'2b10…';const sh=$('#idShared');if(sh)sh.hidden=!(PLANTNET_CLE_DU_SITE&&IDSET.engine==='plantnet')}
 async function identify(){if(!IDS.shots.length)return;IDS.busy=true;renderShots();$('#idResult').innerHTML='<p class="state">Identification en cours…</p>';
   try{let C=[];
-    if(IDSET.engine==='plantnet'){if(!IDSET.key)throw new Error('ajoutez votre clé Pl@ntNet dans « Moteur d’identification » (gratuite, voir l’explication)');
+    if(IDSET.engine==='plantnet'){const KEY=IDSET.key||PLANTNET_CLE_DU_SITE;if(!KEY)throw new Error('ajoutez votre clé Pl@ntNet dans « Moteur d’identification » (gratuite, voir l’explication)');
       const fd=new FormData();IDS.shots.forEach(s=>{fd.append('images',s.blob,'photo.jpg');fd.append('organs',s.organ)});
-      const r=await fetch(`https://my-api.plantnet.org/v2/identify/all?api-key=${encodeURIComponent(IDSET.key)}&lang=fr&include-related-images=false`,{method:'POST',body:fd});
-      const j=await r.json().catch(()=>({}));if(r.status===404)throw new Error('aucune espèce reconnue : essayez une photo plus nette ou d’une autre partie de la plante');if(!r.ok)throw new Error((j.message||('erreur '+r.status))+(r.status===401||r.status===403?' : vérifiez la clé et le domaine autorisé':''));
-      C=(j.results||[]).slice(0,5).map(x=>({latin:x.species.scientificNameWithoutAuthor,fr:(x.species.commonNames||[])[0]||'',score:x.score,family:(x.species.family||{}).scientificNameWithoutAuthor||''}))}
+      const r=await fetch(`https://my-api.plantnet.org/v2/identify/all?api-key=${encodeURIComponent(KEY)}&lang=fr&include-related-images=false`,{method:'POST',body:fd});
+      const j=await r.json().catch(()=>({}));if(r.status===429)throw new Error('le quota quotidien d’identifications du site est atteint ; réessayez demain, ou ajoutez votre propre clé Pl@ntNet dans « Moteur d’identification »');if(r.status===404)throw new Error('aucune espèce reconnue : essayez une photo plus nette ou d’une autre partie de la plante');if(!r.ok)throw new Error((j.message||('erreur '+r.status))+(r.status===401||r.status===403?' : vérifiez la clé et le domaine autorisé':''));
+      IDS.left=j.remainingIdentificationRequests;C=(j.results||[]).slice(0,5).map(x=>({latin:x.species.scientificNameWithoutAuthor,fr:(x.species.commonNames||[])[0]||'',score:x.score,family:(x.species.family||{}).scientificNameWithoutAuthor||''}))}
     else{if(AST.mode==='local')throw new Error('activez Claude dans les réglages de l’assistant (⚙), ou choisissez Pl@ntNet');
       const body={model:AST.model||'claude-sonnet-5-5',max_tokens:700,system:'Tu es botaniste en Belgique. Identifie la plante des photos. Réponds uniquement en JSON : {"candidats":[{"latin":"Genre espèce","fr":"nom français","score":0.0}],"remarque":"phrase courte"} avec au plus 4 candidats, scores entre 0 et 1.',
         messages:[{role:'user',content:[...IDS.shots.slice(0,3).map(s=>({type:'image',source:{type:'base64',media_type:'image/jpeg',data:s.url.split(',')[1]}})),{type:'text',text:'Partie photographiée : '+IDS.shots.map(s=>ORG[s.organ]).join(', ')+'. Quelle est cette plante ?'}]}]};
@@ -6506,7 +6514,7 @@ function indTxt(I){if(!I)return'';const t=[];if(I[2])t.push({d:'sol sec',f:'sol 
 function renderIdResult(){const C=IDS.res||[];if(!C.length){$('#idResult').innerHTML='<p class="koo">Aucune espèce reconnue. Essayez une photo plus nette, ou d’une autre partie de la plante.</p>';return}
   $('#idResult').innerHTML=`<ol class="idcands">${C.map((c,i)=>{const I=indOf(c.latin),inPL=PL.find(p=>p.l.split(' ').slice(0,2).join(' ')===c.latin.split(' ').slice(0,2).join(' '));
     return `<li><div class="ph sm" data-ph="${esc(c.latin)}" data-n="${esc(c.fr)}" data-small="1"></div><div><b>${esc(c.fr||c.latin)}</b> <i class="src">${esc(c.latin)}</i><div class="idsc"><i style="width:${Math.round(c.score*100)}%"></i></div><small>${Math.round(c.score*100)} % de vraisemblance${I?` · <span class="okk">plante indicatrice : ${esc(indTxt(I))}</span>`:''}${inPL?' · présente dans la bibliothèque de plantes':''}</small></div><button type="button" class="${i?'':'pri'}" data-idok="${i}">C’est elle : ajouter au relevé</button></li>`}).join('')}</ol>
-   ${IDS.note?`<p class="note">${esc(IDS.note)}</p>`:''}<p class="note">Vérifiez toujours le résultat en comparant avec les photos de l’espèce. Moins de 30 % : identification incertaine.</p>`;watchPhotos($('#idResult'))}
+   ${IDS.note?`<p class="note">${esc(IDS.note)}</p>`:''}${IDS.left!=null&&IDS.left<100?`<p class="note">Encore ${IDS.left} identifications disponibles aujourd’hui.</p>`:''}<p class="note">Vérifiez toujours le résultat en comparant avec les photos de l’espèce. Moins de 30 % : identification incertaine.</p>`;watchPhotos($('#idResult'))}
 function addIdent(o){S.idents=S.idents.filter(x=>x.latin!==o.latin);S.idents.push({abund:2,...o,date:Date.now()});renderIdents();renderV4();toast(`${o.fr||o.latin} : ajoutée au relevé du terrain`)}
 function idDiag(){const W={1:1,2:2,3:3},out={n:0,list:[]};let we=0,se=0,wp=0,sp=0,wn=0,sn=0,tass=0,hot=0,ce=0,cp=0,cn=0;const lum={s:0,m:0,o:0};
   S.idents.forEach(x=>{const I=indOf(x.latin);if(!I)return;const w=W[x.abund]||2;out.n++;out.list.push([x,I]);
