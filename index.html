@@ -323,17 +323,46 @@ section.band.folded .in>*:not(.shead){display:none!important}section.band.folded
 .cohlist{list-style:none;padding:0;margin:0;display:grid;gap:10px}.cohlist li{border-left:4px solid #9e9e9e;padding:6px 10px;border-radius:6px;background:var(--panel)}.cohlist li.ok{border-color:#2e7d32}.cohlist li.mid{border-color:#e65100}.cohlist li.tip{border-color:#1565c0}.cohlist button{margin-top:6px;min-height:32px;font-size:13px}
 .planimg{position:absolute;max-width:none!important;max-height:none!important;transform-origin:50% 50%;pointer-events:none;user-select:none}
 .vh.mv.plmv{background:#3949ab}.vh.mv.plrot{background:#6a1b9a}
-.lockfab{position:absolute;z-index:800;left:10px;top:84px;width:34px;height:34px;border-radius:6px;border:2px solid rgba(0,0,0,.25);background:#fff;font-size:17px;line-height:1;cursor:pointer;padding:0;box-shadow:0 1px 4px rgba(0,0,0,.3)}
-.mapwrap.locked{box-shadow:inset 0 0 0 3px #e3a018}.mapwrap.locked .lockfab{background:#fff4d6;border-color:#e3a018}
+.lockfab{position:absolute;z-index:800;left:10px;top:84px;width:34px;height:34px;border-radius:6px;border:2px solid rgba(0,0,0,.25);background:var(--card);color:var(--ink);font-size:17px;line-height:1;cursor:pointer;padding:0;box-shadow:0 1px 4px rgba(0,0,0,.3)}
+.mapwrap.locked{box-shadow:inset 0 0 0 3px #e3a018}.mapwrap.locked .lockfab{background:light-dark(#fff4d6,#3a2c12);border-color:#e3a018}
 .mapblank #map{background:#fff}
 .planpanel{margin:.6rem 0;padding:.7rem .9rem}.planpanel h4{margin:0 0 .2rem}
 .planpanel .plrow{display:flex;flex-wrap:wrap;gap:.45rem .9rem;align-items:center;margin:.45rem 0}
 .planpanel input[type=number]{width:6.5em;margin-left:.3em}.planpanel .nudge button{min-width:2.2em}
-.planpanel .calbox{background:#fff8e1;border-left:4px solid #e3a018;padding:.5rem .7rem;border-radius:6px;margin:.4rem 0}
-.planpanel button.pri{background:var(--accent,#2e7d32);color:#fff;border-color:transparent}.planpanel button.danger{color:#b71c1c}
+.planpanel .calbox{background:light-dark(#fff8e1,#3a2c12);border-left:4px solid #e3a018;padding:.5rem .7rem;border-radius:6px;margin:.4rem 0}
+.planpanel button.pri{background:var(--leaf);color:var(--onleaf);border-color:transparent}.planpanel button.danger{color:light-dark(#b71c1c,#ff8a80)}
 .acccard .accopts{display:flex;flex-direction:column;gap:.35rem;margin:.5rem 0}
 .acccard .sub{display:flex;flex-wrap:wrap;gap:.6rem;margin:0 0 .2rem 1.6rem}.acccard .sub input{width:6em;margin-left:.3em}
-.acccard .accres{background:#eef5ea;border-radius:8px;padding:.6rem .8rem;margin:.5rem 0}
+.acccard .accres{background:var(--panel);color:var(--ink);border-radius:8px;padding:.6rem .8rem;margin:.5rem 0}
+.audsw{display:inline-flex;border:1px solid rgba(255,255,255,.5);border-radius:999px;overflow:hidden;margin-right:.5rem;vertical-align:middle}
+.audsw button{background:transparent;color:#fff;border:0;border-radius:0;padding:.45rem .9rem;font-weight:500;cursor:pointer}
+.audsw button[aria-pressed=true]{background:#fff;color:#1f4d2b}
+html.pub #planImp,html.pub #coords,html.pub #mWizard,html.pub #tabs{display:none!important}
+.envbox{display:grid;grid-template-columns:repeat(auto-fill,minmax(250px,1fr));gap:10px;margin-bottom:12px;align-items:start}
+.envbox .envq{padding:12px 14px;margin:0}.envbox .envq:first-child{grid-column:1/-1}
+.envtxt{margin-bottom:12px}
+.tutobox .lnk{background:none;border:0;text-decoration:underline;padding:.2rem .3rem;color:var(--mute);cursor:pointer}.envtxt textarea{width:100%;box-sizing:border-box;font:inherit;margin:.4rem 0}.envtxt .okp{background:var(--panel);border-radius:8px;padding:.5rem .7rem}
+#envMic[aria-pressed=true]{background:light-dark(#fdecea,#3a1b18);border-color:#d7263d}
+.envq h4{display:flex;flex-wrap:wrap;gap:.2rem .5rem;align-items:baseline;margin:0 0 .45rem;font-size:1rem}.envq h4 small{flex-basis:100%;padding-left:2.1em}.envq h4 small{font-weight:400;color:var(--mute)}
+.qn{display:inline-grid;place-items:center;width:1.6em;height:1.6em;border-radius:50%;background:var(--leaf);color:var(--onleaf);font-size:.85em;flex:none}
+.envo{display:flex;flex-wrap:wrap;gap:.35rem}.envb{border-radius:999px;padding:.3rem .7rem;font-size:.92em;border:1px solid var(--line);background:var(--card);color:var(--ink);cursor:pointer;text-align:left;font:inherit}
+.envb[aria-pressed=true]{background:var(--leaf);color:var(--onleaf);border-color:var(--leaf)}
+.envsum{grid-column:1/-1;background:var(--panel);color:var(--ink)}
+.aiideas .thumbs{display:inline-flex;gap:.4rem;flex-wrap:wrap}.aiideas .th{position:relative}.aiideas .th img{width:64px;height:64px;object-fit:cover;border-radius:8px;display:block}
+.aiideas .th button{position:absolute;top:-6px;right:-6px;width:22px;height:22px;border-radius:50%;padding:0;line-height:1}
+.filebtn{display:inline-flex;align-items:center;gap:.4rem;border:1px solid var(--line);border-radius:8px;padding:.5rem .9rem;cursor:pointer;background:var(--card);color:var(--ink)}
+.aiideas .wish{display:block;margin:.6rem 0}.aiideas textarea{width:100%;box-sizing:border-box}
+.ideas{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:12px;margin-top:.6rem}.idea.sel{outline:3px solid var(--leaf)}
+.idea .pill{display:inline-block;background:var(--panel);color:var(--leaf);border-radius:999px;padding:.1rem .55rem;margin:0 .3rem .3rem 0;font-size:.85em}.okb{color:var(--leaf);font-weight:700}
+.rmode{display:flex;flex-wrap:wrap;gap:.6rem 1.4rem;margin:0 0 .8rem}.rmode label{display:flex;gap:.4rem;align-items:baseline}.rmode small{color:var(--mute)}
+.lawai{border-top:1px solid var(--line);margin-top:.8rem;padding-top:.6rem}.lawai .lawh{margin:.5rem 0 .2rem}
+.todoh{display:block;margin-top:.4rem;font-weight:600}
+#envies .foldb{display:none}
+.mapzone.noleg{grid-template-columns:minmax(0,1fr)}
+.vh.mv.rot{background:#6a1b9a}
+.lawnsel{outline:3px solid var(--leaf)}
+.stratc{display:inline-flex;flex-wrap:wrap;gap:.3rem .8rem;align-items:center}
+.zcard h4{display:flex;align-items:center;gap:.5rem}.zcard h5{margin:.8rem 0 .3rem}.zcard .stack th{text-align:left;font-weight:500;color:var(--mute);width:40%}
 </style>
 <script>new MutationObserver(()=>{for(const c of document.querySelectorAll('.stack td:not([data-l])')){let i=0,p=c;while(p=p.previousElementSibling)i+=p.colSpan;c.dataset.l=c.closest('table').rows[0].cells[i]?.textContent||''}}).observe(document,{childList:true,subtree:true})</script>
 </head>
@@ -349,7 +378,7 @@ section.band.folded .in>*:not(.shead){display:none!important}section.band.folded
       <button type="submit" class="pri">Chercher</button>
       <button type="button" id="geo">Ma position</button>
     </form>
-    <div class="hmenu"><span class="savest" id="saveState" aria-live="polite"></span><button type="button" id="menuBtn" aria-haspopup="true" aria-expanded="false">☰ Menu</button>
+    <div class="hmenu"><span class="savest" id="saveState" aria-live="polite"></span><div class="audsw" id="audSw" role="group" aria-label="Version du site"><button type="button" data-aud="pub" aria-pressed="false">Particulier</button><button type="button" data-aud="pro" aria-pressed="false">Professionnel</button></div><button type="button" id="menuBtn" aria-haspopup="true" aria-expanded="false">☰ Menu</button>
       <div class="hmenu-list" id="menuList" hidden><button type="button" id="mProjects">Mes projets…</button><button type="button" id="mWizard">Mode libre (onglets au choix)</button><button type="button" id="helpBtn">Aide : relancer le tutoriel</button><button type="button" id="mGloss">Lexique du jardinier</button><button type="button" id="mText">Texte plus grand</button><button type="button" id="mTheme">Mode sombre</button><button type="button" class="resetall" id="resetAll">Remettre à zéro</button></div></div>
     <label class="langsel"><span>Langue</span><select id="lang" aria-label="Langue / Taal / Language"><option value="fr">Français</option><option value="nl">Nederlands</option><option value="en">English</option></select></label>
   </div>
@@ -359,13 +388,24 @@ section.band.folded .in>*:not(.shead){display:none!important}section.band.folded
 <div class="langnote" id="langnote" hidden>Interface traduite. Les conseils détaillés restent pour l’instant en français · Interface vertaald, gedetailleerd advies blijft voorlopig in het Frans · Interface translated; detailed advice is still in French for now.</div>
 <nav class="secnav scroll" id="tabs" aria-label="Onglets">
   <span class="tabhint">Onglets (plusieurs à la fois) :</span>
-  <button type="button" data-tab="carte" aria-pressed="true">Carte</button><button type="button" data-tab="projet" aria-pressed="false">Mon projet</button><button type="button" data-tab="synthese" aria-pressed="false">Synthèse du site</button><button type="button" data-tab="climat" aria-pressed="false">Climat</button><button type="button" data-tab="sol" aria-pressed="false">Sol</button><button type="button" data-tab="soleil" aria-pressed="false">Soleil et ombres</button><button type="button" data-tab="ident" aria-pressed="false">Identification</button><button type="button" data-tab="sante" aria-pressed="false">Santé des plantes</button><button type="button" data-tab="entretien" aria-pressed="false">Entretien</button><button type="button" data-tab="plantes" aria-pressed="false">Plantes</button><button type="button" data-tab="coherence" aria-pressed="false">Liens entre aménagements</button><button type="button" data-tab="massif" aria-pressed="false">Composition</button><button type="button" data-tab="jardinieres" aria-pressed="false">Jardinières</button><button type="button" data-tab="potager" aria-pressed="false">Potager</button><button type="button" data-tab="verger" aria-pressed="false">Verger</button><button type="button" data-tab="amenagements" aria-pressed="false">Haies, fruitiers, eau, talus</button><button type="button" data-tab="cloture" aria-pressed="false">Clôture</button><button type="button" data-tab="arrosage" aria-pressed="false">Arrosage</button><button type="button" data-tab="diy" aria-pressed="false">Faire soi-même</button><button type="button" data-tab="rendu" aria-pressed="false">Rendus sur photo</button><button type="button" data-tab="pelouse" aria-pressed="false" hidden>Pelouse</button><button type="button" data-tab="machines" aria-pressed="false">Matériel</button><button type="button" data-tab="pros" aria-pressed="false">Pros et achats</button><button type="button" data-tab="budget" aria-pressed="false">Budget</button><button type="button" data-tab="primes" aria-pressed="false">Primes et subsides</button><button type="button" data-tab="export" aria-pressed="false">Exporter</button>
+  <button type="button" data-tab="envies" aria-pressed="false">Mes envies</button><button type="button" data-tab="carte" aria-pressed="true">Carte</button><button type="button" data-tab="projet" aria-pressed="false">Mon projet</button><button type="button" data-tab="synthese" aria-pressed="false">Synthèse du site</button><button type="button" data-tab="climat" aria-pressed="false">Climat</button><button type="button" data-tab="sol" aria-pressed="false">Sol</button><button type="button" data-tab="soleil" aria-pressed="false">Soleil et ombres</button><button type="button" data-tab="ident" aria-pressed="false">Identification</button><button type="button" data-tab="sante" aria-pressed="false">Santé des plantes</button><button type="button" data-tab="entretien" aria-pressed="false">Entretien</button><button type="button" data-tab="plantes" aria-pressed="false">Plantes</button><button type="button" data-tab="coherence" aria-pressed="false">Liens entre aménagements</button><button type="button" data-tab="massif" aria-pressed="false">Composition</button><button type="button" data-tab="jardinieres" aria-pressed="false">Jardinières</button><button type="button" data-tab="potager" aria-pressed="false">Potager</button><button type="button" data-tab="verger" aria-pressed="false">Verger</button><button type="button" data-tab="amenagements" aria-pressed="false">Haies, fruitiers, eau, talus</button><button type="button" data-tab="cloture" aria-pressed="false">Clôture</button><button type="button" data-tab="arrosage" aria-pressed="false">Arrosage</button><button type="button" data-tab="diy" aria-pressed="false">Faire soi-même</button><button type="button" data-tab="rendu" aria-pressed="false">Rendus sur photo</button><button type="button" data-tab="pelouse" aria-pressed="false" hidden>Pelouse</button><button type="button" data-tab="zones" aria-pressed="false">Forêt, eau et fraîcheur</button><button type="button" data-tab="machines" aria-pressed="false">Matériel</button><button type="button" data-tab="pros" aria-pressed="false">Pros et achats</button><button type="button" data-tab="budget" aria-pressed="false">Budget</button><button type="button" data-tab="primes" aria-pressed="false">Primes et subsides</button><button type="button" data-tab="export" aria-pressed="false">Exporter</button>
   <button type="button" class="taball" id="tabAll">Tout afficher</button><button type="button" class="taball" id="tabOne">Un seul onglet</button>
 </nav>
 
 <nav class="steps" id="steps" aria-label="Étapes du projet" hidden><ol>
   <li><button type="button" data-step="1"><b>1</b><span>Mon terrain</span></button></li><li><button type="button" data-step="2"><b>2</b><span>Mon projet</span></button></li><li><button type="button" data-step="3"><b>3</b><span>Je dessine</span></button></li><li><button type="button" data-step="4"><b>4</b><span>Mes résultats</span></button></li><li><button type="button" data-step="5"><b>5</b><span>Je passe à l’action</span></button></li></ol></nav>
 <div class="stepintro" id="stepIntro" hidden></div>
+<section class="band alt" id="envies"><div class="in">
+  <div class="shead"><h2>Mes envies</h2><span class="src">Quelques questions pour préparer un projet à votre goût</span></div>
+  <div class="card envtxt"><h4>Décrivez votre projet avec vos mots</h4><p class="small">Écrivez ou dictez ce que vous aimeriez : les questions ci-dessous se cochent toutes seules. Vous pouvez ensuite les corriger.</p>
+    <textarea id="envTxt" rows="3" placeholder="Ex. : je voudrais un coin fleuri qui demande peu d’entretien, une petite mare pour les enfants qui aiment les grenouilles, et cacher la vue du voisin. Budget d’environ 1 500 €."></textarea>
+    <div class="chips"><button type="button" id="envMic" aria-pressed="false"><span aria-hidden="true">🎤</span> Dicter</button><button type="button" class="pri" id="envTxtGo">Comprendre ma description</button></div><div id="envTxtOut" aria-live="polite"></div></div>
+  <div id="enviesBox" class="envbox"></div>
+  <div class="card aiideas"><h4>Pas encore d’idée ? Montrez votre jardin</h4><p class="small">Ajoutez 1 à 3 photos de votre jardin : l’IA propose trois projets adaptés à votre terrain, à votre climat et à vos réponses.</p>
+    <div class="frow"><label class="filebtn"><span aria-hidden="true">📷</span> Choisir des photos<input type="file" id="aiPhotos" accept="image/*" multiple hidden></label><span id="aiThumbs" class="thumbs"></span></div>
+    <label class="wish">Ce que vous aimeriez (facultatif)<textarea id="aiWish" rows="2" placeholder="Ex. : un coin ombragé pour lire, des fleurs bleues, peu d’entretien"></textarea></label>
+    <div class="chips"><button type="button" class="pri" id="aiGo">Proposer des projets</button></div><div id="aiOut"></div></div>
+</div></section>
 <section class="band" id="carte"><div class="in">
   <div class="maphead">
     <div class="siteinfo"><span id="siteinfo">Cliquez sur la carte pour placer votre site.</span>
@@ -539,7 +579,7 @@ section.band.folded .in>*:not(.shead){display:none!important}section.band.folded
   <div class="shead"><h2>Composer un massif</h2><span class="src">Selon le style, les conditions du site et vos filtres de couleur, feuillage, port et hauteur</span></div>
   <div class="card bedcard">
     <div><h4>Forme du massif</h4><p class="note" id="bedinfo" style="margin:6px 0 0"></p></div>
-    <div class="chips"><button id="drawBed2">Dessiner sur la carte</button><label class="chk"><input type="checkbox" id="island"> Massif isolé, vu de tous côtés</label><label class="chk"><input type="checkbox" id="showPlan" checked> Afficher la plantation sur la carte</label></div>
+    <div class="chips"><button id="drawBed2">Dessiner sur la carte</button><label class="chk"><input type="checkbox" id="island"> Massif isolé, vu de tous côtés</label><label>Vu depuis<select id="oView"><option value="auto">Automatique (murs et obstacles proches)</option><option value="maison">Depuis la maison</option><option value="terrasse">Depuis la terrasse</option><option value="s">Depuis le sud</option><option value="so">Depuis le sud-ouest</option><option value="o">Depuis l’ouest</option><option value="no">Depuis le nord-ouest</option><option value="n">Depuis le nord</option><option value="ne">Depuis le nord-est</option><option value="e">Depuis l’est</option><option value="se">Depuis le sud-est</option><option value="tous">De tous les côtés (massif isolé)</option></select></label><button type="button" id="bedExist">Indiquer un arbre ou arbuste existant</button></div><p class="note" id="oViewHint"></p><div class="chips"><label class="chk"><input type="checkbox" id="showPlan" checked> Afficher la plantation sur la carte</label></div>
   </div>
   <div class="styles" id="styles"></div>
   <div class="card compopts" id="compOpts">
@@ -548,6 +588,8 @@ section.band.folded .in>*:not(.shead){display:none!important}section.band.folded
     <label>Harmonie de couleurs<select id="oHarm"></select></label>
     <label id="oBaseL">Teinte de base<select id="oBase"></select></label>
     <label>Floraison<select id="oBloom"></select></label>
+    <label>Strates<select id="oStrata"><option value="all">Toutes (arbres, arbustes, vivaces…)</option><option value="noTree">Sans arbre</option><option value="noWood">Sans arbre ni arbuste</option><option value="trees">Seulement arbres et arbustes</option><option value="shrubs">Seulement des arbustes</option><option value="viv">Seulement des vivaces</option><option value="vivgra">Vivaces et graminées</option><option value="gra">Seulement des graminées</option><option value="fern">Fougères et vivaces</option><option value="custom">Sur mesure…</option></select></label>
+    <span class="stratc" id="oStrataC" hidden></span><button type="button" id="oVary" title="Choisir d’autres arbres et arbustes parmi ceux qui conviennent">Varier les arbres et arbustes</button>
   </div>
   <div class="crow">
     <label>Surface du massif<input type="number" id="surf" value="15" min="2" max="2000"></label><span style="padding-bottom:12px">m²</span>
@@ -595,6 +637,10 @@ section.band.folded .in>*:not(.shead){display:none!important}section.band.folded
 <section class="band alt" id="pelouse" hidden><div class="in">
   <div class="shead"><h2>Pelouse</h2><span class="src">Selon l’exposition, le sol et l’usage</span></div>
   <div id="lawnBox"></div>
+</div></section>
+<section class="band" id="zones"><div class="in">
+  <div class="shead"><h2>Forêt, eau et fraîcheur</h2><span class="src">Micro-forêt, jardin de pluie, noue d’infiltration et îlot de fraîcheur</span></div>
+  <div id="zonesBox"></div>
 </div></section>
 <section class="band alt" id="machines"><div class="in">
   <div class="shead"><h2>Matériel d’entretien conseillé</h2><span class="src">Pour un particulier, selon ce qui est tracé et composé</span></div>
@@ -669,6 +715,7 @@ section.band.folded .in>*:not(.shead){display:none!important}section.band.folded
   <div class="card xcard" style="margin-bottom:14px"><h4>Page de garde du rapport (facultatif)</h4>
     <div class="frow"><label>Nom<input id="cliName" autocomplete="name" style="width:14em"></label><label>Adresse<input id="cliAddr" autocomplete="street-address" style="width:16em"></label><label>Code postal et commune<input id="cliCity" autocomplete="address-level2" style="width:12em"></label><label>Titre du projet<input id="cliTitle" placeholder="Projet de jardin" style="width:14em"></label></div>
     <p class="note" style="margin:0">Ces informations restent dans votre navigateur. Elles seront reprises automatiquement d’un futur compte client.</p></div>
+  <div class="rmode" role="radiogroup" aria-label="Type de rapport"><label><input type="radio" name="rmode" value="sum"> <b>Rapport résumé</b> <small>l’essentiel en quelques pages</small></label><label><input type="radio" name="rmode" value="full"> <b>Rapport détaillé</b> <small>toutes les fiches : profils, étapes de chantier, contrôles, matériel</small></label></div>
   <div class="chips"><button class="pri" id="exPdf">Rapport PDF</button><button id="exDoc">Rapport Word (.docx)</button><button id="exXls">Liste de plantation Excel (.xlsx)</button><span id="exMsg" class="copied" aria-live="polite"></span></div>
   <p class="note">Le PDF s’ouvre dans un nouvel onglet avec la fenêtre d’impression : choisissez « Enregistrer au format PDF ». Le fichier Excel contient une feuille par sujet (plantes, fournitures, haies, fruitiers, pelouse, pièce d’eau, matériel, entretien).</p>
 </div></section>
@@ -712,7 +759,7 @@ section.band.folded .in>*:not(.shead){display:none!important}section.band.folded
 <dialog class="dlg plantdlg" id="plantDlg" aria-label="Fiche plante"><div id="plantBody"></div></dialog>
 <div class="tutohl" id="tutoHl" hidden></div>
 <div class="tutobox" id="tutoBox" role="dialog" aria-labelledby="tutoT" hidden><small id="tutoN"></small><h4 id="tutoT"></h4><p id="tutoD"></p>
-  <div class="tnav"><button type="button" id="tutoSkip">Passer le tutoriel</button><span><button type="button" id="tutoPrev">Précédent</button> <button type="button" class="pri" id="tutoNext">Suivant</button></span></div></div>
+  <div class="tnav"><span><button type="button" id="tutoSkip" title="Le tutoriel reviendra à la prochaine ouverture">Plus tard</button> <button type="button" id="tutoNever" class="lnk">Ne plus afficher</button></span><span><button type="button" id="tutoPrev">Précédent</button> <button type="button" class="pri" id="tutoNext">Suivant</button></span></div></div>
 <script type="text/plain" id="trdict">
 Érable champêtre	Veldesdoorn	Field maple
 Amélanchier de Lamarck	Krentenboompje	Juneberry
@@ -3735,6 +3782,134 @@ Conseils	Tips	Advice
 Passage retenu	Gekozen doorgang	Chosen access
 Catégorie	Categorie	Category
 Matériel qui passe	Materieel dat erdoor kan	Equipment that fits
+Particulier	Particulier	Private individual
+Professionnel	Professional	Professional
+Mes envies	Mijn wensen	My wishes
+Quelques questions pour préparer un projet à votre goût	Enkele vragen om een project naar uw smaak voor te bereiden	A few questions to prepare a project to your taste
+Que voulez-vous faire dans votre jardin ?	Wat wilt u in uw tuin doen?	What would you like to do in your garden?
+Quelle ambiance vous fait envie ?	Welke sfeer spreekt u aan?	Which atmosphere appeals to you?
+Combien de temps pour l’entretien ?	Hoeveel tijd voor onderhoud?	How much time for maintenance?
+Qui profite du jardin ?	Wie geniet van de tuin?	Who enjoys the garden?
+Et l’arrosage ?	En het water geven?	And watering?
+Qui fera les travaux ?	Wie voert de werken uit?	Who will do the work?
+Quel budget environ ?	Welk budget ongeveer?	Roughly what budget?
+(plusieurs choix possibles)	(meerdere keuzes mogelijk)	(several choices possible)
+Des fleurs toute l’année	Bloemen het hele jaar	Flowers all year round
+Cultiver mes légumes	Mijn groenten kweken	Grow my vegetables
+Récolter quelques fruits	Wat fruit oogsten	Harvest some fruit
+Planter un verger	Een boomgaard planten	Plant an orchard
+Plus d’intimité, cacher un vis-à-vis	Meer privacy, inkijk verbergen	More privacy, hide an overlooking view
+Un point d’eau, une mare	Een waterpartij, een poel	A water feature, a pond
+Un coin pelouse ou prairie fleurie	Een gazon of bloemenweide	A lawn or wildflower meadow
+Fleurir un balcon ou une terrasse	Een balkon of terras vergroenen	Bring flowers to a balcony or terrace
+Clôturer mon terrain	Mijn terrein afsluiten	Fence my land
+Planter une pente	Een helling beplanten	Plant a slope
+Mieux entretenir ce que j’ai déjà	Wat ik al heb beter onderhouden	Better maintain what I already have
+Je ne sais pas : conseillez-moi	Ik weet het niet: adviseer me	I don't know: advise me
+Champêtre et très fleurie	Landelijk en bloemrijk	Country-style and full of flowers
+Naturelle, sous-bois	Natuurlijk, onderbegroeiing	Natural, woodland
+Japonaise, zen	Japans, zen	Japanese, zen
+Contemporaine, graphique	Hedendaags, grafisch	Contemporary, graphic
+Sèche, méditerranéenne	Droog, mediterraan	Dry, Mediterranean
+Refuge pour la biodiversité	Toevlucht voor biodiversiteit	Haven for biodiversity
+Comestible	Eetbaar	Edible
+Romantique, avec des roses	Romantisch, met rozen	Romantic, with roses
+Moderne, graminées et vivaces	Modern, grassen en vaste planten	Modern, grasses and perennials
+Le moins possible	Zo weinig mogelijk	As little as possible
+Un peu chaque mois	Een beetje elke maand	A little every month
+J’adore jardiner	Ik tuinier graag	I love gardening
+De jeunes enfants	Jonge kinderen	Young children
+Un chien ou un chat	Een hond of een kat	A dog or a cat
+Les oiseaux, abeilles et papillons	Vogels, bijen en vlinders	Birds, bees and butterflies
+Des personnes qui se baissent difficilement	Mensen die moeilijk bukken	People who find bending difficult
+Je peux arroser facilement	Ik kan gemakkelijk water geven	I can water easily
+J’aimerais un arrosage automatique	Ik wil graag automatische beregening	I would like automatic watering
+Je ne veux pas arroser	Ik wil geen water geven	I don't want to water
+Moi-même	Ikzelf	Myself
+Un professionnel	Een vakman	A professional
+Je ne sais pas encore	Ik weet het nog niet	I don't know yet
+Moins de 500 €	Minder dan 500 €	Less than €500
+De 500 à 3 000 €	Van 500 tot 3 000 €	From €500 to €3,000
+Plus de 3 000 €	Meer dan 3 000 €	More than €3,000
+Je ne sais pas	Ik weet het niet	I don't know
+Votre projet en bref	Uw project in het kort	Your project at a glance
+Continuer : placer mon terrain sur la carte	Verder: mijn terrein op de kaart plaatsen	Continue: place my land on the map
+Pas encore d’idée ? Montrez votre jardin	Nog geen idee? Toon uw tuin	No idea yet? Show us your garden
+Choisir des photos	Foto's kiezen	Choose photos
+Ce que vous aimeriez (facultatif)	Wat u zou willen (optioneel)	What you would like (optional)
+Proposer des projets	Projecten voorstellen	Suggest projects
+Choisir ce projet	Dit project kiezen	Choose this project
+Utiliser ces plantes dans le massif	Deze planten in de border gebruiken	Use these plants in the bed
+Rapport résumé	Beknopt rapport	Summary report
+Rapport détaillé	Gedetailleerd rapport	Detailed report
+l’essentiel en quelques pages	het essentiële op enkele pagina's	the essentials in a few pages
+Chercher les règles de ma commune	De regels van mijn gemeente opzoeken	Look up my municipality's rules
+Actualiser la recherche	Zoekopdracht vernieuwen	Refresh the search
+Mon projet en main	Mijn project in handen	My project in hand
+Puis dessinez votre projet :	Teken daarna uw project:	Then draw your project:
+VOTRE PROJET EN BREF	UW PROJECT IN HET KORT	YOUR PROJECT AT A GLANCE
+PROJET PROPOSÉ PAR L’IA	DOOR AI VOORGESTELD PROJECT	PROJECT SUGGESTED BY AI
+Forêt, eau et fraîcheur	Bos, water en koelte	Forest, water and cooling
+Micro-forêt, jardin de pluie, noue d’infiltration et îlot de fraîcheur	Minibos, regentuin, wadi en koele plek	Micro-forest, rain garden, swale and cool island
+Micro-forêt	Minibos	Micro-forest
+Jardin de pluie	Regentuin	Rain garden
+Noue d’infiltration	Infiltratiegreppel (wadi)	Infiltration swale
+Îlot de fraîcheur	Koele plek	Cool island
+Une micro-forêt	Een minibos	A micro-forest
+Un jardin de pluie	Een regentuin	A rain garden
+Une noue d’infiltration	Een infiltratiegreppel	An infiltration swale
+Un îlot de fraîcheur	Een koele plek	A cool island
+Strates	Lagen	Layers
+Toutes (arbres, arbustes, vivaces…)	Alle (bomen, heesters, vaste planten…)	All (trees, shrubs, perennials…)
+Sans arbre	Zonder boom	Without trees
+Sans arbre ni arbuste	Zonder bomen en heesters	Without trees or shrubs
+Seulement arbres et arbustes	Alleen bomen en heesters	Trees and shrubs only
+Seulement des arbustes	Alleen heesters	Shrubs only
+Seulement des vivaces	Alleen vaste planten	Perennials only
+Vivaces et graminées	Vaste planten en grassen	Perennials and grasses
+Seulement des graminées	Alleen grassen	Grasses only
+Fougères et vivaces	Varens en vaste planten	Ferns and perennials
+Sur mesure…	Op maat…	Custom…
+Varier les arbres et arbustes	Andere bomen en heesters	Vary trees and shrubs
+Vu depuis	Gezien vanaf	Viewed from
+Depuis la maison	Vanaf het huis	From the house
+Depuis la terrasse	Vanaf het terras	From the terrace
+Depuis le sud	Vanaf het zuiden	From the south
+Depuis le nord	Vanaf het noorden	From the north
+Depuis l’est	Vanaf het oosten	From the east
+Depuis l’ouest	Vanaf het westen	From the west
+De tous les côtés (massif isolé)	Van alle kanten (vrijstaande border)	From all sides (island bed)
+Indiquer un arbre ou arbuste existant	Een bestaande boom of heester aanduiden	Mark an existing tree or shrub
+Arbuste existant	Bestaande heester	Existing shrub
+Choisir ce type	Dit type kiezen	Choose this type
+Type choisi ✓	Gekozen type ✓	Chosen type ✓
+Voir les autres types de pelouse	Andere gazontypes tonen	Show other lawn types
+Masquer les autres types	Andere types verbergen	Hide other types
+Mise en œuvre	Aanleg	Installation
+Entretien mois par mois	Onderhoud maand per maand	Month-by-month care
+Étapes de réalisation	Uitvoeringsstappen	Implementation steps
+Agrandir ou réduire (%)	Vergroten of verkleinen (%)	Enlarge or shrink (%)
+Tourner (°)	Draaien (°)	Rotate (°)
+Tourner la forme	Vorm draaien	Rotate the shape
+Jardin médicinal	Geneeskrachtige tuin	Medicinal garden
+Médicinale et aromatique	Geneeskrachtig en aromatisch	Medicinal and aromatic
+PLAN D’ENSEMBLE	OVERZICHTSPLAN	SITE PLAN
+Gérer l’eau de pluie (jardin de pluie)	Regenwater beheren (regentuin)	Manage rainwater (rain garden)
+Guider l’eau vers une mare (noue)	Water naar een poel leiden (wadi)	Guide water to a pond (swale)
+Un coin frais en été	Een koele plek in de zomer	A cool spot in summer
+Surface de toiture ou terrasse raccordée (m²)	Aangesloten dak- of terrasoppervlak (m²)	Connected roof or terrace area (m²)
+Profondeur (cm)	Diepte (cm)	Depth (cm)
+Décrivez votre projet avec vos mots	Beschrijf uw project in uw eigen woorden	Describe your project in your own words
+Dicter	Dicteren	Dictate
+Arrêter la dictée	Dicteren stoppen	Stop dictation
+Comprendre ma description	Mijn beschrijving verwerken	Understand my description
+Plus tard	Later	Later
+Ne plus afficher	Niet meer tonen	Don't show again
+Particulier ou professionnel	Particulier of professional	Private or professional
+Dites ce que vous aimeriez	Zeg wat u zou willen	Say what you would like
+Suivez les 4 étapes	Volg de 4 stappen	Follow the 4 steps
+Dessinez sur la carte	Teken op de kaart	Draw on the map
+Votre rapport	Uw rapport	Your report
 </script>
 <footer class="band foot"><div class="in">
   <b>Sources de données</b>
@@ -5020,7 +5195,7 @@ function compose(){
     const cand=pool.filter(x=>r.f(x.p)&&!used.has(x.p.l));let inS=cand.filter(x=>x.p.st.includes(key)),off=false;
     if(!inS.length){inS=cand;off=true}
     const picks=pickDiverse(inS,r.k(A),ps);picks.forEach(x=>used.add(x.p.l));return{...r,picks,off}});
-  if(tgt&&(!['fr','gra','jap'].includes(key)||S.bloom==='12')){
+  if(tgt&&(!['fr','gra','jap','medi'].includes(key)||S.bloom==='12')){
     for(let k=0;k<3;k++){const miss=tgt.filter(m=>!ps.months.has(m));if(!miss.length)break;
       const best=pool.filter(x=>!used.has(x.p.l)&&['vivace','arbuste','graminee'].includes(x.p.t)&&(x.p.t!=='arbuste'||A>=4)&&!(x.p.rose&&x.p.rose.g==='grimpant')&&x.p.h<=Math.max(1.5,Math.sqrt(A)/2))
         .map(x=>({x,v:x.p.f.filter(m=>miss.includes(m)).length*14+x.score/5+(x.p.st.includes(key)?6:0)})).filter(o=>o.v>=14).sort((a,b)=>b.v-a.v)[0];
@@ -5262,7 +5437,7 @@ function clearDrawings(){
 function renderItemsList(){
   const el=$('#itemsList');if(!el)return;const rows=[];
   const add=(kind,id,c,lab,cls)=>{const cv=kind==='bed'?S.bed:kind!=='obs'&&kind!=='fruits'?(S[kind]||[]).find(x=>x.id==id):null;rows.push(`<li><span class="sw ${cls||''}" style="background:${c}"></span><span>${esc(lab)}</span>${cv&&(kind==='bed'||cv.pts)?`<button type="button" data-curve="${kind}" data-id="${id}" aria-pressed="${!!cv.smooth}" title="Lisser les angles en courbe">Courbe</button>`:''}<button type="button" data-del="${kind}" data-id="${id}">Supprimer</button></li>`)};
-  S.obs.forEach((o,i)=>add('obs',o.id,OBT[o.type].c,`${OBT[o.type].l} ${i+1} · ${nf(o.h,1)} m`,'pt'));
+  S.obs.forEach((o,i)=>add('obs',o.id,OBT[o.type].c,`${obsName(o,i)} · ${nf(o.h,1)} m`,'pt'));
   (S.shapes||[]).forEach(sh=>add('shapes',sh.id,TC[sh.kind],`${sh.name} · ${nf(sh.h,1)} m`,sh.kind==='obsLine'?'line':''));
   if(S.bed)add('bed',0,TC.bed,`Massif · ${nf(bedGeo().area)} m²`);
   (S.hedges||[]).forEach((h,i)=>add('hedges',h.id,TC.hedge,`Haie ${i+1} · ${nf(lenLL(h.pts),1)} m`,'line'));
@@ -5651,7 +5826,7 @@ async function reportModel0(){
   if(so){T(['Caractéristique','Valeur'],[...(so.belg?[['Texture (carte belge)',so.belg],['Drainage naturel',so.dr?BDR[so.dr]:'–'],['Sigle pédologique',so.sigle||'–']]:[['Argile',nf(so.clay)+' %'],['Limon',nf(so.silt)+' %'],['Sable',nf(so.sand)+' %']]),['pH',so.ph?nf(so.ph,1):'à mesurer']]);P(txt($('#soiltxt')));P('Source : '+$('#soilsrc').textContent)}else P('Sol non renseigné.');
   H1('3. Soleil et ombres');
   P(txt($('#expotxt')));const st=$('#seasons');if(st&&st.rows.length>1)T([...st.rows[0].cells].map(x=>x.textContent),[...st.rows].slice(1).map(rw=>[...rw.cells].map(x=>x.textContent)));
-  const ob=[...S.shapes.map(sh=>`${sh.name} (${SHNAT[sh.nat]}) : ${nf(sh.h,1)} m de haut`),...S.obs.map(o=>`${OBT[o.type].l} : ${nf(o.h,1)} m de haut, ${nf(o.w,1)} m de large, à ${nf(relObs(o).dist)} m au ${card(relObs(o).brg)}`)];if(ob.length){H2('Obstacles pris en compte');U(ob)}
+  const ob=[...S.shapes.map(sh=>`${sh.name} (${SHNAT[sh.nat]}) : ${nf(sh.h,1)} m de haut`),...S.obs.map(o=>`${o.name||OBT[o.type].l} : ${nf(o.h,1)} m de haut, ${nf(o.w,1)} m de large, à ${nf(relObs(o).dist)} m au ${card(relObs(o).brg)}`)];if(ob.length){H2('Obstacles pris en compte');U(ob)}
   I(await svgToPng($('#sunpath svg')));
   H1('4. Conditions retenues pour le choix des plantes');
   T(['Critère','Valeur'],[['Rusticité',k.tmin!=null?'zone '+usda(k.tmin):'–'],['Exposition',EXL[k.expo]],['Humidité du sol',WL[k.eau]],['Texture',SL[k.sol]],['pH',nf(k.ph,1)]]);
@@ -6042,9 +6217,9 @@ const CLI={name:'',addr:'',city:'',title:''};
 try{Object.assign(CLI,JSON.parse(localStorage.getItem('plantania:client')||'{}'))}catch(e){}
 [['cliName','name'],['cliAddr','addr'],['cliCity','city'],['cliTitle','title']].forEach(([id,k])=>{const el=$('#'+id);if(!el)return;el.value=CLI[k]||'';el.addEventListener('input',()=>{CLI[k]=el.value.slice(0,80);try{localStorage.setItem('plantania:client',JSON.stringify(CLI))}catch(e){}if(k==='name'&&!S.devisDirty&&typeof renderPros==='function')renderPros()})});
 window.__plantania={collectReport:()=>collectReport(),reportHtml:R=>reportHtml(R)};
-const ROM=['I','II','III','IV','V','VI','VII','VIII','IX','X','XI','XII'];
+const ROM=['janv.','févr.','mars','avr.','mai','juin','juil.','août','sept.','oct.','nov.','déc.'];
 function romMonths(f){if(!f||!f.length)return'';const s=[...f].sort((a,b)=>a-b),out=[];let a=s[0],b=s[0];for(let i=1;i<=s.length;i++){if(s[i]===b+1){b=s[i];continue}out.push(a===b?ROM[a-1]:ROM[a-1]+'–'+ROM[b-1]);a=b=s[i]}return out.join(', ')}
-const cpOf=p=>p.pers?'P':'C';
+const cpOf=p=>p.pers?'persistant':'caduc';
 async function collectReport(){
   const keep=curTabs();applyTabs(TABS.slice());await new Promise(r=>setTimeout(r,400));
   try{
@@ -6104,7 +6279,7 @@ function reportHtml(R){
     for(let s0=0;s0<pal.items.length;s0+=5){const ch=pal.items.slice(s0,s0+5),base=s0;
       out.push(page(`${H(pal.title+(s0?' (suite)':''))}${pal.sub?`<p class="sub">${RE(pal.sub)}</p>`:''}<div class="pal"><div class="photos">${ch.map((it,j)=>`<figure><span class="num">${base+j+1}</span>${it.photo&&it.photo.src?`<img src="${RE(it.photo.src)}" alt="${RE(it.p.n)}">`:'<div class="nophoto"></div>'}</figure>`).join('')}</div>
        <ol start="${base+1}" class="names">${ch.map(it=>`<li><i>${RE(it.p.l)}</i>${it.p.f&&it.p.f.length?', '+romMonths(it.p.f):''}${it.cp||it.p.pers!=null?', '+(it.cp||cpOf(it.p)):''}<br><span>${RE(it.p.n)}${it.qty?' · '+it.qty+' plant'+(it.qty>1?'s':''):''}${it.zone?' · '+RE(it.zone):''}</span></li>`).join('')}</ol></div>
-       <p class="credits">Chiffres romains : mois de floraison · C : caduc · P : persistant · M : marcescent. Photos : ${[...new Set(ch.map(it=>it.photo&&it.photo.credit).filter(Boolean))].map(RE).join(' ; ')||'—'}</p>`,'palette'))}
+       <p class="credits">Après chaque nom : mois de floraison et feuillage (caduc, persistant ou marcescent). Photos : ${[...new Set(ch.map(it=>it.photo&&it.photo.credit).filter(Boolean))].map(RE).join(' ; ')||'—'}</p>`,'palette'))}
   }
   if(R.compo)out.push(page(`${H('QUANTITÉS ET FOURNITURES')}<div class="cols"><div><h3>Plantes du massif</h3>${tbl(['N°','Plante','Quantité','Hauteur'],R.compo.rows.map((x,i)=>[i+1,x.p.n,x.qty,nf(x.p.h,x.p.h<1?2:1)+' m']))}</div><div><h3>Fournitures</h3>${tbl(['Fourniture','Quantité','Conditionnement'],R.supplies.map(x=>[x[0],x[1],x[2]]))}</div></div>`));
   if(R.checks.length)out.push(page(`${H('CONTRÔLES AGRONOMIQUES ET PAYSAGERS')}${tbl(['','Contrôle','Détail'],R.checks.map(o=>[o.s==='ok'?'✓':o.s==='ko'?'!':'i',o.t,o.d]))}`));
@@ -6178,7 +6353,7 @@ async function exportDocx(opt){
       cells.push(`<w:tc><w:tcPr><w:tcW w:w="${cw}" w:type="dxa"/></w:tcPr>${para(run(String(s0+j+1),{b:1,sz:18}))}${ib?para(pic(ib.u8,ib.ext,cx,cy)):para(run('(photo indisponible)',{sz:16,c:'8A958D'}))}</w:tc>`)}
     body+=`<w:tbl><w:tblPr><w:tblW w:w="${cw*ch.length}" w:type="dxa"/><w:tblLayout w:type="fixed"/></w:tblPr><w:tblGrid>${ch.map(()=>`<w:gridCol w:w="${cw}"/>`).join('')}</w:tblGrid><w:tr>${cells.join('')}</w:tr></w:tbl>`;
     body+=ch.map((it,j)=>para(run(`${s0+j+1}. `,{sz:22})+run(it.p.l,{i:1,sz:22})+run(`${it.p.f&&it.p.f.length?', '+romMonths(it.p.f):''}${it.cp||it.p.pers!=null?', '+(it.cp||cpOf(it.p)):''} — ${it.p.n}${it.qty?' · '+it.qty+' plant'+(it.qty>1?'s':''):''}${it.zone?' · '+it.zone:''}`,{sz:22}),'<w:spacing w:after="60"/>')).join('');
-    body+=para(run('Chiffres romains : mois de floraison · C : caduc · P : persistant · M : marcescent. Photos : '+([...new Set(ch.map(it=>it.photo&&it.photo.credit).filter(Boolean))].join(' ; ')||'—'),{sz:14,c:'8A958D'}),'<w:spacing w:before="200"/>')+brk}}
+    body+=para(run('Après chaque nom : mois de floraison et feuillage (caduc, persistant ou marcescent). Photos : '+([...new Set(ch.map(it=>it.photo&&it.photo.credit).filter(Boolean))].join(' ; ')||'—'),{sz:14,c:'8A958D'}),'<w:spacing w:before="200"/>')+brk}}
   if(R.compo){body+=H('QUANTITÉS ET FOURNITURES')+table(['N°','Plante','Nom latin','Quantité','Hauteur'],R.compo.rows.map((x,i)=>[i+1,x.p.n,x.p.l,x.qty,nf(x.p.h,x.p.h<1?2:1)+' m']),[800,4200,4838,2000,3000])+para('')+table(['Fourniture','Quantité','Conditionnement','Détail'],R.supplies,[3600,2000,3600,5638])+brk}
   if(R.checks.length)body+=H('CONTRÔLES AGRONOMIQUES ET PAYSAGERS')+table(['Statut','Contrôle','Détail'],R.checks.map(o=>[o.s==='ok'?'OK':o.s==='ko'?'À revoir':'Info',o.t,o.d]),[1400,3400,10038])+brk;
 (R.sections||[]).filter(x=>!x.top).forEach(docSec);
@@ -6676,17 +6851,17 @@ const TUTO=[
  ['#compOpts','massif','Composez un massif','Choisissez un style (dont la roseraie), la disposition, l’harmonie de couleurs et la durée de floraison. En mode « Personnalisé », vous choisissez vous-même les plantes.'],
  ['#boxBox','jardinieres','Jardinières, potager et verger','Ajoutez vos appuis de fenêtre et garde-corps, organisez un potager en bacs, en pleine terre ou sous serre, et composez un verger avec ses pollinisateurs.'],
  ['#exPdf','export','Exportez et faites réaliser','Téléchargez le rapport PDF ou Word et la liste Excel. Dans « Pros et achats », envoyez une demande de devis avec le rapport joint.'],
- ['#aiOpen',null,'Besoin d’aide ?','Décrivez votre projet à l’assistant, et donnez votre avis avec « Donner mon avis ». Le bouton « ? Aide » relance ce tutoriel à tout moment.']];
+ ['#aiOpen',null,'Besoin d’aide ?','Décrivez votre projet à l’assistant, et donnez votre avis avec « Donner mon avis ». Le menu ☰ → « Aide : relancer le tutoriel » le relance à tout moment.']];
 let tutoI=-1;
-function tutoEnd(){tutoI=-1;$('#tutoHl').hidden=true;$('#tutoBox').hidden=true;try{localStorage.setItem('plantania:tuto','done')}catch(e){}}
+function tutoEnd(fin){tutoI=-1;$('#tutoHl').hidden=true;$('#tutoBox').hidden=true;if(fin===true){try{localStorage.setItem('plantania:tuto','done')}catch(e){}}}
 let TUTO_SEL='';function tutoPlace(){if(tutoI<0)return;const el=$(TUTO_SEL||TUTO[tutoI][0]);if(!el)return;const r=el.getBoundingClientRect(),hl=$('#tutoHl'),bx=$('#tutoBox'),pad=6;
   Object.assign(hl.style,{left:r.left-pad+'px',top:r.top-pad+'px',width:r.width+2*pad+'px',height:Math.min(r.height+2*pad,innerHeight-20)+'px'});
   const bw=Math.min(380,innerWidth-24),bh=bx.offsetHeight||190;let top=r.bottom+14;if(top+bh>innerHeight-10)top=Math.max(10,r.top-bh-14);if(top<10)top=Math.max(10,innerHeight-bh-10);
   bx.style.left=Math.max(12,Math.min(innerWidth-bw-12,r.left))+'px';bx.style.top=top+'px'}
-function tutoGo(i){if(i<0||i>=TUTO.length){tutoEnd();return}tutoI=i;let [sel,tab,t,d]=TUTO[i];if(sel==='#tabs'&&typeof WZ!=='undefined'&&WZ.on){sel='#steps';t='Suivez les 5 étapes';d='Terrain, projet, dessin, résultats, action : le parcours n’affiche que ce qui est utile. Le menu (en haut) permet de passer en mode libre avec tous les onglets, de gérer vos projets et d’agrandir le texte.'}if(tab)showTab(tab,'force');
+function tutoGo(i){if(i>=TUTO.length){tutoEnd(true);return}if(i<0){tutoEnd();return}tutoI=i;let [sel,tab,t,d]=TUTO[i];if(sel==='#tabs'&&typeof WZ!=='undefined'&&WZ.on){sel='#steps';t='Suivez les 5 étapes';d='Projet, terrain, dessin, résultats, action : le parcours n’affiche que ce qui est utile. Le menu (en haut) permet de passer en mode libre avec tous les onglets, de gérer vos projets et d’agrandir le texte.'}if(tab)showTab(tab,'force');
   $('#tutoHl').hidden=false;$('#tutoBox').hidden=false;$('#tutoT').textContent=t;$('#tutoD').textContent=d;$('#tutoN').textContent=`${i+1} / ${TUTO.length}`;$('#tutoPrev').disabled=i===0;$('#tutoNext').textContent=i===TUTO.length-1?'Terminer':'Suivant';
   const el=$(sel);if(el){const dd=el.closest('details');if(dd)dd.open=true;el.scrollIntoView({block:'center',behavior:'instant'})}setTimeout(tutoPlace,60);TUTO_SEL=sel;$('#tutoNext').focus()}
-$('#tutoNext').addEventListener('click',()=>tutoGo(tutoI+1));$('#tutoPrev').addEventListener('click',()=>tutoGo(tutoI-1));$('#tutoSkip').addEventListener('click',tutoEnd);
+$('#tutoNext').addEventListener('click',()=>tutoGo(tutoI+1));$('#tutoPrev').addEventListener('click',()=>tutoGo(tutoI-1));$('#tutoSkip').addEventListener('click',()=>tutoEnd());$('#tutoNever').addEventListener('click',()=>tutoEnd(true));
 $('#helpBtn').addEventListener('click',()=>tutoGo(0));
 addEventListener('resize',tutoPlace);addEventListener('scroll',tutoPlace,{passive:true});
 document.addEventListener('keydown',e=>{if(tutoI>=0&&e.key==='Escape')tutoEnd();if(tutoI>=0&&e.key==='ArrowRight')tutoGo(tutoI+1);if(tutoI>=0&&e.key==='ArrowLeft')tutoGo(tutoI-1)});
@@ -7084,6 +7259,8 @@ const indOf=latin=>{const w=String(latin||'').replace(/ ×/,'').split(/\s+/);con
 S.idents=[];const IDS={shots:[],busy:false,res:null};
 /* ===== CLÉ Pl@ntNet PARTAGÉE : collez votre clé entre les apostrophes ci-dessous ===== */
 const PLANTNET_CLE_DU_SITE='';
+/* Adresse du serveur relais Claude (Cloudflare Worker) pour tous les visiteurs, ex. 'https://plantania-ia.votre-compte.workers.dev'. Laisser vide pour désactiver l’IA par défaut. */
+const RELAIS_CLAUDE_DU_SITE='';
 /* ==================================================================================== */
 const IDSET={engine:'plantnet',key:''};try{Object.assign(IDSET,JSON.parse(localStorage.getItem('plantania:idset')||'{}'))}catch(e){}
 const ORG={auto:'Automatique',leaf:'Feuille',flower:'Fleur',fruit:'Fruit',bark:'Écorce',habit:'Plante entière'};
@@ -7423,12 +7600,12 @@ $('#stepIntro').addEventListener('click',e=>{if(e.target.dataset.cad){useCadastr
 const OFORM={ronde:['Ronde',0.7],colonne:['Colonnaire (fastigiée)',0.3],conique:['Conique',0.45],etalee:['Étalée',1.0],pleureur:['Pleureuse',0.8]};
 function obsPopup(ll,kind,id){if(!L.popup||!ll)return;const d=document.createElement('div');d.className='obpop';
   if(kind==='obs'){const o=S.obs.find(x=>x.id==id);if(!o)return;const tree=o.type==='caduc'||o.type==='pers';
-    d.innerHTML=`<b>${esc(OBT[o.type].l)}</b><label>Type<select data-k="type">${Object.entries(OBT).map(([k,v])=>`<option value="${k}"${k===o.type?' selected':''}>${v.l}</option>`).join('')}</select></label>
+    d.innerHTML=`<b>${esc(o.name||OBT[o.type].l)}</b><label>Nom<input data-k="name" value="${esc(o.name||'')}" placeholder="${esc(OBT[o.type].l)}"></label><label>Type<select data-k="type">${Object.entries(OBT).map(([k,v])=>`<option value="${k}"${k===o.type?' selected':''}>${v.l}</option>`).join('')}</select></label>
      <label>Hauteur (m)<input type="number" data-k="h" value="${o.h}" min="0.5" max="150" step="0.5"></label><label>${tree?'Envergure':'Largeur'} (m)<input type="number" data-k="w" value="${o.w}" min="0.5" max="150" step="0.5"></label>
      ${tree?`<label>Forme<select data-k="form"><option value="">—</option>${Object.entries(OFORM).map(([k,v])=>`<option value="${k}"${k===o.form?' selected':''}>${v[0]}</option>`).join('')}</select></label>`:''}
      ${o.type==='bat'?`<details><summary>Forme exacte du bâtiment</summary><label>Longueur (m)<input type="number" data-k="L" value="${o.w}" min="1" step="0.5"></label><label>Largeur (m)<input type="number" data-k="W" value="${Math.round(o.w*0.7)}" min="1" step="0.5"></label><label>Rotation (°)<input type="number" data-k="rot" value="0" step="5"></label><button type="button" data-a="rect">Remplacer par un rectangle</button></details>`:''}
      <div class="chips"><button type="button" data-a="photo">📷 Mesurer sur photo</button><button type="button" class="popx" data-a="del">Supprimer</button></div>`;
-    d.addEventListener('change',e=>{const k=e.target.dataset.k;if(!k||['L','W','rot'].includes(k))return;pushUndo();
+    d.addEventListener('change',e=>{const k=e.target.dataset.k;if(!k||['L','W','rot'].includes(k))return;pushUndo();if(k==='name'){o.name=e.target.value.trim().slice(0,40);renderObs();return}
       if(k==='type'){o.type=e.target.value;o.h=OBT[o.type].h;o.w=OBT[o.type].w;o.form=null}else if(k==='form'){o.form=e.target.value||null;if(o.form)o.w=Math.max(0.5,Math.round(o.h*OFORM[o.form][1]*2)/2)}else{const v=parseFloat(e.target.value);if(v>0)o[k]=v}
       styleObs(o);renderObs();sunUpdate();map.closePopup();obsPopup([o.lat,o.lng],'obs',o.id)});
     d.addEventListener('click',e=>{const a=e.target.dataset.a;if(!a)return;
@@ -7440,8 +7617,9 @@ function obsPopup(ll,kind,id){if(!L.popup||!ll)return;const d=document.createEle
   else{const sh=S.shapes.find(x=>x.id==id);if(!sh)return;
     d.innerHTML=`<b>${esc(sh.name)}</b><label>Nom<input data-k="name" value="${esc(sh.name)}"></label><label>Nature<select data-k="nat">${Object.entries(SHNAT).map(([k,v])=>`<option value="${k}"${k===sh.nat?' selected':''}>${v}</option>`).join('')}</select></label>
      <label>Hauteur (m)<input type="number" data-k="h" value="${sh.h}" min="0.3" max="150" step="0.1"></label>
+     <label>Agrandir ou réduire (%)<input type="number" data-k="scl" value="100" min="10" max="500" step="5"></label><label>Tourner (°)<input type="number" data-k="rotd" value="0" min="-180" max="180" step="5"></label>
      <div class="chips"><button type="button" data-a="edit">Modifier la forme</button><button type="button" data-a="photo">📷 Mesurer sur photo</button><button type="button" class="popx" data-a="del">Supprimer</button></div>`;
-    d.addEventListener('change',e=>{const k=e.target.dataset.k;if(!k)return;pushUndo();if(k==='h'){const v=parseFloat(e.target.value);if(v>0)sh.h=v}else if(k==='name')sh.name=e.target.value.slice(0,40);else sh.nat=e.target.value;itemsChanged(true);renderObs()});
+    d.addEventListener('change',e=>{const k=e.target.dataset.k;if(!k)return;pushUndo();if(k==='h'){const v=parseFloat(e.target.value);if(v>0)sh.h=v}else if(k==='name')sh.name=e.target.value.slice(0,40);else if(k==='scl'){const f=parseFloat(e.target.value)/100;if(f>0&&f!==1)sclItem('shapes',sh,f);e.target.value=100}else if(k==='rotd'){const a=parseFloat(e.target.value);if(a)rotItem('shapes',sh,-a);e.target.value=0}else sh.nat=e.target.value;itemsChanged(true);renderObs()});
     d.addEventListener('click',e=>{const a=e.target.dataset.a;if(!a)return;map.closePopup();if(a==='del')delItem('shapes',sh.id);if(a==='edit')setEditing(true);if(a==='photo')openMeasure('shapes:'+sh.id)})}
   L.popup().setLatLng(ll).setContent(d).openOn(map)}
 {const _ro=renderObs;renderObs=function(){_ro();document.querySelectorAll('#obslist .ob[data-id]').forEach(row=>{const o=S.obs.find(x=>x.id==row.dataset.id);if(!o||!(o.type==='caduc'||o.type==='pers'))return;
@@ -8606,6 +8784,533 @@ async function planComposite(W){if(!S.plan||!PLANIMG)return null;const P=S.plan,
 
 applyLock();
 window.__p14={pxToLL,llToPx,planComposite,interactions:()=>interactions()};
+/* ================= v15 : particulier / professionnel, envies, idées IA, rapport, règles communales ================= */
+if(RELAIS_CLAUDE_DU_SITE){let had=null;try{had=localStorage.getItem('plantania:ai')}catch(e){}if(!had||AST.mode==='local'&&!AST.proxy){AST.mode='proxy';AST.proxy=RELAIS_CLAUDE_DU_SITE}}
+const aiReady=()=>AST.mode==='proxy'?!!AST.proxy:AST.mode==='key'?!!AST.key:false;
+/* --- version particulier / professionnel --- */
+let AUD=null;try{AUD=localStorage.getItem('plantania:aud')}catch(e){}
+let WZNEW=false;try{WZNEW=!localStorage.getItem('plantania:wiz')}catch(e){}
+let AUDNEW=false;if(AUD!=='pub'&&AUD!=='pro'){let n=0;try{n=Object.keys(pIdx()).length}catch(e){}AUD=n?'pro':'pub';AUDNEW=true;try{localStorage.setItem('plantania:aud',AUD)}catch(e){}}
+const STEPS0=STEPS.map(x=>x.slice()),STEPMORE0=JSON.parse(JSON.stringify(STEPMORE));
+const STEPS_PRO={1:['Mon terrain','Placez votre terrain sur la carte et dessinez ce qui existe déjà : limite, bâtiments, arbres, chemins.']};
+const STEPS_PUB={2:['Mes envies','Décrivez votre projet (texte ou dictée) ou répondez aux questions. Pas d’idée ? Montrez une photo de votre jardin.'],1:['Mon terrain','Placez votre terrain, puis dessinez ce qui existe et ce que vous voulez aménager.'],4:['Mes résultats','Vos plantes, les quantités, le plan et l’entretien : l’essentiel.'],5:['Mon projet en main','Rapport, budget, primes et professionnels près de chez vous.']};
+const MORE_PUB={1:[['soleil','Soleil et ombres'],['climat','Climat'],['sol','Sol']],4:[['plantes','Toutes les plantes adaptées'],['machines','Matériel d’entretien'],['ident','Identifier une plante'],['sante','Santé des plantes']]};
+const wzOrder=()=>AUD==='pub'?[2,1,4,5]:[2,1,3,4,5];
+function applySteps(){const P=AUD==='pub'?STEPS_PUB:STEPS_PRO;STEPS0.forEach((s,i)=>{STEPS[i]=(P[i+1]||s).slice()});
+  Object.keys(STEPMORE).forEach(k=>delete STEPMORE[k]);Object.assign(STEPMORE,AUD==='pub'?JSON.parse(JSON.stringify(MORE_PUB)):JSON.parse(JSON.stringify(STEPMORE0)));
+  const O=wzOrder();$('#steps ol').innerHTML=O.map((k,i)=>`<li><button type="button" data-step="${k}"><b>${i+1}</b><span>${esc(STEPS[k-1][0])}</span></button></li>`).join('');
+  document.documentElement.classList.toggle('pub',AUD==='pub');document.documentElement.classList.toggle('pro',AUD!=='pub');
+  document.querySelectorAll('#audSw [data-aud]').forEach(b=>b.setAttribute('aria-pressed',String(b.dataset.aud===AUD)))}
+function setAud(a,quiet){if(a===AUD&&!quiet)return;AUD=a;try{localStorage.setItem('plantania:aud',a)}catch(e){}applySteps();syncRmode();
+  if(a==='pub'){WZ.on=true;wizGo(2)}else{if(WZ.on)wizGo(2);else wizApply()}
+  if(!quiet)toast(a==='pub'?'Version particulier : un parcours en 4 étapes qui va à l’essentiel.':'Version professionnelle : tous les onglets, outils et détails.')}
+{const _ss15=stepSecs;stepSecs=function(n){if(n===2&&AUD==='pub')return['envies'];const s=_ss15(n);if(AUD==='pub'&&n===4)return s.filter(x=>x!=='machines');return s}}
+{const _wa15=wizApply;wizApply=function(){_wa15();if(!WZ.on)return;const O=wzOrder(),n=WZ.step,p=O.indexOf(n)+1,N=O.length;if(p<1)return;
+  const b=$('#stepIntro .in > b');if(b)b.textContent=`Étape ${p} sur ${N} : ${STEPS[n-1][0]}`;
+  $('#stPrev').disabled=p===1;$('#stNext').textContent=p===N?'Terminer':'Étape suivante : '+STEPS[O[p]-1][0];$('#stInfo').textContent=`Étape ${p} / ${N}`;
+  document.querySelectorAll('#steps [data-step]').forEach(x=>{const k=+x.dataset.step;x.setAttribute('aria-current',k===n?'step':'false');x.classList.toggle('done',O.indexOf(k)<O.indexOf(n))});
+  const i=$('#stepIntro .in');if(!i)return;
+  if(n===2)i.querySelectorAll('.todo').forEach(x=>x.remove());
+  if(AUD==='pub'&&n===1&&!i.querySelector('.todo.draw')){const h=drawChecklist().replace('<ul class="todo">','<ul class="todo draw">');if(S.want.size){const more=i.querySelector('.more');(more||i.lastChild).insertAdjacentHTML(more?'beforebegin':'afterend',`<span class="todoh">Puis dessinez votre projet :</span>${h}`)}}}}
+{const _wg15=wizGo;wizGo=function(n){_wg15(n);if(AUD==='pub'&&WZ.step===4){/* résultats déjà calculés par l’étape 4 */}}}
+$('#stPrev').addEventListener('click',e=>{if(!WZ.on)return;e.stopImmediatePropagation();const O=wzOrder(),p=O.indexOf(WZ.step);if(p>0)wizGo(O[p-1])},true);
+$('#stNext').addEventListener('click',e=>{if(!WZ.on)return;e.stopImmediatePropagation();const O=wzOrder(),p=O.indexOf(WZ.step);if(p>=O.length-1){toast('Votre projet est enregistré automatiquement. Bon jardinage !');return}wizGo(O[p+1])},true);
+{const _rmt15=renderMapTools;renderMapTools=function(){_rmt15();if(!(AUD==='pub'&&WZ.on&&WZ.step===1))return;const box=$('#mapTools');if(!box)return;const have=new Set([...box.querySelectorAll('[data-mt]')].map(b=>b.dataset.mt));
+  const add=TOOLS.filter(t=>{const k=t[0];if(k==='g'||!SHORT[k]||have.has(k))return false;if(k==='fence')return wantOn('cloture');return !!(TOOLWANT[k]&&S.want.has(TOOLWANT[k]))});
+  box.insertAdjacentHTML('beforeend',add.map(t=>`<button type="button" data-mt="${t[0]}" aria-pressed="${S.mode===t[0]}" title="${esc(t[1])}">${swatch(t[0],t[2])}<span>${esc(SHORT[t[0]])}</span></button>`).join(''))}}
+$('#audSw').addEventListener('click',e=>{const b=e.target.closest('[data-aud]');if(b)setAud(b.dataset.aud)});
+
+/* --- mes envies : questions sur les besoins --- */
+S.env=Object.assign({amb:'',care:'',who:[],water:'',diy:'',budget:''},S.env||{});
+const ENVQ=[
+ {k:'want',m:1,q:'Que voulez-vous faire dans votre jardin ?',o:[['massif','Des fleurs toute l’année'],['potager','Cultiver mes légumes'],['fruit','Récolter quelques fruits'],['verger','Planter un verger'],['haie','Plus d’intimité, cacher un vis-à-vis'],['mare','Un point d’eau, une mare'],['pelouse','Un coin pelouse ou prairie fleurie'],['jardinieres','Fleurir un balcon ou une terrasse'],['cloture','Clôturer mon terrain'],['talus','Planter une pente'],['entretien','Mieux entretenir ce que j’ai déjà']]},
+ {k:'amb',q:'Quelle ambiance vous fait envie ?',o:[['auto','Je ne sais pas : conseillez-moi'],['ang','Champêtre et très fleurie'],['nat','Naturelle, sous-bois'],['jap','Japonaise, zen'],['gra','Contemporaine, graphique'],['med','Sèche, méditerranéenne'],['eco','Refuge pour la biodiversité'],['viv','Comestible'],['ros','Romantique, avec des roses'],['nw','Moderne, graminées et vivaces']]},
+ {k:'care',q:'Combien de temps pour l’entretien ?',o:[['low','Le moins possible'],['mid','Un peu chaque mois'],['high','J’adore jardiner']]},
+ {k:'who',m:1,q:'Qui profite du jardin ?',o:[['kids','De jeunes enfants'],['pets','Un chien ou un chat'],['bio','Les oiseaux, abeilles et papillons'],['senior','Des personnes qui se baissent difficilement']]},
+ {k:'water',q:'Et l’arrosage ?',o:[['ok','Je peux arroser facilement'],['auto','J’aimerais un arrosage automatique'],['none','Je ne veux pas arroser']]},
+ {k:'diy',q:'Qui fera les travaux ?',o:[['me','Moi-même'],['pro','Un professionnel'],['?','Je ne sais pas encore']]},
+ {k:'budget',q:'Quel budget environ ?',o:[['s','Moins de 500 €'],['m','De 500 à 3 000 €'],['l','Plus de 3 000 €'],['?','Je ne sais pas']]}];
+const envLab=(k,v)=>{const Q=ENVQ.find(q=>q.k===k),o=Q&&Q.o.find(x=>x[0]===v);return o?o[1]:''};
+function envStyle(){const E=S.env;if(E.amb&&E.amb!=='auto'&&STY[E.amb])return E.amb;if(E.water==='none')return'med';if(E.who.includes('bio'))return'eco';if(E.care==='low')return'nw';return'ang'}
+function setWant(k,on){if(!WANTS.some(w=>w[0]===k)||S.want.has(k)===on)return;on?S.want.add(k):S.want.delete(k)}
+function applyStyle(k){if(!STY[k]||!k)return;S.style=k;document.querySelectorAll('#styles .sty').forEach(b=>b.setAttribute('aria-pressed',String(b.dataset.s===k)))}
+function envAdvice(){const E=S.env,a=[];
+  if(E.care==='low')a.push('Entretien réduit : vivaces robustes plantées serrées, paillage épais, prairie fleurie plutôt que pelouse tondue chaque semaine.');
+  if(E.care==='high')a.push('Vous aimez jardiner : potager, rosiers, vivaces à floraison longue et taille des fruitiers sont à votre portée.');
+  if(E.who.includes('kids'))a.push('Jeunes enfants : les plantes toxiques (if, digitale, laurier-rose, cytise, muguet…) sont retirées des compositions. Une mare doit être sécurisée (grille rigide sous la surface ou clôture).');
+  if(E.who.includes('pets'))a.push('Chien ou chat : les plantes toxiques pour eux (lis, hémérocalles, if, laurier-cerise…) sont retirées des compositions.');
+  if(E.who.includes('bio'))a.push('Biodiversité : plantes mellifères et indigènes, haie champêtre, coin laissé sauvage et point d’eau peu profond.');
+  if(E.who.includes('senior'))a.push('Pour éviter de se baisser : potager en bacs surélevés (70 à 90 cm), jardinières hautes, allées larges et stables.');
+  if(E.water==='none')a.push('Sans arrosage : plantes de terrain sec, plantation en automne, paillage minéral ou végétal épais ; arrosez seulement la première année.');
+  if(E.water==='auto')a.push('Un arrosage automatique est ajouté au projet (goutte-à-goutte pour les massifs et les haies).');
+  if(E.diy==='me')a.push('Vous ferez les travaux : les étapes, les outils et les durées de chaque chantier sont ajoutés.');
+  if(E.diy==='pro')a.push('Travaux par un professionnel : le rapport sert de cahier des charges pour demander des devis comparables.');
+  return a}
+function envBudgetTxt(){const E=S.env;if(!E.budget||E.budget==='?')return'';let T=null;try{const L=budgetLines();if(L.length)T=budgetTotals(L)}catch(e){}if(!T)return'';
+  const lim={s:[0,500],m:[500,3000],l:[3000,1e9]}[E.budget],v=E.diy==='pro'?T.pro:T.diy,who=E.diy==='pro'?'par un professionnel':'en le faisant vous-même';
+  return v[0]>lim[1]?`Estimation actuelle ${who} : ${rg(v)}, au-dessus de votre budget. Réduisez les surfaces ou étalez le projet sur plusieurs saisons.`:`Estimation actuelle ${who} : ${rg(v)}${v[1]<=lim[1]?', dans votre budget.':', proche de votre budget.'}`}
+function renderEnvies(){const box=$('#enviesBox');if(!box)return;const E=S.env;
+  box.innerHTML=ENVQ.map((Q,i)=>`<div class="card envq"><h4><span class="qn">${i+1}</span>${esc(Q.q)}${Q.m?' <small>(plusieurs choix possibles)</small>':''}</h4><div class="envo">${Q.o.map(([k,l])=>{const on=Q.k==='want'?S.want.has(k):Q.m?E[Q.k].includes(k):E[Q.k]===k;return `<button type="button" class="envb" data-eq="${Q.k}" data-ev="${k}" aria-pressed="${on}">${esc(l)}</button>`}).join('')}</div></div>`).join('')+envSummary()}
+function envSummary(){const E=S.env,w=WANTS.filter(x=>S.want.has(x[0])).map(x=>x[1]),adv=envAdvice(),bt=envBudgetTxt();
+  return `<div class="card envsum"><h4>Votre projet en bref</h4>${w.length?`<p><b>À aménager :</b> ${esc(w.join(', '))}</p>`:'<p class="small">Choisissez au moins une envie à la question 1.</p>'}
+   <p><b>Ambiance proposée :</b> ${esc(STY[envStyle()].l)}${E.amb==='auto'||!E.amb?' <small>(choisie d’après vos réponses)</small>':''}</p>${adv.length?`<ul class="small">${adv.map(t=>`<li>${esc(t)}</li>`).join('')}</ul>`:''}${bt?`<p class="small"><b>Budget :</b> ${esc(bt)}</p>`:''}
+   <div class="chips"><button type="button" class="pri" data-envnext="1"${w.length?'':' disabled'}>Continuer : placer mon terrain sur la carte</button></div></div>`}
+$('#envies').addEventListener('click',e=>{const b=e.target.closest('[data-eq]');
+  if(b){const k=b.dataset.eq,v=b.dataset.ev,E=S.env;
+    if(k==='want'){setWant(v,!S.want.has(v));renderWants()}
+    else if(k==='who'){E.who=E.who.includes(v)?E.who.filter(x=>x!==v):[...E.who,v];if(typeof renderCompo==='function')try{renderCompo()}catch(err){}}
+    else{E[k]=E[k]===v?'':v;if(k==='water')setWant('arrosage',E.water==='auto');if(k==='diy')setWant('diy',E.diy==='me');if(k==='water'||k==='diy')renderWants()}
+    if(['amb','care','water','who'].includes(k))applyStyle(envStyle());
+    renderEnvies();if(WZ.on)wizApply();renderMapTools();saveNow(true);return}
+  if(e.target.closest('[data-envnext]')){if(WZ.on)wizGo(1);else{applyTabs([...new Set([...curTabs(),'carte'])]);showTab('carte',true)}}});
+{const _rw15=renderWants;renderWants=function(){_rw15();if($('#enviesBox')&&!$('#envies').classList.contains('tabhide'))renderEnvies()}}
+const TOXG=['Digitalis','Taxus','Aconitum','Laburnum','Nerium','Ricinus','Datura','Brugmansia','Convallaria','Colchicum','Daphne','Euphorbia','Rhododendron','Helleborus','Lupinus','Arum','Delphinium','Ruta','Ilex','Kalmia','Pieris','Gloriosa','Narcissus'];
+const TOXPET=['Lilium','Hemerocallis','Cycas','Tulipa','Hyacinthus'];
+const toxic=p=>{const g=p.l.split(' ')[0],w=S.env.who;return TOXG.includes(g)||p.l.startsWith('Prunus laurocerasus')||(w.includes('pets')&&TOXPET.includes(g))};
+{const _pf15=passF;passF=function(p,c){if(!_pf15(p,c))return false;const w=S.env&&S.env.who||[];return !((w.includes('kids')||w.includes('pets'))&&toxic(p))}}
+
+/* --- idées de projets par l’IA à partir de photos --- */
+let IDEAPH=[];S.aiIdeas=null;S.aiPick=null;
+function renderIdeaThumbs(){$('#aiThumbs').innerHTML=IDEAPH.map((u,i)=>`<span class="th"><img src="${u}" alt="Photo ${i+1}"><button type="button" data-rmph="${i}" aria-label="Retirer la photo ${i+1}">×</button></span>`).join('')}
+$('#aiPhotos').addEventListener('change',async e=>{const fs=[...(e.target.files||[])];e.target.value='';for(const f of fs){if(IDEAPH.length>=3){toast('Trois photos au maximum.');break}try{const u=URL.createObjectURL(f),im=await loadImg(u);IDEAPH.push(fitCanvas(im,im.naturalWidth,im.naturalHeight,1024).toDataURL('image/jpeg',0.8));URL.revokeObjectURL(u)}catch(err){toast('Photo illisible : '+f.name)}}renderIdeaThumbs()});
+$('#aiThumbs').addEventListener('click',e=>{const b=e.target.closest('[data-rmph]');if(b){IDEAPH.splice(+b.dataset.rmph,1);renderIdeaThumbs()}});
+function ideaPrompt(){const E=S.env,sc=scored().filter(x=>x.ok).sort((a,b)=>b.score-a.score).slice(0,160).map(x=>`${x.p.l} (${x.p.n})`);
+  return `Contexte du terrain (données Plantañ.ia) : ${JSON.stringify(siteContext())}
+Région : ${PLACE.region||'Belgique'}${PLACE.commune?', commune : '+PLACE.commune:''}${typeof plotArea==='function'&&plotArea()?`, parcelle dessinée : ${Math.round(plotArea())} m²`:''}.
+Réponses de l’utilisateur : envies = ${WANTS.filter(x=>S.want.has(x[0])).map(x=>x[1]).join(', ')||'non précisées'} ; ambiance = ${envLab('amb',E.amb)||'non précisée'} ; entretien = ${envLab('care',E.care)||'non précisé'} ; public = ${E.who.map(v=>envLab('who',v)).join(', ')||'non précisé'} ; arrosage = ${envLab('water',E.water)||'non précisé'} ; travaux = ${envLab('diy',E.diy)||'non précisé'} ; budget = ${envLab('budget',E.budget)||'non précisé'}.
+Souhait libre : ${($('#aiWish').value||'').trim()||'aucun'}.
+Plantes adaptées à ce site (choisis-les de préférence dans cette liste) : ${sc.join('; ')}.`}
+const IDEA_SYS=`Tu es paysagiste en Belgique. À partir des photos d’un jardin et du contexte fourni, propose exactement 3 projets différents et réalistes (un simple et économique, un intermédiaire, un plus ambitieux), adaptés au climat, au sol, à l’exposition visible et aux réponses de l’utilisateur. Réponds uniquement en JSON compact, en français, sans texte autour :
+{"observations":"ce que montrent les photos : exposition, existant, contraintes (2 phrases)","projets":[{"titre":"","resume":"2 phrases","ambiance":"une clé parmi ${Object.keys(STY).join(', ')}","amenagements":["clés parmi ${WANTS.map(w=>w[0]).join(', ')}"],"plantes":[{"latin":"","nom":"","role":"rôle en 3 à 6 mots"}],"entretien":"faible|moyen|soutenu","budget":"fourchette en euros","etapes":["3 à 5 étapes courtes"],"attention":"un point de vigilance"}]}
+Au plus 8 plantes par projet. Pas de plantes invasives. Si des enfants ou des animaux sont présents, aucune plante toxique.`;
+$('#aiGo').addEventListener('click',async()=>{const out=$('#aiOut');if(!aiReady()){out.innerHTML='<p class="koo">Cette fonction utilise l’IA Claude. Elle n’est pas encore activée sur ce site : le propriétaire doit renseigner l’adresse du serveur relais (constante RELAIS_CLAUDE_DU_SITE), ou vous pouvez la régler dans l’assistant (⚙).</p>';return}
+  if(!IDEAPH.length&&!($('#aiWish').value||'').trim()){out.innerHTML='<p class="koo">Ajoutez au moins une photo, ou décrivez ce que vous aimeriez.</p>';return}
+  out.innerHTML='<p class="small">Analyse des photos et préparation de trois projets… (20 à 40 secondes)</p>';$('#aiGo').disabled=true;
+  try{const j=await askClaude(IDEA_SYS,[...IDEAPH.map(imgBlock),{type:'text',text:ideaPrompt()}],2400);if(!j||!Array.isArray(j.projets)||!j.projets.length)throw new Error('réponse incomplète');S.aiIdeas=j;renderIdeas();saveNow(true)}
+  catch(err){out.innerHTML=`<p class="koo">Proposition impossible : ${esc(err.message||String(err))}</p>`}finally{$('#aiGo').disabled=false}});
+const plMatch=l=>{if(!l)return null;const s=String(l).toLowerCase().replace(/[‘’'"]/g,'').trim();return PL.find(p=>p.l.toLowerCase()===s)||PL.find(p=>s.startsWith(p.l.toLowerCase()))||PL.find(p=>p.l.toLowerCase().startsWith(s))||null};
+function renderIdeas(){const out=$('#aiOut'),j=S.aiIdeas;if(!out)return;if(!j){out.innerHTML='';return}
+  out.innerHTML=`${j.observations?`<p class="small"><b>Ce que l’IA voit :</b> ${esc(j.observations)}</p>`:''}<div class="ideas">${j.projets.slice(0,3).map((P,i)=>{const am=(P.amenagements||[]).map(k=>WANTS.find(w=>w[0]===k)).filter(Boolean);const sel=S.aiPick&&S.aiPick.titre===P.titre;
+   return `<div class="card idea${sel?' sel':''}"><h4>${esc(P.titre||'Projet '+(i+1))}</h4><p>${esc(P.resume||'')}</p>
+    <p class="small">${STY[P.ambiance]?`<span class="pill">${esc(STY[P.ambiance].l)}</span>`:''}${am.map(w=>`<span class="pill">${esc(w[1])}</span>`).join('')}</p>
+    <ul class="small">${(P.plantes||[]).slice(0,8).map(x=>{const m=plMatch(x.latin);return `<li><i>${esc(x.latin||'')}</i> ${x.nom?'('+esc(x.nom)+')':''}${x.role?' : '+esc(x.role):''}${m?' <span class="okb" title="Plante présente dans la base">✓</span>':''}</li>`}).join('')}</ul>
+    <p class="small"><b>Entretien :</b> ${esc(P.entretien||'—')} · <b>Budget :</b> ${esc(P.budget||'—')}</p>${P.attention?`<p class="small"><b>Attention :</b> ${esc(P.attention)}</p>`:''}
+    ${(P.etapes||[]).length?`<details><summary>Étapes</summary><ol class="small">${P.etapes.slice(0,6).map(t=>`<li>${esc(t)}</li>`).join('')}</ol></details>`:''}
+    <div class="chips"><button type="button" class="pri" data-aipick="${i}">${sel?'Projet choisi ✓':'Choisir ce projet'}</button>${(P.plantes||[]).some(x=>plMatch(x.latin))?`<button type="button" data-aiplants="${i}">Utiliser ces plantes dans le massif</button>`:''}</div></div>`}).join('')}</div>
+   <p class="note">Propositions générées par IA à partir de vos photos : vérifiez-les sur place. Les plantes marquées ✓ sont dans la base de Plantañ.ia et seront calculées (quantités, entretien).</p>`}
+$('#aiOut').addEventListener('click',e=>{const a=e.target.closest('[data-aipick]'),b=e.target.closest('[data-aiplants]');if(!a&&!b)return;const P=S.aiIdeas.projets[+(a||b).dataset[a?'aipick':'aiplants']];if(!P)return;
+  if(a){const keep=['diy','arrosage','entretien'];WANTS.forEach(w=>{if(!keep.includes(w[0]))setWant(w[0],(P.amenagements||[]).includes(w[0]))});if(STY[P.ambiance]){S.env.amb=P.ambiance;applyStyle(P.ambiance)}S.aiPick=JSON.parse(JSON.stringify(P));renderWants();renderEnvies();renderIdeas();if(WZ.on)wizApply();renderMapTools();saveNow(true);toast(`Projet « ${P.titre} » choisi : vos envies et l’ambiance sont mises à jour.`)}
+  else{const L=(P.plantes||[]).map(x=>plMatch(x.latin)).filter(Boolean);S.custom=[...new Map(L.map(p=>[p.l,{l:p.l,qty:p.t==='arbre'||p.t==='arbuste'?1:5}])).values()];S.pick='perso';const o=$('#oPick');if(o)o.value='perso';setWant('massif',true);renderWants();try{renderCompo()}catch(err){}saveNow(true);toast(`${S.custom.length} plantes ajoutées au massif (« Mon choix »). Dessinez le massif sur la carte pour les quantités.`)}});
+
+/* --- persistance --- */
+{const _ser15=serialize;serialize=function(){const d=_ser15();d.set.env=clone(S.env);if(S.aiIdeas)d.set.aiIdeas=S.aiIdeas;if(S.aiPick)d.set.aiPick=S.aiPick;return d}}
+{const _rs15=restoreSettings;restoreSettings=function(t){_rs15(t);if(t&&t.env)S.env=Object.assign({amb:'',care:'',who:[],water:'',diy:'',budget:''},clone(t.env));S.aiIdeas=t&&t.aiIdeas||null;S.aiPick=t&&t.aiPick||null}}
+{const _rp15=resetProject;resetProject=function(){_rp15();S.env={amb:'',care:'',who:[],water:'',diy:'',budget:''};S.aiIdeas=null;S.aiPick=null;IDEAPH=[];if($('#aiThumbs'))renderIdeaThumbs()}}
+{const _rst15=restoreState;restoreState=function(d){_rst15(d);renderEnvies();renderIdeas()}}
+
+/* --- règles communales des clôtures : recherche par l’IA --- */
+async function askWeb(system,prompt,uses){if(!aiReady())throw new Error('IA non activée sur ce site');const loc={type:'approximate',country:'BE',timezone:'Europe/Brussels'};if(PLACE.commune)loc.city=PLACE.commune;
+  let msgs=[{role:'user',content:prompt}],j=null,all=[];
+  for(let g=0;g<3;g++){const body={model:AST.model||'claude-sonnet-5-5',max_tokens:2500,system,messages:msgs};let r;
+    if(AST.mode==='proxy'){body.web=true;body.web_uses=uses||4;body.city=PLACE.commune||'';r=await fetch(AST.proxy,{method:'POST',headers:{'content-type':'application/json'},body:JSON.stringify(body)})}
+    else{body.tools=[{type:'web_search_20250305',name:'web_search',max_uses:uses||4,user_location:loc}];r=await fetch('https://api.anthropic.com/v1/messages',{method:'POST',headers:{'x-api-key':AST.key,'anthropic-version':'2023-06-01','content-type':'application/json','anthropic-dangerous-direct-browser-access':'true'},body:JSON.stringify(body)})}
+    j=await r.json().catch(()=>({}));if(!r.ok)throw new Error((j.error&&j.error.message)||('HTTP '+r.status));all.push(...(j.content||[]));
+    if(j.stop_reason==='pause_turn'&&AST.mode!=='proxy'){msgs=[...msgs,{role:'assistant',content:j.content}];continue}break}
+  const txt=[],src=new Map();all.forEach(b=>{if(b.type==='text'){txt.push(b.text);(b.citations||[]).forEach(c=>{if(c.url&&!src.has(c.url))src.set(c.url,c.title||c.url)})}});
+  if(!src.size)all.filter(b=>b.type==='web_search_tool_result'&&Array.isArray(b.content)).forEach(b=>b.content.slice(0,4).forEach(x=>{if(x.url&&!src.has(x.url))src.set(x.url,x.title||x.url)}));
+  if(!txt.join('').trim())throw new Error('aucune réponse');return{text:txt.join('').trim(),sources:[...src]}}
+const LAW_SYS='Tu es un assistant en urbanisme pour la Belgique. Cherche sur le web le règlement ou le guide communal d’urbanisme de la commune indiquée (site de la commune en priorité), et les règles régionales applicables aux clôtures, palissades, murets et haies. N’affirme que ce que disent les sources trouvées ; si la commune n’a pas de règle spécifique trouvée en ligne, dis-le clairement. Réponds en français, en texte brut, avec ces titres sur une ligne chacun, suivis de tirets : En bref, Hauteurs, Matériaux et aspect, Permis ou dispense, Documents de référence, À vérifier auprès de la commune. 200 mots au maximum.';
+const lawKey=()=>'plantania:law:'+(regionKey()||'')+':'+(PLACE.commune||'').toLowerCase();
+function lawGet(){try{return JSON.parse(localStorage.getItem(lawKey())||'null')}catch(e){return null}}
+function lawHtml(L){if(!L)return'';const lines=L.text.split(/\n+/).map(s=>s.trim()).filter(Boolean);let h='',inList=false;
+  lines.forEach(s=>{const m=s.match(/^[-•*]\s*(.*)$/);if(m){if(!inList){h+='<ul class="small">';inList=true}h+=`<li>${esc(m[1].replace(/\*\*/g,''))}</li>`}else{if(inList){h+='</ul>';inList=false}h+=`<p class="lawh"><b>${esc(s.replace(/\*\*/g,'').replace(/^#+\s*/,''))}</b></p>`}});if(inList)h+='</ul>';
+  return `${h}${L.sources.length?`<p class="small"><b>Sources :</b> ${L.sources.slice(0,6).map(([u,t])=>`<a href="${esc(u)}" target="_blank" rel="noopener">${esc(t)}</a>`).join(' · ')}</p>`:''}<p class="note">Recherche faite par IA le ${esc(L.date)} : confirmez auprès du service urbanisme de la commune avant de commander.</p>`}
+function renderLawAi(){const card=$('#fenceBox')&&[...$('#fenceBox').querySelectorAll('.card')].find(c=>/Règles qui s’appliquent/.test(c.textContent));if(!card)return;let box=$('#lawAi');if(!box){card.insertAdjacentHTML('beforeend','<div id="lawAi" class="lawai"></div>');box=$('#lawAi')}
+  const L=lawGet(),c=PLACE.commune;box.innerHTML=`<h4>Règles de ${c?esc(c):'votre commune'}</h4>${L?lawHtml(L):`<p class="small">L’IA cherche le règlement ou le guide d’urbanisme de la commune et résume les règles des clôtures, avec les liens vers les sources.</p>`}
+   <div class="chips"><button type="button" class="${L?'':'pri'}" id="lawGo"${c?'':' disabled'}>${L?'Actualiser la recherche':'Chercher les règles de ma commune'}</button></div>${c?'':'<p class="small">Placez d’abord votre terrain : la commune est détectée automatiquement.</p>'}`}
+{const _rf15=renderFences;renderFences=function(){_rf15();renderLawAi()}}
+$('#cloture').addEventListener('click',async e=>{if(!e.target.closest('#lawGo'))return;const b=$('#lawGo');if(!aiReady()){toast('La recherche par IA n’est pas activée sur ce site (serveur relais).');return}
+  b.disabled=true;b.textContent='Recherche en cours… (30 à 60 secondes)';const reg=regionKey(),F=S.fences.map(f=>`${FM[f.model]?FM[f.model].l:f.model}, ${nf(f.h,1)} m, ${f.pos||''}`).join(' ; ');
+  try{const r=await askWeb(LAW_SYS,`Commune : ${PLACE.commune}${PLACE.cp?' ('+PLACE.cp+')':''}, région : ${reg==='vla'?'Flandre':reg==='bxl'?'Bruxelles-Capitale':'Wallonie'}, Belgique.\nProjet de clôture : ${F||'clôture de jardin, hauteur à préciser'}.\nQuelles règles s’appliquent (hauteur maximale à rue et en limites latérales et arrière, matériaux, couleurs, haie obligatoire, recul, permis ou dispense) ?`,4);
+    const L={...r,date:new Date().toLocaleDateString('fr-BE'),commune:PLACE.commune};try{localStorage.setItem(lawKey(),JSON.stringify(L))}catch(err){}renderLawAi()}
+  catch(err){toast('Recherche impossible : '+(err.message||err));renderLawAi()}});
+{const _vs15=v4Sections;v4Sections=function(){const o=_vs15(),L=lawGet(),s=o.find(x=>x.title==='CLÔTURES ET PALISSADES');if(s&&L){s.bullets=[...(s.bullets||[]),`Règles de ${L.commune} (recherche par IA du ${L.date}, à confirmer auprès de la commune) :`,...L.text.split(/\n+/).map(x=>x.replace(/^[-•*]\s*/,'').replace(/\*\*/g,'').trim()).filter(Boolean).slice(0,14),...(L.sources.length?['Sources : '+L.sources.slice(0,4).map(([u,t])=>`${t} (${u})`).join(' ; ')]:[])]}return o}}
+
+/* --- rapport : résumé ou détaillé, nouvelle mise en page --- */
+const repMode=()=>{let m=null;try{m=localStorage.getItem('plantania:rmode')}catch(e){}return m==='sum'||m==='full'?m:(AUD==='pub'?'sum':'full')};
+function syncRmode(){const m=repMode();document.querySelectorAll('input[name=rmode]').forEach(r=>{r.checked=r.value===m})}
+document.querySelectorAll('input[name=rmode]').forEach(r=>r.addEventListener('change',()=>{try{localStorage.setItem('plantania:rmode',r.value)}catch(e){}}));
+function briefData(R){const t=[],w=WANTS.filter(x=>wantOn(x[0])&&!['diy','arrosage','entretien'].includes(x[0]));
+  t.push(['Aménagements',w.length?String(w.length):'—']);let a=0;try{a=typeof plotArea==='function'?plotArea():0}catch(e){}t.push(['Terrain dessiné',a?nf(a)+' m²':'—']);
+  const nP=(R.palettes||[]).reduce((s,p)=>s+p.items.reduce((u,it)=>u+(+it.qty||0),0),0);t.push(['Plantes',nP?nf(nP):'—']);
+  t.push(['Ambiance',R.compo?R.compo.style:(STY[S.style]?STY[S.style].l:'—')]);
+  try{const L=budgetLines();if(L.length){const T=budgetTotals(L);t.push(['Budget soi-même',rg(T.diy)],['Budget professionnel',rg(T.pro)],['Temps de travaux',`≈ ${nf(Math.round(T.hours))} h`])}}catch(e){}
+  if(S.env.care)t.push(['Entretien souhaité',envLab('care',S.env.care)]);
+  const photos=(R.palettes||[]).flatMap(p=>p.items).filter(it=>it.photo&&it.photo.src).slice(0,6).map(it=>({src:it.photo.src,n:it.p.n}));
+  const env=ENVQ.filter(q=>q.k!=='want').map(q=>[q.q.replace(/ \?$/,''),q.m?S.env[q.k].map(v=>envLab(q.k,v)).join(', '):envLab(q.k,S.env[q.k])]).filter(r=>r[1]);
+  return{tiles:t.slice(0,8),photos,want:w.map(x=>x[1]),env,adv:envAdvice(),hero:R.plan&&R.plan.data||((R.sections||[]).find(s=>s.planPng)||{}).planPng||(photos[0]&&photos[0].src)||'',heroPlan:!!(R.plan&&R.plan.data||(R.sections||[]).some(s=>s.planPng))}}
+{const _cr15=collectReport;collectReport=async function(){const R=await _cr15();try{const mode=repMode();R.mode=mode;
+  if(S.aiPick){const P=S.aiPick,i=R.sections.findIndex(s=>s.title==='VOTRE PROJET');R.sections.splice(i>=0?i+1:0,0,{title:'PROJET PROPOSÉ PAR L’IA',intro:`${P.titre} : ${P.resume||''}`,tables:(P.plantes||[]).length?[{head:['Plante','Nom commun','Rôle'],rows:P.plantes.slice(0,8).map(x=>[x.latin||'',x.nom||'',x.role||'']),w:[4000,4000,6838]}]:[],bullets:[...(P.etapes||[]),...(P.attention?['Attention : '+P.attention]:[])],bh:'Étapes proposées'})}
+  const B=briefData(R);R.brief=B;R.sections.unshift({title:'VOTRE PROJET EN BREF',brief:1,tables:[{head:['Indicateur','Valeur'],rows:B.tiles,w:[5000,9838]},...(B.env.length?[{h:'Vos envies',head:['Question','Réponse'],rows:B.env,w:[7000,7838]}]:[])],bullets:B.adv,bh:'Nos conseils'});
+  if(mode==='sum'){const DROP=/PROFILS|RÉALISER|ACCÈS|SANTÉ|LIENS|IDENTIF|MATÉRIEL/;R.sections=R.sections.filter(s=>!DROP.test(s.title)).map(s=>s.brief?s:{...s,tables:(s.tables||[]).map(t=>t.rows.length>14?{...t,rows:[...t.rows.slice(0,14),[`… et ${t.rows.length-14} lignes de plus dans le rapport détaillé`,...t.head.slice(1).map(()=>'')]]}:t),bullets:(s.bullets||[]).slice(0,5)});R.checks=[];R.mach=[]}}
+  catch(e){console.warn('rapport',e)}return R}}
+const REP_CSS=`<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,600&display=swap" rel="stylesheet"><style>
+:root{--g:#2d6a3d;--g2:#e8f1ea;--ink:#1d241f}body{counter-reset:sec}
+h2{text-decoration:none;font-family:Fraunces,Georgia,serif;font-weight:600;font-size:19pt;color:var(--g);display:flex;align-items:center;gap:4mm;margin:0 0 7mm;padding-bottom:3mm;border-bottom:2px solid var(--g2)}
+.pg>h2::before{counter-increment:sec;content:counter(sec,decimal-leading-zero);font:600 10pt Jost,sans-serif;color:#fff;background:var(--g);border-radius:50%;width:9mm;height:9mm;display:inline-flex;align-items:center;justify-content:center;flex:none}
+h3{font-family:Fraunces,Georgia,serif;font-weight:600;color:var(--g)}.sub{color:#4c5d51}
+.pg footer{border-top:1px solid var(--g2);padding-top:2mm}
+.tb{border-collapse:separate;border-spacing:0;border-radius:2.5mm;overflow:hidden;border:1px solid var(--g2)}.tb th{background:var(--g2);color:var(--g);font-weight:600;border-bottom:none}.tb td{border-bottom:none}.tb tbody tr:nth-child(even) td{background:#f6faf6}
+.kv th{color:var(--g)}.kv td{border-bottom:1px dashed #dbe5dd}
+.photos figure{border-radius:3mm}.num{border:none;background:var(--g);color:#fff;border-radius:50%;width:6mm;height:6mm;line-height:6mm;min-width:0;font-weight:600}
+.cal>div{background:#f4f8f5;border-radius:3mm;padding:2.5mm 3mm}.fig{border-radius:2mm}
+.cover2{display:grid;grid-template-columns:1.05fr 1fr;padding:0!important}
+.cv-l{background:linear-gradient(160deg,#1f4d2b,#2d6a3d 60%,#4f8a5b);color:#fff;padding:16mm 14mm;display:flex;flex-direction:column;justify-content:space-between}
+.cv-l .clogo{height:22mm;background:#fff;border-radius:3mm;padding:2mm;align-self:flex-start}.kick{text-transform:uppercase;letter-spacing:.2em;font-size:9pt;opacity:.85;margin:0}
+.cv-t h1{font-family:Fraunces,Georgia,serif;font-weight:600;font-size:32pt;line-height:1.1;margin:3mm 0 4mm}.lead{font-size:12pt;opacity:.9;margin:0}
+.cv-cli{font-size:11pt;line-height:1.6;border-top:1px solid rgba(255,255,255,.35);padding-top:5mm}
+.cv-r{position:relative;background:radial-gradient(circle at 30% 30%,#cfe3d3,#9cc3a6)}.cv-r img{width:100%;height:100%;object-fit:cover;display:block}.cv-r.plan{background:#fff}.cv-r.plan img{object-fit:contain;padding:12mm 10mm 22mm}
+.cv-badges{position:absolute;left:8mm;bottom:8mm;right:8mm;display:flex;gap:2mm;flex-wrap:wrap}.cv-badges span{background:#fff;color:var(--g);border-radius:20mm;padding:1.5mm 4mm;font-size:9.5pt;font-weight:500;box-shadow:0 1mm 3mm rgba(0,0,0,.15)}
+.tiles{display:grid;grid-template-columns:repeat(4,1fr);gap:4mm;margin-bottom:6mm}.tile{background:var(--g2);border-radius:3mm;padding:3.5mm 4.5mm}.tile span{display:block;font-size:8pt;color:#56665b;text-transform:uppercase;letter-spacing:.06em}.tile b{display:block;font-family:Fraunces,Georgia,serif;font-size:13.5pt;color:var(--g);margin-top:1mm;font-weight:600;line-height:1.2}
+.bphotos{display:grid;grid-template-columns:repeat(3,1fr);gap:2.5mm}.bphotos figure{margin:0}.bphotos img{width:100%;height:36mm;object-fit:cover;border-radius:3mm;display:block}.bphotos figcaption{font-size:8pt;color:#56665b;margin-top:.8mm}
+.advice{padding-left:5mm}.advice li{margin-bottom:1.6mm}.wants span{display:inline-block;background:#fff;border:1px solid var(--g);color:var(--g);border-radius:20mm;padding:.8mm 3mm;margin:0 1.5mm 1.5mm 0;font-size:9pt}
+</style>`;
+{const _rh15=reportHtml;reportHtml=function(R){const R2={...R,sections:(R.sections||[]).filter(s=>!s.brief)};let h=_rh15(R2);try{const B=R.brief||briefData(R),title=R.cli.title||'Projet de jardin',sum=R.mode==='sum';
+  const foot=`<footer><img src="data:image/png;base64,${LOGO}" alt=""><span>${RE(title)} · Plantañ.ia</span></footer>`;
+  const cover=`<section class="pg cover2"><div class="cv-l"><img class="clogo" src="data:image/png;base64,${LOGO}" alt="Plantañ.ia"><div class="cv-t"><p class="kick">Aménagement paysager</p><h1>${RE(title)}</h1><p class="lead">Rapport ${sum?'résumé':'détaillé'} · ${RE(R.date)}</p></div><div class="cv-cli">${R.cli.name?RE(R.cli.name)+'<br>':''}${R.cli.addr?RE(R.cli.addr)+'<br>':''}${R.cli.city?RE(R.cli.city):(R.place&&R.place.commune?RE(R.place.commune):'')}</div></div>
+   <div class="cv-r${B.heroPlan?' plan':''}">${B.hero?`<img src="${RE(B.hero)}" alt="">`:''}<div class="cv-badges">${B.want.slice(0,5).map(w=>`<span>${RE(w)}</span>`).join('')}</div></div></section>`;
+  const brief=`<section class="pg brief"><h2>VOTRE PROJET EN BREF</h2><div class="tiles">${B.tiles.map(([l,v])=>`<div class="tile"><span>${RE(l)}</span><b>${RE(v)}</b></div>`).join('')}</div>
+   <div class="cols"><div>${B.want.length?`<h3>Ce que vous voulez aménager</h3><p class="wants">${B.want.map(w=>`<span>${RE(w)}</span>`).join('')}</p>`:''}${B.adv.length?`<h3>Nos conseils</h3><ul class="advice small">${B.adv.slice(0,5).map(a=>`<li>${RE(a)}</li>`).join('')}</ul>`:''}${!B.adv.length&&B.env.length?`<h3>Vos envies</h3><table class="kv">${B.env.map(r=>`<tr><th>${RE(r[0])}</th><td>${RE(r[1])}</td></tr>`).join('')}</table>`:''}</div>
+   <div>${B.photos.length?`<h3>Quelques plantes de votre projet</h3><div class="bphotos">${B.photos.map(p=>`<figure><img src="${RE(p.src)}" alt=""><figcaption>${RE(p.n)}</figcaption></figure>`).join('')}</div>`:''}${sum?'<p class="small" style="margin-top:4mm">Rapport résumé : les fiches techniques (profils de terrassement, étapes de chantier, contrôles, matériel) sont dans le rapport détaillé.</p>':''}</div></div>${foot}</section>`;
+  const a=h.indexOf('<section class="pg cover">'),b=a>=0?h.indexOf('</section>',a):-1;if(a>=0&&b>0)h=h.slice(0,a)+cover+brief+h.slice(b+10);
+  if(sum){const k=h.indexOf('MATÉRIEL D’ENTRETIEN ET SOURCES');if(k>0){const s0=h.lastIndexOf('<section',k),s1=h.indexOf('</section>',k);if(s0>0&&s1>0)h=h.slice(0,s0)+h.slice(s1+10)}}
+  h=h.replace('</head>',REP_CSS+'</head>')}catch(e){console.warn('mise en page',e)}return h}}
+syncRmode();applySteps();if(AUD==='pub'&&!WZ.on){WZ.on=true}
+window.__p15={setPlace:o=>Object.assign(PLACE,o),AST,repMode,setAud,aud:()=>AUD,toxic,ENVQ};
+setTimeout(()=>{renderEnvies();renderIdeas();if(AUD==='pub'){if(!WZ.on)WZ.on=true;const O=wzOrder();if(AUDNEW||!O.includes(WZ.step))WZ.step=2;wizGo(WZ.step)}else if(WZ.on){if(WZNEW)wizGo(2);else wizApply()}},0);
+
+/* ================= v16 : lot 1 (légende, rotation, obstacles, vue des massifs, pelouse, plan d’ensemble) ================= */
+/* --- légende : seulement ce qui est sur la carte --- */
+const LEGK={site:()=>S.lat!=null,plot:()=>S.plots.length,obs:()=>S.obs.length,obsPoly:()=>S.shapes.some(s=>s.kind==='obsPoly'),obsLine:()=>S.shapes.some(s=>s.kind==='obsLine'),path:()=>S.paths.length,bed:()=>!!S.bed,hedge:()=>S.hedges.length,fruit:()=>S.fruits.length,vine:()=>S.vines.length,lawn:()=>S.lawns.length,pond:()=>S.ponds.length,talus:()=>S.taluses.length,potager:()=>S.potagers.length,orchard:()=>S.orchards.length,fence:()=>S.fences.length};
+function updateLegend(){const el=$('#maplegend');if(!el)return;const has=k=>{try{if(k.startsWith('z_'))return(S.zones||[]).some(z=>'z_'+z.kind===k);return LEGK[k]?!!LEGK[k]():false}catch(e){return false}};
+  const shown=TOOLS.filter(t=>t[0]!=='g'&&t[0]!=='measure'&&t[0]!=='erase'&&has(t[0])),real=shown.filter(t=>t[0]!=='site');
+  el.hidden=!real.length;const z=el.closest('.mapzone');if(z)z.classList.toggle('noleg',!real.length);if(!real.length){el.innerHTML='';return}
+  const sh=S.obs.length||S.shapes.length;el.innerHTML='<b class="lgt">Légende</b>'+shown.map(t=>`<span>${swatch(t[0],t[2])}${t[1].replace(/ \((forme|ligne|point|contour|existant)\)$/,'').replace(' (point d’étude)','')}</span>`).join('')+(S.parcel?'<span><span class="sw line" style="background:#d7263d"></span>Limite cadastrale</span>':'')+(sh?'<span><span class="sw" style="background:#0b0f0c;opacity:.45"></span>Ombre portée</span>':'')}
+{const _rtl16=rebuildToolLists;rebuildToolLists=function(){_rtl16();updateLegend()}}
+{const _di16=drawItems;drawItems=function(){_di16();updateLegend()}}
+{const _db16=drawBed;drawBed=function(){_db16();updateLegend()}}
+{const _ro16=renderObs;renderObs=function(){_ro16();updateLegend();document.querySelectorAll('#obslist .ob[data-id]').forEach(row=>{const o=S.obs.find(x=>x.id==row.dataset.id);if(!o||row.querySelector('[data-f=oname]'))return;const s=row.querySelector('select[data-f=type]');if(s)s.insertAdjacentHTML('afterend',`<input data-f="oname" value="${esc(o.name||'')}" placeholder="Nom" aria-label="Nom de l’obstacle" style="width:8em">`)})}}
+$('#obslist').addEventListener('change',e=>{if(e.target.dataset.f!=='oname')return;e.stopImmediatePropagation();const row=e.target.closest('.ob'),o=row&&S.obs.find(x=>x.id==row.dataset.id);if(!o)return;o.name=e.target.value.trim().slice(0,40);renderItemsList();saveNow(true)},true);
+OBT.arbu={l:'Arbuste existant',h:2.5,w:2.5,c:'#7cb342'};
+{const _sd16=snapDrawings;snapDrawings=function(){const d=_sd16();d.obs=(d.obs||[]).map((o,i)=>({...o,name:S.obs[i]&&S.obs[i].name||''}));return d}}
+{const _rd16=restoreDrawings;restoreDrawings=function(d){_rd16(d);(d&&d.obs||[]).forEach((o,i)=>{if(S.obs[i]&&o.name)S.obs[i].name=o.name});renderObs()}}
+function obsName(o,i){return o.name||`${OBT[o.type].l} ${i+1}`}
+
+/* --- rotation et taille des formes --- */
+function rotPts(P,c,ang){const a=ang*Math.PI/180,mp=mPer(c[0]);return P.map(p=>{const x=(p[1]-c[1])*mp,y=(p[0]-c[0])*111320;return[c[0]+(x*Math.sin(a)+y*Math.cos(a))/111320,c[1]+(x*Math.cos(a)-y*Math.sin(a))/mp]})}
+const sclPts=(P,c,f)=>P.map(p=>[c[0]+(p[0]-c[0])*f,c[1]+(p[1]-c[1])*f]);
+function rotItem(k,it,a){const raw=it.raw||it.pts;const nr=rotPts(raw,cen(raw),a);if(it.raw){it.raw=nr;regeom(it,closedOf(k,it))}else it.pts=nr;itemsChanged(k==='shapes');if(S.editing)drawHandles()}
+function sclItem(k,it,f){const raw=it.raw||it.pts;const nr=sclPts(raw,cen(raw),f);if(it.raw){it.raw=nr;regeom(it,closedOf(k,it))}else it.pts=nr;itemsChanged(k==='shapes');if(S.editing)drawHandles()}
+{const _dh16=drawHandles;drawHandles=function(){_dh16();if(!S.editing||!L.marker)return;
+  const rh=(raw,done)=>{if(!raw||raw.length<2)return;const c=cen(raw),mp=mPer(c[0]),R=Math.max(...raw.map(p=>Math.hypot((p[1]-c[1])*mp,(p[0]-c[0])*111320)));
+    const mk=L.marker([c[0]+(R+1.5)/111320,c[1]],{draggable:true,zIndexOffset:1200,title:'Tourner la forme',icon:L.divIcon({className:'',html:'<span class="vh mv rot">⟳</span>',iconSize:[26,26],iconAnchor:[13,13]})}).addTo(editLayer);
+    mk.on('dragend',()=>{const q=mk.getLatLng();let a=Math.round(Math.atan2((q.lat-c[0])*111320,(q.lng-c[1])*mp)*180/Math.PI-90);a=((a+540)%360)-180;if(!a){drawHandles();return}
+      pushUndo();const nr=rotPts(raw,c,a);raw.splice(0,raw.length,...nr);done();toast(`Forme tournée de ${Math.abs(a)}° ${a>0?'dans le sens inverse des aiguilles d’une montre':'dans le sens des aiguilles d’une montre'}`,{undo:true})})};
+  if(S.bed&&S.bed.raw)rh(S.bed.raw,()=>{bedRegeom();drawBed();renderCompo();drawHandles()});
+  EDIT_K.forEach(([k])=>(S[k]||[]).forEach(it=>{if(!it.raw)return;const cl=closedOf(k,it);rh(it.raw,()=>{regeom(it,cl);if(k==='taluses')estimateTalus(it);itemsChanged(k==='shapes');drawHandles();if(k==='fences')renderFences()})}))}}
+
+/* --- d’où regarde-t-on le massif ? --- */
+const VIEWD={n:[0,1],ne:[.707,.707],e:[1,0],se:[.707,-.707],s:[0,-1],so:[-.707,-.707],o:[-1,0],no:[-.707,.707]};
+const VIEWL={auto:'Automatique (selon les murs et obstacles proches)',maison:'Depuis la maison',terrasse:'Depuis la terrasse',s:'Depuis le sud',so:'Depuis le sud-ouest',o:'Depuis l’ouest',no:'Depuis le nord-ouest',n:'Depuis le nord',ne:'Depuis le nord-est',e:'Depuis l’est',se:'Depuis le sud-est',tous:'De tous les côtés (massif isolé)'};
+S.bedView=S.bedView||'auto';
+function applyView(v,quiet){const b=S.bed;S.bedView=v;if(!b){renderViewHint();return}if(!b.raw)bedRegeom();
+  if(v==='tous'){b.island=true;$('#island').checked=true}else{b.island=false;$('#island').checked=false;b.rawEdges=b.rawEdges.map(t=>t===1?0:t===2?3:t);
+    if(v!=='auto'){const R=b.raw,c=cen(R),mp=mPer(c[0]),P=R.map(p=>[(p[1]-c[1])*mp,(p[0]-c[0])*111320]);let d=VIEWD[v];
+      if(v==='maison'||v==='terrasse'){const T=v==='maison'?S.shapes.filter(s=>s.kind==='obsPoly').map(s=>cen(s.pts)).concat(S.obs.filter(o=>o.type==='bat').map(o=>[o.lat,o.lng])):S.paths.filter(p=>p.nat==='terrasse').map(p=>cen(p.pts));
+        if(!T.length){if(!quiet)toast(v==='maison'?'Dessinez d’abord la maison (outil « Bâtiment ») sur la carte.':'Dessinez d’abord la terrasse (outil « Chemin, terrasse »).');renderViewHint();return}
+        const t=T.sort((a,b)=>llDist(a,c)-llDist(b,c))[0],vx=(t[1]-c[1])*mp,vy=(t[0]-c[0])*111320,L_=Math.hypot(vx,vy)||1;d=[vx/L_,vy/L_]}
+      const ar=P.reduce((s,p,i)=>{const q=P[(i+1)%P.length];return s+p[0]*q[1]-q[0]*p[1]},0),sg=ar>0?1:-1;let best=-1,bv=-9;
+      P.forEach((p,i)=>{const q=P[(i+1)%P.length],dx=q[0]-p[0],dy=q[1]-p[1],Ln=Math.hypot(dx,dy)||1,nx=dy/Ln*sg,ny=-dx/Ln*sg,val=(-d[0]*nx-d[1]*ny)*Math.min(1,Ln/2);if(val>bv){bv=val;best=i}});
+      if(best>=0)b.rawEdges[best]=b.rawEdges[best]===3?2:1}}
+  bedRegeom();drawBed();renderCompo();renderViewHint();saveNow(true)}
+function renderViewHint(){const h=$('#oViewHint'),s=$('#oView');if(s)s.value=S.bedView||'auto';if(!h)return;const v=S.bedView||'auto';
+  h.textContent=!S.bed?'Dessinez le massif pour choisir d’où on le regarde.':v==='tous'?'Massif vu de tous les côtés : les plantes hautes au centre.':v==='auto'?'Le fond (trait marron sur la carte) est placé contre le mur ou l’obstacle le plus proche. Vous pouvez aussi cliquer un côté du massif sur la carte.':'Les plantes hautes sont placées au fond (trait marron sur la carte), les basses du côté d’où vous regardez.'}
+$('#oView').addEventListener('change',e=>applyView(e.target.value));
+$('#island').addEventListener('change',()=>{S.bedView=$('#island').checked?'tous':'auto';renderViewHint()});
+$('#bedExist').addEventListener('click',()=>{showTab('carte',true);const t=$('#obsType');if(t)t.value='caduc';setMode('obs');toast('Cliquez l’arbre ou l’arbuste existant sur la carte, puis réglez son type, sa hauteur et son envergure.')});
+
+const MON16=MOL.map(m=>m[0].toUpperCase()+m.slice(1));
+/* --- pelouse : un type choisi, mise en œuvre et entretien --- */
+S.lawnType=S.lawnType||null;let lawnAll=false;
+const LAWN_STEPS={std:['Désherber, retirer cailloux et racines.','Ameublir sur 15 à 20 cm (bêche, grelinette ou motoculteur) ; sur sol pauvre, incorporer 2 à 3 cm de compost.','Niveler au râteau, rouler, puis attendre 2 à 3 semaines et arracher les herbes qui lèvent (faux semis).','Semer à la volée en deux passages croisés, griffer légèrement et rouler.','Arroser en pluie fine chaque jour sans pluie jusqu’à la levée (10 à 20 jours), puis espacer.','Première tonte quand l’herbe atteint 8 à 10 cm, en ne coupant que le tiers supérieur.'],
+  prairie:['Décaper 5 à 10 cm de terre riche ou faucher ras et exporter : une prairie fleurie aime les sols pauvres.','Ameublir superficiellement (3 à 5 cm) et niveler sans compost ni engrais.','Mélanger les graines avec du sable sec pour bien les répartir, semer à la volée en surface sans recouvrir.','Rouler pour mettre les graines au contact du sol ; arroser si le printemps est sec.','Première année : une fauche de nettoyage quand les herbes atteignent 20 cm ; ensuite 1 à 2 fauches par an avec exportation.'],
+  golf:['Confier la réalisation à un professionnel : substrat sableux drainé de 20 à 30 cm, nivellement au laser, arrosage automatique.','Semis d’agrostide stolonifère ou placage de gazon de précision.','Tontes très fréquentes à quelques millimètres dès l’enracinement.']};
+const LAWN_CAL={std:[[3,'Scarifier et regarnir les zones clairsemées'],[4,'Reprise des tontes ; engrais organique de printemps'],[6,'Tondre plus haut par temps chaud et sec'],[9,'Aérer, regarnir, engrais d’automne pauvre en azote'],[11,'Dernière tonte ; ramasser les feuilles mortes']],
+  sec:[[4,'Reprise des tontes, toujours haut (6 à 8 cm)'],[7,'Aucun arrosage : le gazon jaunit puis reverdit'],[9,'Regarnir les zones abîmées'],[11,'Ramasser les feuilles']],
+  trefle:[[4,'Première tonte haute'],[6,'Tondre toutes les 2 à 3 semaines, laisser fleurir le trèfle'],[9,'Regarnir si besoin'],[11,'Ramasser les feuilles']],
+  prairie:[[3,'Ramasser les déchets ; aucun engrais'],[6,'Fauche de fin juin (facultative) avec exportation'],[9,'Fauche principale avec exportation ; laisser une zone refuge'],[10,'Semer en complément si des trous apparaissent']],
+  golf:[[3,'Aération, sablage et regarnissage'],[4,'Tontes très fréquentes à 3–5 mm'],[7,'Arrosage quotidien, surveillance des maladies'],[10,'Aération et sablage d’automne']]};
+const lawnT=()=>{const rk=lawnRank();return(S.lawnType&&LAWNS.find(t=>t.k===S.lawnType))||rk[0].t};
+function lawnSupplies(t,A){const r=[[`Semences « ${t.n} »`,`${nf(Math.ceil(A*t.dose*1.1/100)/10,1)} kg`,`${t.dose} g/m² + 10 %`]];
+  if(t.k!=='prairie'&&t.k!=='golf')r.push(['Compost (sol pauvre)',`${nf(Math.round(A*0.025*10)/10,1)} m³`,'2 à 3 cm à incorporer'],['Engrais organique de démarrage',`${nf(Math.round(A*0.05*10)/10,1)} kg`,'environ 50 g/m², suivre l’étiquette']);
+  if(t.k==='prairie')r.push(['Sable sec pour le semis',`${nf(Math.max(5,Math.round(A*0.2)))} L`,'pour bien répartir les graines']);
+  return r}
+{const _rl16=renderLawn;renderLawn=function(){_rl16();const box=$('#lawnBox');if(!box)return;const rk=lawnRank(),cards=[...box.querySelectorAll('.lawns > .card')],A=lawnArea();
+  cards.forEach((cd,i)=>{const t=rk[i]&&rk[i].t;if(!t)return;const sel=S.lawnType===t.k;cd.classList.toggle('lawnsel',sel);if(S.lawnType&&!sel&&!lawnAll)cd.hidden=true;
+    cd.insertAdjacentHTML('beforeend',`<div class="chips"><button type="button" class="${sel?'pri':''}" data-lawnpick="${t.k}">${sel?'Type choisi ✓':'Choisir ce type'}</button></div>`);
+    if(sel){const st=LAWN_STEPS[t.k]||LAWN_STEPS.std,sup=A?lawnSupplies(t,A):[];cd.insertAdjacentHTML('beforeend',`<details open><summary>Mise en œuvre</summary><ol class="small">${st.map(s=>`<li>${esc(s)}</li>`).join('')}</ol></details>${sup.length?`<details><summary>Fournitures</summary><ul class="small">${sup.map(r=>`<li>${esc(r[0])} : <b>${esc(r[1])}</b> (${esc(r[2])})</li>`).join('')}</ul></details>`:''}<details><summary>Entretien mois par mois</summary><ul class="small">${(LAWN_CAL[t.k]||LAWN_CAL.std).map(([m,x])=>`<li><b>${MON16[m-1]}</b> : ${esc(x)}</li>`).join('')}</ul></details>`)}});
+  if(S.lawnType){const l=box.querySelector('.lawns');if(l)l.insertAdjacentHTML('afterend',`<div class="chips"><button type="button" data-lawnall="1">${lawnAll?'Masquer les autres types':'Voir les autres types de pelouse'}</button></div>`)}}}
+$('#pelouse').addEventListener('click',e=>{const p=e.target.closest('[data-lawnpick]');if(p){S.lawnType=S.lawnType===p.dataset.lawnpick?null:p.dataset.lawnpick;lawnAll=false;renderLawn();saveNow(true);return}if(e.target.closest('[data-lawnall]')){lawnAll=!lawnAll;renderLawn()}});
+{const _vs16=v4Sections;v4Sections=function(){const o=_vs16(),A=lawnArea();if(A>0&&(S.lawns.length||wantOn('pelouse'))){const t=lawnT(),cal=LAWN_CAL[t.k]||LAWN_CAL.std;
+  o.push({title:'PELOUSE — '+t.n.toUpperCase(),intro:`${S.lawnType?'Type choisi':'Type conseillé pour votre terrain'} : ${t.n}. Surface : ${nf(A)} m². Usage : ${LUSE[S.lawnUse]||'—'}.`,
+   tables:[{h:'Caractéristiques',head:['Point','Détail'],rows:[['Mélange',t.mix],['Dose de semis',`${t.dose} g/m²`],['Période de semis','Avril–mai ou fin août–septembre'],['Entretien',t.ent]],w:[3500,11338]},
+    {h:'Fournitures',head:['Fourniture','Quantité','Remarque'],rows:lawnSupplies(t,A),w:[6000,3000,5838]},{h:'Entretien mois par mois',head:['Mois','Tâche'],rows:cal.map(([m,x])=>[MON16[m-1],x]),w:[3000,11838]}],
+   bullets:LAWN_STEPS[t.k]||LAWN_STEPS.std,bh:'Mise en œuvre'})}return o}}
+
+/* --- plan d’ensemble avec échelle et nord --- */
+const KLAB={plots:'Parcelle',bed:'Massif',ponds:'Mare',potagers:'Potager',lawns:'Pelouse',orchards:'Verger',taluses:'Talus',hedges:'Haie',vines:'Vigne',fences:'Clôture',paths:'Chemin, terrasse',fruits:'Fruitier',obs:'Arbre ou bâtiment existant',shapes:'Bâtiment ou mur existant',zones:'Zone'};
+function planLabels(){const L_=[],a=(t,p)=>{if(p)L_.push([t,p])};
+  S.shapes.forEach(s=>a(s.name,cen(s.pts)));S.obs.forEach((o,i)=>a(obsName(o,i),[o.lat,o.lng]));if(S.bed&&massifOn())a('Massif',cen(S.bed.ll));
+  S.ponds.forEach((p,i)=>a(`Mare ${i+1}`,cen(p.pts)));S.potagers.forEach((p,i)=>a(`Potager ${i+1}`,cen(p.pts)));S.lawns.forEach((p,i)=>a(`Pelouse ${i+1}`,cen(p.pts)));S.orchards.forEach((p,i)=>a(`Verger ${i+1}`,cen(p.pts)));
+  S.taluses.forEach((p,i)=>a(`Talus ${i+1}`,cen(p.pts)));S.hedges.forEach((p,i)=>a(`Haie ${i+1}`,p.pts[Math.floor(p.pts.length/2)]));S.fences.forEach((p,i)=>a(`Clôture ${i+1}`,p.pts[Math.floor(p.pts.length/2)]));
+  S.paths.forEach(p=>a(PATHN[p.nat]||'Chemin',cen(p.pts)));S.fruits.forEach(f=>a(FRUITS[f.sp].n,[f.lat,f.lng]));(S.zones||[]).forEach(z=>a(`${ZK[z.kind].l} ${zNum(z)}`,cen(z.pts)));return L_}
+async function drawSiteCanvas(withPlan,W){const P=withPlan&&S.plan&&PLANIMG?S.plan:null,items=planItems();if(!P&&!items.length)return null;
+  const o=P?P.c:(S.plots[0]?cen(S.plots[0].pts):cen(items.flatMap(i=>i.pts))),mp=mPer(o[0]),toL=q=>[(q[1]-o[1])*mp,-(q[0]-o[0])*111320];
+  let corn=[],im=null,H=0,th=0;if(P){im=await loadImg(PLANIMG);H=plH();th=plTh();corn=[[-P.w/2,-H/2],[P.w/2,-H/2],[P.w/2,H/2],[-P.w/2,H/2]].map(([u,v])=>[Math.cos(th)*u-Math.sin(th)*v,Math.sin(th)*u+Math.cos(th)*v])}
+  const its=items.map(i=>({...i,m:i.pts.map(toL)})),all=[...corn,...its.flatMap(i=>i.m.map(p=>i.r?[[p[0]-i.r,p[1]-i.r],[p[0]+i.r,p[1]+i.r]]:[p]).flat())];
+  const xs=all.map(p=>p[0]),ys=all.map(p=>p[1]),x0=Math.min(...xs)-3,x1=Math.max(...xs)+3,y0=Math.min(...ys)-3,y1=Math.max(...ys)+3,Wd=W||1600,sc=Math.min(Wd/(x1-x0),Wd*1.3/(y1-y0)),cw=Math.round((x1-x0)*sc),legH=90,ch=Math.round((y1-y0)*sc)+legH;
+  const cv=document.createElement('canvas');cv.width=cw;cv.height=ch;const x=cv.getContext('2d');x.fillStyle='#fff';x.fillRect(0,0,cw,ch);const X=p=>[(p[0]-x0)*sc,(p[1]-y0)*sc],fs=Math.max(13,Math.round(cw/85));
+  if(!P){x.strokeStyle='#eef2ee';x.lineWidth=1;const g=sc*5>40?5:10;for(let gx=Math.ceil(x0/g)*g;gx<x1;gx+=g){x.beginPath();x.moveTo((gx-x0)*sc,0);x.lineTo((gx-x0)*sc,ch-legH);x.stroke()}for(let gy=Math.ceil(y0/g)*g;gy<y1;gy+=g){x.beginPath();x.moveTo(0,(gy-y0)*sc);x.lineTo(cw,(gy-y0)*sc);x.stroke()}}
+  if(P){x.save();x.translate(-x0*sc,-y0*sc);x.rotate(th);x.globalAlpha=P.hide?0:0.95;x.drawImage(im,-P.w/2*sc,-H/2*sc,P.w*sc,H*sc);x.restore()}
+  its.forEach(i=>{x.save();x.strokeStyle=i.col;x.fillStyle=i.col;x.lineWidth=(i.lw||2)*Math.max(1,sc/40);x.lineJoin='round';x.lineCap='round';if(i.dash)x.setLineDash([10,7]);
+    if(i.r){const c=X(i.m[0]);x.globalAlpha=.55;x.beginPath();x.arc(c[0],c[1],i.r*sc,0,7);x.fill();x.globalAlpha=1;x.lineWidth=2;x.stroke()}
+    else{x.beginPath();i.m.forEach((p,j)=>{const q=X(p);j?x.lineTo(q[0],q[1]):x.moveTo(q[0],q[1])});if(i.closed){x.closePath();if(i.fill){x.globalAlpha=i.fill;x.fill();x.globalAlpha=1}}x.stroke()}x.restore()});
+  x.font=`600 ${fs}px sans-serif`;x.textAlign='center';x.textBaseline='middle';x.lineJoin='round';x.miterLimit=2;const boxes=[];planLabels().forEach(([t,p])=>{const q=X(toL(p)),w=x.measureText(t).width+6,h=fs+4;let y=q[1];for(let k=0;k<6&&boxes.some(b=>Math.abs(b[0]-q[0])<(b[2]+w)/2&&Math.abs(b[1]-y)<h);k++)y+=h;boxes.push([q[0],y,w]);x.lineWidth=4;x.strokeStyle='rgba(255,255,255,.92)';x.strokeText(t,q[0],y);x.fillStyle='#1d241f';x.fillText(t,q[0],y)});
+  x.textAlign='left';x.textBaseline='alphabetic';const by=ch-legH+30,bar=[1,2,5,10,20,50].find(v=>v*sc>cw*0.12)||50;x.fillStyle='#212121';x.fillRect(20,by,bar*sc,6);x.font=`${fs}px sans-serif`;x.fillText(`${bar} m`,26+bar*sc,by+7);
+  x.beginPath();x.moveTo(cw-40,by+12);x.lineTo(cw-30,by-22);x.lineTo(cw-20,by+12);x.closePath();x.fill();x.fillText('N',cw-36,by-28);
+  const kinds=[...new Map(items.map(i=>[i.col,i.lab])).entries()].filter(e=>e[1]);let lx=20,ly=by+30;x.font=`${Math.round(fs*0.85)}px sans-serif`;
+  kinds.forEach(([c,l])=>{const w=x.measureText(l).width+40;if(lx+w>cw-60){lx=20;ly+=fs+4}x.fillStyle=c;x.globalAlpha=.7;x.fillRect(lx,ly-fs*0.7,16,fs*0.8);x.globalAlpha=1;x.fillStyle='#333';x.fillText(l,lx+22,ly);lx+=w});
+  return{data:cv.toDataURL('image/png'),w:Math.round(cw/2),h:Math.round(ch/2)}}
+{const _pi16=planItems;planItems=function(){const it=_pi16(),lab={[TC.plot]:'Parcelle',[TC.path]:'Chemin, terrasse',[TC.lawn]:'Pelouse',[TC.potager]:'Potager',[TC.orchard]:'Verger',[TC.talus]:'Talus',[TC.pond]:'Mare',[TC.bed]:'Massif',[TC.hedge]:'Haie',[TC.vine]:'Vigne',[TC.fence]:'Clôture',[TC.fruit]:'Fruitier',[TC.obs]:'Arbre ou bâtiment existant','#795548':'Bâtiment existant','#4e342e':'Mur ou haie existant'};
+  it.forEach(i=>{i.lab=lab[i.col]||''});(S.zones||[]).forEach(z=>it.push({pts:z.pts,col:ZK[z.kind].c,closed:1,fill:.4,lw:2,lab:ZK[z.kind].l}));return it}}
+planComposite=function(W){return drawSiteCanvas(true,W)};
+{const _cr16=collectReport;collectReport=async function(){const R=await _cr16();try{if(!(S.plan&&PLANIMG)&&R.sections){const im=await drawSiteCanvas(false,1600);if(im){const i=R.sections.findIndex(s=>s.title==='VOTRE PROJET');
+  R.sections.splice(i>=0?i+1:1,0,{title:'PLAN D’ENSEMBLE',intro:'Tout ce qui a été dessiné sur la carte, à l’échelle, nord en haut.',tables:[],pngs:[null,im],planPng:im.data})}}}catch(e){console.warn('plan',e)}return R}}
+
+/* ================= v16 : lot 2 (plantes, jardin médicinal, strates, existant, micro-forêt, eau, fraîcheur) ================= */
+const NP=[
+P("Ciste pourpre","Cistus × purpureus","arbuste",-12,"s","d","sl",[5.5,8],1,[5,6,7],1,"rose","vert","arrondi","med gra",{pers:1}),
+P("Ciste à feuilles de laurier","Cistus laurifolius","arbuste",-15,"s","d","sl",[5,7.5],1.5,[6,7],1,"blanc","vert","arrondi","med",{pers:1}),
+P("Sauge de Jérusalem","Phlomis fruticosa","arbuste",-15,"s","d","sl",[6,8.5],1,[6,7],1,"jaune","gris","arrondi","med gra",{pers:1}),
+P("Santoline","Santolina chamaecyparissus","arbuste",-15,"s","d","sl",[6,8.5],0.5,[6,7],4,"jaune","gris","arrondi","med fr",{pers:1}),
+P("Immortelle d’Italie","Helichrysum italicum","arbuste",-12,"s","d","s",[6,8.5],0.5,[6,7,8],4,"jaune","gris","arrondi","med",{pers:1,medic:'Huile essentielle, usage cosmétique (cicatrisation)'}),
+P("Euphorbe de Corse","Euphorbia myrsinites","vivace",-20,"s","d","sl",[6,8.5],0.2,[3,4,5],5,"jaune","gris","couvre","med gra",{pers:1}),
+P("Panicaut des Pyrénées","Eryngium bourgatii","vivace",-20,"s","d","sl",[6,8.5],0.5,[6,7,8],5,"bleu","gris","erige","med nw eco"),
+P("Giroflée vivace 'Bowles's Mauve'","Erysimum 'Bowles's Mauve'","vivace",-15,"s","df","sl",[6,8],0.7,[3,4,5,6,7,8],3,"violet","gris","arrondi","med ang eco",{pers:1}),
+P("Ballote","Ballota pseudodictamnus","vivace",-12,"s","d","s",[6.5,8.5],0.5,[6,7],4,"blanc","gris","arrondi","med"),
+P("Anthémis des teinturiers","Anthemis tinctoria","vivace",-25,"s","d","sl",[6,8],0.6,[6,7,8],5,"jaune","vert","touffe","med ang eco"),
+P("Avoine bleue","Helictotrichon sempervirens","graminee",-25,"s","d","sl",[6,8.5],0.6,[6,7],3,"blond","gris","fontaine","med gra nw",{pers:1}),
+P("Avoine géante","Stipa gigantea","graminee",-20,"s","d","sl",[5.5,8],2,[6,7],1,"blond","vert","fontaine","med nw gra"),
+P("Tritoma","Kniphofia uvaria (hybrides)","vivace",-15,"s","df","sl",[6,7.5],1,[7,8,9],3,"orange rouge","vert","touffe","med gra ang"),
+P("Asphodèle jaune","Asphodeline lutea","vivace",-20,"s","d","sl",[6,8.5],0.8,[5,6],5,"jaune","gris","erige","med"),
+P("Armoise 'Powis Castle'","Artemisia 'Powis Castle'","vivace",-15,"s","d","sl",[6,8],0.7,[],2,"","gris","arrondi","med gra",{pers:1}),
+P("Germandrée petit-chêne","Teucrium chamaedrys","vivace",-20,"s","d","sl",[6.5,8.5],0.3,[7,8],6,"rose","vert","couvre","med fr eco",{pers:1}),
+P("Orpin 'Angelina'","Sedum rupestre 'Angelina'","vivace",-25,"s","d","s",[6,8],0.15,[6,7],9,"jaune","vert","couvre","med gra",{pers:1}),
+P("Lavandin 'Grosso'","Lavandula × intermedia 'Grosso'","arbuste",-15,"s","d","sl",[6.5,8.5],0.8,[7,8],2,"violet","gris","arrondi","med fr eco",{pers:1,medic:'Aromatique ; fleurs séchées (sachets, infusion légère)'}),
+P("Liseron de Mauritanie arbustif","Convolvulus cneorum","arbuste",-10,"s","d","s",[6.5,8.5],0.6,[5,6,7],2,"blanc","gris","arrondi","med",{pers:1}),
+P("Myrte commun","Myrtus communis","arbuste",-12,"s","df","sl",[6,8],2,[7,8],0,"blanc","vert","arrondi","med",{pers:1}),
+P("Arbousier","Arbutus unedo","arbuste",-15,"s","df","sla",[5,7.5],4,[10,11],0,"blanc","vert","arrondi","med ang",{pers:1,note:"Fruits comestibles en automne, en même temps que les fleurs."}),
+P("Gattilier","Vitex agnus-castus","arbuste",-15,"s","d","sl",[6,8],2.5,[8,9],0,"violet","gris","arrondi","med eco"),
+P("Tamaris d’été","Tamarix ramosissima","arbuste",-25,"s","df","sl",[6,8.5],3,[7,8],0,"rose","vert","arrondi","med"),
+P("Chalef d’Ebbinge","Elaeagnus × ebbingei","arbuste",-18,"smo","df","sla",[5.5,8],3,[10,11],0,"blanc","gris","arrondi","med fr",{pers:1}),
+P("Olivier","Olea europaea","arbre",-12,"s","d","sl",[6,8.5],5,[6],0,"blanc","gris","arrondi","med",{pers:1,note:"Rustique jusqu’à −12 °C environ : à l’abri d’un mur exposé au sud, sur sol très drainant."}),
+P("Cyprès de Provence","Cupressus sempervirens 'Totem'","arbre",-15,"s","d","sl",[6,8.5],6,[],0,"","vert","colonne","med fr",{pers:1}),
+P("Mélisse","Melissa officinalis","vivace",-25,"sm","f","sla",[6,8],0.7,[6,7,8],4,"blanc","vert","touffe","viv eco",{medic:'Infusion apaisante et digestive (feuilles)'}),
+P("Menthe poivrée","Mentha × piperita","vivace",-25,"smo","fh","la",[6,7.5],0.5,[7,8],6,"violet","vert","couvre","viv",{medic:'Infusion digestive (feuilles)',note:"Très envahissante : plantez-la dans un pot enterré."}),
+P("Camomille matricaire","Matricaria chamomilla","annuelle",null,"s","df","sl",[6,8],0.4,[6,7,8],16,"blanc","vert","touffe","viv eco",{medic:'Infusion apaisante (capitules)'}),
+P("Valériane officinale","Valeriana officinalis","vivace",-30,"sm","fh","la",[5.5,8],1.2,[6,7],3,"blanc rose","vert","erige","nat eco",{medic:'Racine : usage traditionnel pour le sommeil'}),
+P("Millepertuis perforé","Hypericum perforatum","vivace",-30,"s","df","sl",[5.5,8],0.6,[6,7,8],5,"jaune","vert","erige","nat eco",{medic:'Usage traditionnel (huile rouge) ; nombreuses interactions médicamenteuses, rend la peau sensible au soleil'}),
+P("Bourrache","Borago officinalis","annuelle",null,"s","f","sl",[6,8],0.6,[5,6,7,8,9],4,"bleu","vert","touffe","viv eco",{medic:'Fleurs comestibles ; huile des graines'}),
+P("Guimauve officinale","Althaea officinalis","vivace",-25,"s","fh","la",[6,8],1.5,[7,8,9],2,"rose","gris","erige","nat",{medic:'Racine et feuilles adoucissantes (toux, gorge)'}),
+P("Hysope officinale","Hyssopus officinalis","vivace",-25,"s","d","sl",[6.5,8.5],0.5,[7,8,9],5,"bleu","vert","touffe","med viv eco",{medic:'Aromatique ; infusion pour les voies respiratoires',pers:1}),
+P("Grande camomille","Tanacetum parthenium","vivace",-25,"s","df","sl",[6,8],0.6,[6,7,8],5,"blanc","vert","touffe","ang viv",{medic:'Usage traditionnel contre les migraines'}),
+P("Mauve sylvestre","Malva sylvestris","vivace",-25,"s","df","sla",[6,8],1,[6,7,8,9],3,"violet rose","vert","erige","nat eco",{medic:'Fleurs et feuilles adoucissantes en infusion'}),
+P("Agripaume cardiaque","Leonurus cardiaca","vivace",-30,"sm","df","sla",[6,8],1,[6,7,8],3,"rose","vert","erige","nat",{medic:'Usage traditionnel (nervosité, palpitations)'}),
+P("Agastache anisée","Agastache foeniculum","vivace",-25,"s","df","sl",[6,8],1,[7,8,9],4,"violet","vert","erige","eco viv",{medic:'Infusion anisée (feuilles et fleurs)'}),
+P("Carex à épis pendants","Carex pendula","graminee",-25,"smo","fh","la",[5.5,8],1,[5,6],2,"vert","vert","fontaine","nat jap",{pers:1}),
+P("Jonc épars","Juncus effusus","graminee",-30,"sm","h","la",[4.5,7.5],0.7,[6,7],4,"blond","vert","touffe","nat",{pers:1}),
+P("Eupatoire chanvrine","Eupatorium cannabinum","vivace",-30,"sm","fh","la",[6,8],1.3,[7,8,9],2,"rose","vert","erige","nat eco"),
+P("Lysimaque commune","Lysimachia vulgaris","vivace",-30,"sm","fh","la",[5.5,7.5],0.9,[7,8],4,"jaune","vert","erige","nat eco")];
+{const have=new Set(PL.map(p=>p.l));NP.forEach(p=>{if(!have.has(p.l))PL.push(p)})}
+const MEDIC={'Achillea millefolium':'Infusion digestive ; cicatrisant traditionnel','Calendula officinalis':'Fleurs : pommade apaisante pour la peau','Echinacea purpurea':'Racine et parties aériennes : usage traditionnel pour les défenses naturelles','Filipendula ulmaria':'Fleurs : infusion contre les douleurs légères','Lavandula angustifolia':'Fleurs : apaisante, huile essentielle','Mentha spicata':'Feuilles : infusion digestive','Origanum vulgare':'Aromatique ; infusion digestive','Salvia officinalis':'Feuilles : gargarisme, digestion','Salvia rosmarinus':'Aromatique ; tonique','Symphytum officinale':'Usage externe seulement (cataplasmes)','Thymus vulgaris':'Aromatique ; infusion pour la gorge','Thymus serpyllum':'Aromatique ; infusion','Sambucus nigra':'Fleurs en infusion ; baies cuites seulement'};
+PL.forEach(p=>{if(MEDIC[p.l])p.medic=MEDIC[p.l];if(p.medic&&!p.st.includes('medi'))p.st.push('medi')});
+STY.medi={l:'Jardin médicinal',s:'Aromatiques et plantes médicinales en carrés',d:'Un jardin de simples : des aromatiques persistantes pour la structure (thym, sauge, romarin, lavande, hysope), des vivaces médicinales (mélisse, échinacée, achillée, valériane…) plantées en carrés ou en bandes faciles d’accès pour la cueillette, et quelques annuelles semées chaque année (souci, camomille, bourrache). Les usages indiqués sont traditionnels : demandez conseil à un médecin ou à un pharmacien avant toute utilisation.',
+ roles:[{r:'Aromatiques persistantes (structure)',f:p=>!!p.medic&&(p.t==='arbuste'||!!p.pers)&&p.h<=1.2&&p.d>0,k:A=>A>=8?3:2,m:'area',sh:.35},{r:'Vivaces médicinales',f:p=>!!p.medic&&p.t==='vivace'&&!p.pers,k:A=>A>=10?6:4,m:'area',sh:.65}],
+ tasks:[[3,'Tailler d’un tiers les aromatiques ligneuses (lavande, sauge, thym, hysope)'],[5,'Semer souci, camomille et bourrache en place'],[6,'Récolter feuilles et fleurs le matin, par temps sec, au début de la floraison'],[9,'Diviser mélisse et menthe ; récolter les racines de valériane et de guimauve']]};
+$('#styles').innerHTML=Object.entries(STY).map(([k,v])=>`<button class="sty" data-s="${k}" aria-pressed="${k===S.style}"><b>${v.l}</b><span>${v.s}</span></button>`).join('');
+ENVQ[1].o.push(['medi','Médicinale et aromatique']);
+
+/* --- strates choisies et variété des arbres --- */
+const STRATA={all:null,noTree:['arbuste','vivace','graminee','fougere','bulbe','annuelle'],noWood:['vivace','graminee','fougere','bulbe','annuelle'],shrubs:['arbuste'],viv:['vivace','bulbe'],vivgra:['vivace','graminee','bulbe'],gra:['graminee'],fern:['fougere','vivace','bulbe'],trees:['arbre','arbuste']};
+const STRL={arbre:'Arbres',arbuste:'Arbustes',vivace:'Vivaces',graminee:'Graminées',fougere:'Fougères',bulbe:'Bulbes'};
+S.strata=S.strata||'all';S.strataC=S.strataC||['arbre','arbuste','vivace','graminee','fougere','bulbe'];S.vary=S.vary||0;
+const pcat=p=>isBulb(p)?'bulbe':p.t;
+const strataSet=()=>S.strata==='custom'?[...S.strataC,'annuelle']:STRATA[S.strata];
+let COMPO16=0,NOTREE16=0;
+{const _pf16=passF;passF=function(p,c){if(!_pf16(p,c))return false;if(c&&COMPO16){const s=strataSet();if(s&&!s.includes(pcat(p)))return false;if(NOTREE16&&p.t==='arbre')return false}return true}}
+const hsh=s=>{let h=2166136261;for(let i=0;i<s.length;i++){h^=s.charCodeAt(i);h=Math.imul(h,16777619)}return(h>>>0)/4294967296};
+{const _sc16=scored;scored=function(){const r=_sc16();if(!COMPO16)return r;const seed=(PRJ.id||'')+':'+S.vary;return r.map(x=>x.p.t==='arbre'||x.p.t==='arbuste'?{...x,score:x.score+Math.round(hsh(seed+x.p.l)*(x.p.t==='arbre'?14:7))}:x)}}
+function bedExisting(){if(!S.bed||!S.bed.ll)return[];const ll=S.bed.ll;return S.obs.filter(o=>['caduc','pers','arbu'].includes(o.type)&&(inPolyLL([o.lat,o.lng],ll)||distPtPoly([o.lat,o.lng],ll)<(o.w||2)/2))}
+function underPlants(o,A){const c=cond(),cm={...c,expo:o.type==='pers'?'o':'m',eau:'d'};const ok=PL.filter(p=>['vivace','fougere','graminee'].includes(p.t)&&p.h<=0.8&&p.d>0&&scorePlant(p,cm).ok&&passF(p,true)).map(p=>({p,score:scorePlant(p,cm).score})).sort((a,b)=>b.score-a.score);
+  const pick=[];for(const x of ok){if(pick.length>=4)break;if(pick.some(y=>y.p.t===x.p.t&&pick.filter(z=>z.p.t===x.p.t).length>=2))continue;pick.push(x)}return pick}
+{const _co16=compose;compose=function(){const ex=bedExisting();COMPO16=1;NOTREE16=ex.some(o=>o.type==='caduc'||o.type==='pers')?1:0;let r;try{r=_co16()}finally{COMPO16=0;NOTREE16=0}
+  try{if(r&&!r.custom){const s=strataSet();
+    if(s&&!r.rows.some(x=>x.m==='area')&&r.rows.length&&s.includes('arbuste')){const tot=r.rows.reduce((a,x)=>a+x.qty,0),need=Math.max(tot,Math.round(r.planted/2));r.rows.forEach(x=>{x.qty=Math.max(1,Math.round(x.qty*need/tot));x.det='plantés à environ 2 m² chacun'})}
+    if(ex.length&&S.bed){const ll=S.bed.ll;let Au=0;const add=[];ex.forEach(o=>{const cr=Math.PI*Math.pow((o.w||3)/2,2),a=Math.min(cr,r.A*0.8);Au+=a;if(o.type==='arbu')return;
+        const pk=underPlants(o,a);pk.forEach(x=>{const ar=a/pk.length;add.push({role:`Sous l’arbre existant (${o.type==='pers'?'ombre sèche':'mi-ombre sèche'})`,m:'area',p:x.p,score:x.score,qty:Math.max(1,Math.round(ar*x.p.d)),det:`${nf(ar,1)} m² · ${x.p.d}/m²`,off:false,place:'Sous l’arbre',col:pickCol(x.p,r.cset)})})});
+      const f=Math.max(0.2,1-Au/r.A);r.rows.forEach(x=>{if(x.m==='area'){x.qty=Math.max(1,Math.round(x.qty*f))}});r.rows.push(...add);r.existing=ex.map(o=>`${o.name||OBT[o.type].l} (${nf(o.h,1)} m)`)}}}catch(e){console.warn('compo',e)}
+  return r}}
+function renderStrata(){const s=$('#oStrata');if(s)s.value=S.strata;const c=$('#oStrataC');if(!c)return;c.hidden=S.strata!=='custom';c.innerHTML=Object.entries(STRL).map(([k,l])=>`<label class="chk"><input type="checkbox" data-strat="${k}"${S.strataC.includes(k)?' checked':''}> ${l}</label>`).join('')}
+$('#oStrata').addEventListener('change',e=>{S.strata=e.target.value;renderStrata();renderCompo();saveNow(true)});
+$('#oStrataC').addEventListener('change',e=>{const k=e.target.dataset.strat;if(!k)return;S.strataC=e.target.checked?[...new Set([...S.strataC,k])]:S.strataC.filter(x=>x!==k);if(!S.strataC.length){S.strataC=[k];e.target.checked=true;toast('Gardez au moins une strate.')}renderCompo();saveNow(true)});
+$('#oVary').addEventListener('click',()=>{S.vary=(S.vary||0)+1;renderCompo();saveNow(true);toast('Nouvelle sélection d’arbres et d’arbustes.')});
+
+/* --- micro-forêt, jardin de pluie, noue, îlot de fraîcheur --- */
+S.zones=S.zones||[];LISTS.push('zones');EDIT_K.push(['zones',1]);
+const ZK={foret:{l:'Micro-forêt',c:'#2e5e2a',w:'foret',t:'Micro-forêt (forme)',h:'Micro-forêt : cliquez le contour de la zone à boiser (idéalement 30 m² ou plus), puis « Terminer ».'},
+ pluie:{l:'Jardin de pluie',c:'#3f8fb0',w:'pluie',t:'Jardin de pluie (forme)',h:'Jardin de pluie : cliquez le contour de la cuvette, à 3 m au moins des fondations, puis « Terminer ».'},
+ noue:{l:'Noue d’infiltration',c:'#6aa9c9',w:'noue',t:'Noue d’infiltration (forme allongée)',h:'Noue : dessinez une forme allongée qui suit la pente, de la descente de gouttière vers la mare ou le jardin de pluie.'},
+ fraicheur:{l:'Îlot de fraîcheur',c:'#43a047',w:'fraicheur',t:'Îlot de fraîcheur (forme)',h:'Îlot de fraîcheur : cliquez le contour de la zone à ombrager (coin repas, jeux, terrasse), puis « Terminer ».'}};
+Object.entries(ZK).forEach(([k,z])=>{const m='z_'+k;SHAPE_MODES[m]=3;TC[m]=z.c;HINT[m]=z.h;SHORT[m]=z.l;DRAWTXT[m]='Cliquez le contour : '+z.l.toLowerCase();TOOLWANT[m]=z.w});
+{const i=TOOLS.findIndex(t=>t[0]==='fence');TOOLS.splice(i+1,0,...Object.entries(ZK).map(([k,z])=>['z_'+k,z.t,'area']))}
+rebuildToolLists();
+WANTS.push(['foret','Une micro-forêt','Forêt dense d’essences locales (méthode Miyawaki)','z_foret'],['pluie','Un jardin de pluie','Recueille l’eau des toitures et l’infiltre','z_pluie'],['noue','Une noue d’infiltration','Fossé planté qui guide l’eau de pluie, vers une mare par exemple','z_noue'],['fraicheur','Un îlot de fraîcheur','Ombre, végétation et eau contre la chaleur','z_fraicheur']);
+ENVQ[0].o.splice(ENVQ[0].o.length-1,0,['foret','Une micro-forêt'],['pluie','Gérer l’eau de pluie (jardin de pluie)'],['noue','Guider l’eau vers une mare (noue)'],['fraicheur','Un coin frais en été']);
+renderWants();
+const zDef=k=>({drain:k==='pluie'?40:k==='noue'?60:0,depth:k==='pluie'?0.2:k==='noue'?0.4:0});
+{const _fs16=finishShape;finishShape=function(){const m=S.mode;if(!m||!m.startsWith('z_'))return _fs16();if(S.drawPts.length<3){$('#maphint').textContent='Il faut au moins 3 points.';return}pushUndo();
+  const k=m.slice(2),id=++itemId;S.zones.push({id,pts:S.drawPts.slice(),kind:k,opts:zDef(k)});initGeom(id);setMode('site');itemsChanged(false);drawHandles();renderZones();toast(`${ZK[k].l} ajouté(e) : ${nf(areaLL(S.zones[S.zones.length-1].pts))} m². Résultats dans l’onglet « Forêt, eau et fraîcheur ».`);if(typeof wizApply==='function')wizApply()}}
+{const _di16b=drawItems;drawItems=function(){_di16b();(S.zones||[]).forEach(z=>{const lab=`${ZK[z.kind].l} ${zNum(z)} · ${nf(areaLL(z.pts))} m²`;const l=hook(L.polygon(z.pts,{color:ZK[z.kind].c,weight:2,fillColor:ZK[z.kind].c,fillOpacity:z.kind==='noue'||z.kind==='pluie'?.45:.35,dashArray:z.kind==='noue'?'6 4':null}).addTo(itemsLayer),'zones',z.id,lab);if(l&&l.bindTooltip)l.bindTooltip(lab,{permanent:true,direction:'center',className:'maplbl'})});updateLegend()}}
+{const _ril16=renderItemsList;renderItemsList=function(){_ril16();const ul=$('#itemsList ul');if(!ul)return;(S.zones||[]).forEach(z=>ul.insertAdjacentHTML('beforeend',`<li><span class="sw" style="background:${ZK[z.kind].c}"></span><span>${esc(ZK[z.kind].l)} ${zNum(z)} · ${nf(areaLL(z.pts))} m²</span><button type="button" data-del="zones" data-id="${z.id}">Supprimer</button></li>`))}}
+{const _ss16=stepSecs;stepSecs=function(n){const s=_ss16(n);if(n===4&&(S.zones.length||['foret','pluie','noue','fraicheur'].some(wantOn))&&!s.includes('zones')){const i=s.indexOf('machines');i>=0?s.splice(i,0,'zones'):s.push('zones')}return s}}
+const zNum=z=>S.zones.filter(x=>x.kind===z.kind).indexOf(z)+1;
+function zDims(z){const mp=mPer(z.pts[0][0]),P=z.pts.map(p=>[p[1]*mp,p[0]*111320]);let L_=0;for(let i=0;i<P.length;i++)for(let j=i+1;j<P.length;j++)L_=Math.max(L_,Math.hypot(P[i][0]-P[j][0],P[i][1]-P[j][1]));const A=areaLL(z.pts);return{A,L:L_,W:L_?A/L_:0}}
+const nearB=z=>{const B=[...S.shapes.filter(s=>s.kind==='obsPoly').map(s=>s.pts),...S.obs.filter(o=>o.type==='bat').map(o=>[[o.lat,o.lng]])];let d=1e9;B.forEach(b=>z.pts.forEach(p=>{d=Math.min(d,b.length>2?distPtPoly(p,b):llDist(p,b[0]))}));return d};
+const nearPond=z=>{let best=null;S.ponds.forEach((p,i)=>{const d=minD(geomPts('pond',p),geomPts('z',z));if(!best||d<best.d)best={i,d,p}});return best};
+function pickPlants(filter,cm,n,used,nat){const out=[];PL.filter(p=>filter(p)&&!used.has(p.l)&&passF(p,true)).map(p=>({p,s:scorePlant(p,cm)})).filter(x=>x.s.ok).sort((a,b)=>(b.s.score+(nat&&b.p.st.includes('nat')?20:0))-(a.s.score+(nat&&a.p.st.includes('nat')?20:0))).forEach(x=>{if(out.length<n){out.push(x.p);used.add(x.p.l)}});return out}
+function zoneInfo(z){const c=cond(),D=zDims(z),A=D.A,o=z.opts||{},used=new Set(),warn=[],rows=[],sup=[],steps=[],tech=[];let hours=0,cost=[0,0],nPl=0;
+  const addPl=(lay,list,qtot)=>{if(!list.length)return;const q=Math.max(1,Math.round(qtot/list.length));list.forEach(p=>{rows.push([lay,p.n,p.l,q,nf(p.h,p.h<1?2:1)+' m']);nPl+=q;cost=add2(cost,pr(p.t==='arbre'||p.t==='arbuste'?(z.kind==='foret'?'haie':p.t):p.t==='annuelle'?'annuelle':p.t==='fougere'?'fougere':p.t==='graminee'?'graminee':'vivace',q))})};
+  if(z.kind==='foret'){const n=Math.round(A*3),nat=p=>p.st.includes('nat')&&!p.pers;
+    const L1=pickPlants(p=>p.t==='arbre'&&p.h>=12&&nat(p),c,4,used),L2=pickPlants(p=>(p.t==='arbre'&&p.h<12||p.t==='arbuste'&&p.h>=5)&&nat(p),c,4,used),L3=pickPlants(p=>p.t==='arbuste'&&p.h>=1.5&&p.h<5&&nat(p),c,6,used),L4=pickPlants(p=>p.t==='arbuste'&&p.h<1.5&&p.st.includes('nat'),c,3,used);
+    addPl('Canopée (grands arbres)',L1,n*0.2);addPl('Arbres moyens',L2,n*0.25);addPl('Arbustes',L3,n*0.4);addPl('Strate basse',L4,n*0.15);
+    const sp=L1.length+L2.length+L3.length+L4.length;if(A<30)warn.push('Surface faible : une micro-forêt fonctionne mieux à partir d’environ 30 m², idéalement 100 m² ou plus.');if(D.W<3)warn.push('Zone très étroite : visez au moins 3 m de large.');if(sp<10)warn.push(`Seulement ${sp} essences adaptées trouvées : ajoutez-en d’autres indigènes chez le pépiniériste (objectif : 15 à 30 essences).`);
+    if(nearB(z)<5)warn.push('Moins de 5 m d’un bâtiment : les grands arbres devront être placés au fond de la zone.');
+    tech.push(['Densité','3 jeunes plants par m²'],['Nombre de plants',String(n)],['Taille des plants','Jeunes plants de 40 à 80 cm, racines nues ou godets forestiers'],['Période de plantation','De novembre à mars, hors gel']);
+    sup.push(['Compost ou fumier composté',`${nf(A*0.05,1)} m³`],['Paillage (paille, BRF)',`${nf(A*0.12,1)} m³ (10 à 15 cm)`]);cost=add2(add2(cost,pr('compost',A*0.05)),pr('paillage',A*0.12));hours=A*0.4+n*0.08;
+    steps.push('Délimiter la zone et retirer le gazon.','Décompacter le sol sur 50 cm à 1 m (fourche-bêche ou mini-pelle) et y mélanger le compost.','Planter serré, 3 plants par m², en mélangeant les essences au hasard : jamais deux plants identiques côte à côte.','Pailler sur 10 à 15 cm et arroser copieusement.','Les 2 à 3 premières années : désherber, arroser en période sèche, recharger le paillage. Ensuite, la forêt se débrouille seule.')}
+  else if(z.kind==='pluie'){const ratio={s:0.1,l:0.15,a:0.25}[c.sol]||0.15,need=(o.drain||40)*ratio,vol=A*(o.depth||0.2),vneed=(o.drain||40)*0.03;
+    tech.push(['Surface de toiture ou terrasse raccordée',`${nf(o.drain||40)} m²`],['Surface conseillée',`${nf(need,1)} m² (${Math.round(ratio*100)} % de la surface raccordée, sol ${c.sol==='s'?'sableux':c.sol==='a'?'argileux':'limoneux'})`],['Profondeur de la cuvette',`${nf((o.depth||0.2)*100)} cm`],['Volume retenu',`${nf(vol,1)} m³ (pluie de 30 mm : ${nf(vneed,1)} m³)`]);
+    if(A<need*0.8)warn.push(`Jardin un peu petit : visez environ ${nf(need,1)} m², ou raccordez moins de toiture.`);if(vol<vneed)warn.push('Volume insuffisant pour une forte pluie : creusez un peu plus ou prévoyez un trop-plein.');if(nearB(z)<3)warn.push('À moins de 3 m d’un bâtiment : éloignez la cuvette des fondations.');if(c.sol==='a')warn.push('Sol argileux : l’eau s’infiltre lentement. Ajoutez 20 à 30 cm de mélange sable-compost et un trop-plein (vers une noue ou une mare).');
+    const bot=pickPlants(p=>['vivace','graminee'].includes(p.t)&&p.w.includes('h')&&p.w.includes('f')&&p.h<=1.5,{...c,eau:'h'},4,used,1),slope=pickPlants(p=>['vivace','graminee','fougere'].includes(p.t)&&p.w.includes('f')&&p.h<=1.2,{...c,eau:'f'},4,used,1),rim=pickPlants(p=>['vivace','graminee','arbuste'].includes(p.t)&&p.w.includes('d')&&p.h<=1.2,{...c,eau:'d'},3,used,1);
+    const q=(arr,frac)=>arr.length?A*frac*(arr.reduce((s,p)=>s+(p.d||4),0)/arr.length):0;addPl('Fond (supporte l’eau quelques jours)',bot,q(bot,0.4));addPl('Pentes',slope,q(slope,0.4));addPl('Bord (plus sec)',rim,q(rim,0.2));
+    sup.push(['Mélange sable-compost (sol lourd)',`${nf(A*0.25,1)} m³`],['Galets pour l’arrivée d’eau',`${nf(Math.max(0.1,A*0.01),1)} m³`],['Paillage',`${nf(A*0.07,1)} m³`]);cost=add2(cost,pr('paillage',A*0.07));if(c.sol!=='s')cost=add2(cost,pr('compost',A*0.12));hours=A*1.2+nPl*0.08;
+    steps.push('Repérer la descente de gouttière et la pente du terrain ; placer la cuvette à 3 m au moins des fondations.','Creuser une cuvette de 15 à 30 cm, fond plat, bords en pente douce.','Ameublir le fond ; sur sol lourd, remplacer 20 à 30 cm par un mélange sable-compost.','Amener l’eau par une rigole en galets ou un tuyau enterré ; protéger l’arrivée avec des galets.','Prévoir un trop-plein vers une noue, une mare ou une zone qui accepte l’excès d’eau.','Planter selon les zones (fond, pentes, bord), pailler et arroser la première année.')}
+  else if(z.kind==='noue'){const d=o.depth||0.4,s=3,b=D.W-2*s*d,dmax=D.W/(2*s),dd=b<0?Math.round(dmax*100)/100:d,bb=Math.max(0,D.W-2*s*dd),vol=D.L*(D.W+bb)/2*dd,vneed=(o.drain||60)*0.03,np=nearPond(z);
+    tech.push(['Longueur',`${nf(D.L,1)} m`],['Largeur en haut',`${nf(D.W,2)} m`],['Profondeur',`${nf(dd*100)} cm${b<0?` (réduite : la noue est trop étroite pour ${nf(d*100)} cm avec des berges douces)`:''}`],['Largeur du fond',`${nf(bb,2)} m`],['Pentes des berges','1 de haut pour 3 de large'],['Volume stocké',`${nf(vol,1)} m³`],['Surface raccordée',`${nf(o.drain||60)} m² (pluie de 30 mm : ${nf(vneed,1)} m³)`]);
+    if(vol<vneed)warn.push('Volume un peu faible : allongez ou élargissez la noue, ou raccordez moins de surface.');if(np&&np.d<6){tech.push(['Trop-plein',`vers la mare ${np.i+1} (à ${nf(np.d,1)} m)`]);steps.push(`Relier le bout de la noue à la mare ${np.i+1} par un seuil en galets : la mare reçoit l’eau propre des toitures, sans engrais ni boue.`)}
+    const bot=pickPlants(p=>['vivace','graminee'].includes(p.t)&&p.w.includes('h')&&p.w.includes('f')&&p.h<=1.3,{...c,eau:'h'},3,used,1),bank=pickPlants(p=>['vivace','graminee'].includes(p.t)&&p.w.includes('f')&&p.h<=1,{...c,eau:'f'},3,used,1);
+    addPl('Fond de la noue',bot,A*0.35*4);addPl('Berges',bank,A*0.65*5);sup.push(['Terre végétale',`${nf(A*0.1,1)} m³ (10 cm)`],['Toile coco pour les berges',`${nf(A*0.7)} m²`],['Galets (entrée, sortie, seuils)',`${nf(Math.max(0.2,D.L*0.03),1)} m³`]);cost=add2(cost,pr('coco',A*0.7));hours=D.L*1.5+nPl*0.06;
+    steps.unshift('Tracer la noue en suivant la pente (0,5 à 1 %) ou en travers de la pente pour freiner l’eau ; placer des seuils si la pente est forte.','Creuser un profil en cuvette : berges douces (1 pour 3), fond plat.','Remettre 10 cm de terre végétale, couvrir les berges de toile coco.','Semer un mélange pour prairie humide ou planter fond et berges ; protéger l’entrée et la sortie par des galets.')}
+  else if(z.kind==='fraicheur'){const tr=pickPlants(p=>p.t==='arbre'&&p.h>=6&&p.h<=16&&!p.pers&&['arrondi','etale'].includes(p.p),c,3,used),cr=tr.length?tr.reduce((s,p)=>s+Math.PI*Math.pow(p.h*0.35,2),0)/tr.length:40,nt=Math.max(1,Math.ceil(A*0.5/cr));
+    addPl('Arbres d’ombrage (caducs : ombre l’été, soleil l’hiver)',tr.slice(0,Math.min(3,nt)),nt);const sh=pickPlants(p=>p.t==='arbuste'&&p.h<=3&&p.h>=1,{...c,expo:'m'},3,used),gc=pickPlants(p=>['vivace','fougere'].includes(p.t)&&p.p==='couvre',{...c,expo:'m'},3,used);
+    addPl('Arbustes',sh,Math.max(2,Math.round(A/15)));addPl('Couvre-sols (sol toujours couvert)',gc,A*0.3*6);
+    tech.push(['Objectif','Au moins la moitié de la zone ombragée par les arbres adultes'],['Arbres',`${nt} (couronne adulte moyenne ≈ ${nf(cr)} m²)`],['Surface',`${nf(A)} m²`]);
+    if(!tr.length)warn.push('Aucun arbre adapté trouvé pour ce site : demandez conseil au pépiniériste.');sup.push(['Tuteurs et liens',`${nt}`],['Compost',`${nf(A*0.03,1)} m³`],['Paillage',`${nf(A*0.08,1)} m³`]);cost=add2(add2(add2(cost,pr('tuteur',nt)),pr('compost',A*0.03)),pr('paillage',A*0.08));hours=nt*1.5+A*0.2+nPl*0.08;
+    steps.push('Placer les arbres au sud-ouest et à l’ouest du coin à rafraîchir : ils coupent le soleil de l’après-midi, le plus chaud.','Garder le sol perméable et couvert : couvre-sols, paillage ou prairie plutôt que grandes surfaces minérales sombres qui stockent la chaleur.','En attendant que les arbres grandissent : pergola ou treille avec une grimpante (vigne, glycine, houblon).','Ajouter de l’eau si possible : petite mare, bassin, fontaine ou simple récupérateur pour arroser.','Arroser les jeunes arbres en été pendant 3 ans (50 L tous les 10 jours en période sèche).')}
+  return{A,D,rows,warn,tech,sup,steps,hours,cost,nPl}}
+function renderZones(){const box=$('#zonesBox');if(!box)return;if(!S.zones.length){box.innerHTML=`<p class="empty">Dessinez une micro-forêt, un jardin de pluie, une noue ou un îlot de fraîcheur sur la carte (outils « Micro-forêt », « Jardin de pluie »…).</p><div class="chips">${Object.entries(ZK).map(([k,z])=>`<button type="button" data-zdraw="${k}">${esc(z.l)}</button>`).join('')}</div>`;return}
+  box.innerHTML=S.zones.map(z=>{const I=zoneInfo(z),o=z.opts||{};return `<div class="card zcard" data-zid="${z.id}"><h4><span class="sw" style="background:${ZK[z.kind].c}"></span> ${esc(ZK[z.kind].l)} ${zNum(z)} · ${nf(I.A)} m²</h4>
+   ${z.kind==='pluie'||z.kind==='noue'?`<div class="frow"><label>Surface de toiture ou terrasse raccordée (m²)<input type="number" min="0" step="5" data-zo="drain" value="${o.drain||0}"></label><label>Profondeur (cm)<input type="number" min="5" max="100" step="5" data-zo="depth" value="${Math.round((o.depth||0)*100)}"></label></div>`:''}
+   ${I.warn.map(w=>`<p class="warn">${esc(w)}</p>`).join('')}<table class="stack"><tbody>${I.tech.map(r=>`<tr><th>${esc(r[0])}</th><td>${esc(r[1])}</td></tr>`).join('')}</tbody></table>
+   ${I.rows.length?`<h5>Plantes (${nf(I.nPl)})</h5><table class="stack"><thead><tr><th>Strate</th><th>Plante</th><th>Qté</th><th>Hauteur</th></tr></thead><tbody>${I.rows.map(r=>`<tr><td>${esc(r[0])}</td><td>${esc(r[1])} <i>${esc(r[2])}</i></td><td>${r[3]}</td><td>${esc(r[4])}</td></tr>`).join('')}</tbody></table>`:''}
+   ${I.sup.length?`<p class="small"><b>Fournitures :</b> ${I.sup.map(s=>`${esc(s[0])} : ${esc(s[1])}`).join(' · ')}</p>`:''}<details><summary>Étapes de réalisation</summary><ol class="small">${I.steps.map(s=>`<li>${esc(s)}</li>`).join('')}</ol></details>
+   <p class="small">Budget indicatif (fournitures et plants) : ${rg(I.cost.map(v=>v*1.06))} · travail ≈ ${nf(Math.round(I.hours))} h</p></div>`}).join('')}
+$('#zones').addEventListener('change',e=>{const k=e.target.dataset.zo;if(!k)return;const z=S.zones.find(x=>x.id==e.target.closest('[data-zid]').dataset.zid);if(!z)return;const v=parseFloat(e.target.value);if(!(v>=0))return;z.opts=z.opts||{};z.opts[k]=k==='depth'?v/100:v;renderZones();saveNow(true)});
+$('#zones').addEventListener('click',e=>{const b=e.target.closest('[data-zdraw]');if(b){setWant(ZK[b.dataset.zdraw].w,true);renderWants();showTab('carte',true);setMode('z_'+b.dataset.zdraw)}});
+{const _ic16=itemsChanged;itemsChanged=function(a){_ic16(a);if(!$('#zones').classList.contains('tabhide'))renderZones()}}
+{const _bl16=budgetLines;budgetLines=function(){const L=_bl16();S.zones.forEach(z=>{const I=zoneInfo(z);L.push({k:z.kind,t:`${ZK[z.kind].l} ${zNum(z)}`,sup:I.cost,vat:6,qtxt:`${nf(I.A)} m² · ${nf(I.nPl)} plants`,rent:z.kind==='foret'&&I.A>60||z.kind==='noue'&&I.D.L>15?[60,110]:[0,0],hDiy:I.hours,hPro:I.hours/1.8})});return L}}
+{const _vs16b=v4Sections;v4Sections=function(){const o=_vs16b();S.zones.forEach(z=>{const I=zoneInfo(z);o.push({title:`${ZK[z.kind].l.toUpperCase()} ${zNum(z)}`,intro:`${nf(I.A)} m².`,tables:[{h:'Caractéristiques',head:['Point','Détail'],rows:I.tech,w:[5000,9838]},...(I.rows.length?[{h:'Plantes',head:['Strate','Plante','Nom latin','Quantité','Hauteur'],rows:I.rows,w:[3500,3500,3800,1800,2238]}]:[]),...(I.sup.length?[{h:'Fournitures',head:['Fourniture','Quantité'],rows:I.sup,w:[8000,6838]}]:[])],bullets:[...I.warn,...I.steps],bh:'Points d’attention et étapes'})});const bi=o.findIndex(x=>/^BUDGET/.test(x.title));if(bi>=0)o.push(o.splice(bi,1)[0]);return o}}
+DIY.foret={t:'Micro-forêt',when:'Novembre à mars',dur:a=>`≈ ${nf(Math.round(a*0.6))} h pour ${nf(a)} m²`,lvl:'Moyen',tools:'Fourche-bêche, bêche, brouette, cordeau',s:['Voir les étapes détaillées dans l’onglet « Forêt, eau et fraîcheur ».']};
+DIY.pluie={t:'Jardin de pluie',when:'Printemps ou automne',dur:a=>`≈ ${nf(Math.round(a*1.5))} h pour ${nf(a)} m²`,lvl:'Moyen',tools:'Bêche, pelle, niveau, brouette',s:['Voir les étapes détaillées dans l’onglet « Forêt, eau et fraîcheur ».']};
+DIY.noue={t:'Noue d’infiltration',when:'Fin d’été ou automne (sol ressuyé)',dur:a=>`≈ ${nf(Math.round(a*1.2))} h pour ${nf(a)} m²`,lvl:'Moyen à difficile',tools:'Bêche, pelle, niveau à bulle et cordeau (ou mini-pelle)',s:['Voir les étapes détaillées dans l’onglet « Forêt, eau et fraîcheur ».']};
+DIY.fraicheur={t:'Îlot de fraîcheur',when:'Novembre à mars pour les arbres',dur:a=>`≈ ${nf(Math.round(a*0.3))} h pour ${nf(a)} m²`,lvl:'Facile',tools:'Bêche, tuteurs, maillet, arrosoir',s:['Voir les étapes détaillées dans l’onglet « Forêt, eau et fraîcheur ».']};
+{const _dl16=diyList;diyList=function(){const L=_dl16();S.zones.forEach(z=>L.push([z.kind,Math.round(areaLL(z.pts))]));return L}}
+{const _int16=interactions;interactions=function(){const L=_int16();S.zones.forEach(z=>{const i=zNum(z)-1;if(z.kind!=='noue'&&z.kind!=='pluie')return;const np=nearPond(z);if(np&&np.d<6)L.push({lvl:'tip',t:`${ZK[z.kind].l} ${i+1} et mare ${np.i+1}`,d:`À ${nf(np.d,1)} m l’une de l’autre : faites déborder ${z.kind==='noue'?'la noue':'le jardin de pluie'} vers la mare par un seuil en galets. La mare reçoit l’eau propre des toitures et reste pleine plus longtemps l’été.`});
+    else if(z.kind==='noue'&&S.ponds.length)L.push({lvl:'tip',t:`Noue ${i+1} et mare`,d:'Prolongez la noue jusqu’à la mare pour l’alimenter en eau de pluie.'});if(nearB(z)<3)L.push({lvl:'warn',t:`${ZK[z.kind].l} ${i+1} trop près d’un bâtiment`,d:'Gardez au moins 3 m entre une zone d’infiltration et les fondations.'})});
+  S.zones.filter(z=>z.kind==='foret').forEach((z,i)=>{/*num*/S.potagers.forEach((v,j)=>{const d=minD(geomPts('z',z),geomPts('v',v));if(d<4)L.push({lvl:'warn',t:`Micro-forêt ${i+1} et potager ${j+1}`,d:'La micro-forêt va ombrager et concurrencer le potager : gardez 4 m au moins, ou placez le potager au sud de la forêt.'})})});return L}}
+{const _ser16=serialize;serialize=function(){const d=_ser16();Object.assign(d.set,{bedView:S.bedView,lawnType:S.lawnType,strata:S.strata,strataC:S.strataC,vary:S.vary});return d}}
+{const _rs16=restoreSettings;restoreSettings=function(t){_rs16(t);if(!t)return;S.bedView=t.bedView||'auto';S.lawnType=t.lawnType||null;S.strata=t.strata||'all';S.strataC=t.strataC||['arbre','arbuste','vivace','graminee','fougere','bulbe'];S.vary=t.vary||0;renderStrata();renderViewHint()}}
+{const _rp16=resetProject;resetProject=function(){_rp16();S.bedView='auto';S.lawnType=null;S.strata='all';S.vary=0;S.zones=[];renderStrata();renderViewHint()}}
+{const _rst16=restoreState;restoreState=function(d){_rst16(d);S.zones=S.zones||[];drawItems();renderZones();renderStrata();renderViewHint()}}
+renderStrata();renderViewHint();updateLegend();setTimeout(()=>{renderZones();updateLegend()},0);
+window.__p16={zoneInfo,drawSiteCanvas,applyView,bedExisting,rotItem,sclItem,lawnT};
+
+/* ================= v17 : envies décrites en texte ou à la voix ================= */
+S.env.text=S.env.text||'';
+const ENVKW={want:{massif:['fleur','massif','vivace','couleur','bloem'],potager:['potager','legume','tomate','salade','moestuin','groente','vegetable'],fruit:['fruit','pommier','poirier','cerisier','framboise','prunier','fruitboom'],verger:['verger','boomgaard','orchard'],
+   haie:['haie','intimite','vis-a-vis','vis a vis','cacher','brise-vue','brise vue','regard','haag','privacy'],mare:['mare','bassin','etang','point d\'eau','grenouille','vijver','pond'],pelouse:['pelouse','gazon','prairie','gras','lawn'],jardinieres:['balcon','jardiniere','en pot','des pots','bacs','balkon'],
+   cloture:['cloture','palissade','grillage','afsluiting','fence'],talus:['talus','pente','butte','helling','slope'],entretien:['entretenir','deja des plantes','existant'],foret:['foret','miyawaki','bosquet','minibos'],pluie:['eau de pluie','gouttiere','jardin de pluie','inond','flaque','regenwater'],noue:['noue','fosse','wadi'],fraicheur:['fraicheur','frais en ete','canicule','chaleur','trop chaud','ombre pour','koel']},
+ amb:[['jap',['japon','zen']],['med',['mediterran','provence','jardin sec','lavande','olivier']],['ros',['rosier','roseraie','des roses']],['medi',['medicinal','tisane','aromatique','plantes qui soignent']],['gra',['contemporain','moderne','graphique','minimal','epure']],['nw',['graminee','new wave','prairie de vivaces']],['eco',['biodiversite','ecolog','refuge']],['viv',['comestible','nourricier','a manger']],['nat',['naturel','sauvage','sous-bois','sous bois','forestier']],['ang',['anglais','champetre','romantique','cottage','boheme']]],
+ care:[['low',['peu d\'entretien','pas le temps','sans entretien','facile','pas beaucoup de temps','le moins possible','weinig onderhoud','low maintenance']],['high',['j\'adore jardiner','passionne','j\'aime jardiner','beaucoup de temps']]],
+ who:{kids:['enfant','bebe','petit-fils','petite-fille','kinder','kids','children'],pets:['chien','chat','animaux','animal','hond','kat','dog','cat'],bio:['oiseau','abeille','papillon','biodiversite','herisson','insecte','pollinis','vogel','bij'],senior:['mal au dos','se baisser','age','mobilite','fauteuil','genoux']},
+ water:[['auto',['arrosage automatique','goutte a goutte','goutte-a-goutte','arroseur']],['none',['pas arroser','sans arrosage','pas d\'arrosage','secheresse','ne veux pas arroser','zonder water']],['ok',['arroser facilement','je peux arroser']]],
+ diy:[['me',['moi-meme','moi meme','je ferai','je vais faire','bricol','je creuse','zelf']],['pro',['paysagiste','professionnel','une entreprise','faire faire','aannemer','tuinaannemer']]]};
+function envParse(t){const x=' '+String(t||'').toLowerCase().normalize('NFD').replace(/[̀-ͯ]/g,'').replace(/[’]/g,'\'')+' ',has=w=>w.some(k=>x.includes(k)),r={want:[],who:[]};
+  Object.entries(ENVKW.want).forEach(([k,w])=>{if(has(w))r.want.push(k)});Object.entries(ENVKW.who).forEach(([k,w])=>{if(has(w))r.who.push(k)});
+  ['amb','care','water','diy'].forEach(k=>{const f=ENVKW[k].find(([v,w])=>has(w));if(f)r[k]=f[0]});
+  const m=x.match(/(\d[\d .]*)\s*(€|eur|euro)/);if(m){const v=parseFloat(m[1].replace(/[ .]/g,''));if(v>0)r.budget=v<500?'s':v<=3000?'m':'l'}else if(has(['petit budget','pas cher','economique','pas beaucoup d\'argent']))r.budget='s';
+  return r}
+function envApply(r,src){const E=S.env,got=[];(r.want||[]).forEach(k=>{if(WANTS.some(w=>w[0]===k)&&!S.want.has(k)){setWant(k,true);got.push(WANTS.find(w=>w[0]===k)[1])}});
+  (r.who||[]).forEach(v=>{if(['kids','pets','bio','senior'].includes(v)&&!E.who.includes(v)){E.who=[...E.who,v];got.push(envLab('who',v))}});
+  [['amb',Object.keys(STY)],['care',['low','mid','high']],['water',['ok','auto','none']],['diy',['me','pro','?']],['budget',['s','m','l','?']]].forEach(([k,ok])=>{if(r[k]&&ok.includes(r[k])&&E[k]!==r[k]){E[k]=r[k];got.push(k==='amb'?STY[r[k]].l:envLab(k,r[k]))}});
+  if(E.water==='auto')setWant('arrosage',true);if(E.diy==='me')setWant('diy',true);applyStyle(envStyle());renderWants();renderEnvies();if(WZ.on)wizApply();renderMapTools();saveNow(true);
+  const out=$('#envTxtOut');if(out)out.innerHTML=got.length?`<p class="okp"><b>${src==='ia'?'L’IA a compris':'J’ai compris'} :</b> ${esc(got.join(' · '))}. Les réponses ci-dessous sont cochées : corrigez-les si besoin.</p>${r.resume?`<p class="small">${esc(r.resume)}</p>`:''}`:'<p class="koo">Je n’ai rien reconnu de précis : ajoutez des détails (ce que vous voulez planter, l’ambiance, le temps d’entretien…) ou répondez aux questions ci-dessous.</p>'}
+const ENV_SYS=`Tu aides à remplir un questionnaire de jardin à partir de la description libre d’un particulier en Belgique. Réponds uniquement en JSON :
+{"want":["clés parmi ${WANTS.map(w=>w[0]).join(', ')}, foret, pluie, noue, fraicheur"],"amb":"une clé parmi ${Object.keys(STY).join(', ')}, medi, ou vide","care":"low|mid|high|vide","who":["kids|pets|bio|senior"],"water":"ok|auto|none|vide","diy":"me|pro|?|vide","budget":"s (moins de 500 €)|m (500 à 3 000 €)|l (plus de 3 000 €)|vide","resume":"une phrase qui reformule le projet"}
+N’invente rien : laisse vide ce qui n’est pas dit.`;
+$('#envTxtGo').addEventListener('click',async()=>{const t=($('#envTxt').value||'').trim();if(!t){toast('Écrivez ou dictez d’abord ce que vous aimeriez.');return}S.env.text=t;if(!($('#aiWish').value||'').trim())$('#aiWish').value=t;
+  const loc=envParse(t);if(!aiReady()){envApply(loc,'local');return}
+  const b=$('#envTxtGo');b.disabled=true;b.textContent='Analyse…';try{const j=await askClaude(ENV_SYS,t.slice(0,3000),600);const m={...loc,...Object.fromEntries(Object.entries(j||{}).filter(([k,v])=>v&&(!Array.isArray(v)||v.length)))};m.want=[...new Set([...(loc.want||[]),...((j&&j.want)||[])])];m.who=[...new Set([...(loc.who||[]),...((j&&j.who)||[])])];envApply(m,'ia')}
+  catch(e){envApply(loc,'local')}finally{b.disabled=false;b.textContent='Comprendre ma description'}});
+const SRec=window.SpeechRecognition||window.webkitSpeechRecognition;let envRec=null;
+function micUI(on){const b=$('#envMic');if(!b)return;b.setAttribute('aria-pressed',String(on));b.innerHTML=on?'<span aria-hidden="true">⏹</span> Arrêter la dictée':'<span aria-hidden="true">🎤</span> Dicter'}
+$('#envMic').addEventListener('click',()=>{if(!SRec){toast('Dictée non disponible dans ce navigateur : utilisez le micro du clavier de votre téléphone, ou Chrome, Edge ou Safari.');return}
+  if(envRec){envRec.stop();return}const ta=$('#envTxt'),base=ta.value.trim()?ta.value.trim()+' ':'';envRec=new SRec();envRec.lang=LANG==='nl'?'nl-BE':LANG==='en'?'en-GB':'fr-BE';envRec.interimResults=true;envRec.continuous=true;
+  envRec.onresult=e=>{let fin='',tmp='';for(let i=0;i<e.results.length;i++){const r=e.results[i];if(r.isFinal)fin+=r[0].transcript+' ';else tmp+=r[0].transcript}ta.value=(base+fin+tmp).replace(/\s+/g,' ')};
+  envRec.onerror=e=>{toast(e.error==='not-allowed'?'Autorisez le micro pour ce site dans votre navigateur.':'Dictée interrompue ('+e.error+').')};envRec.onend=()=>{envRec=null;micUI(false);S.env.text=ta.value.trim();saveNow(true)};
+  try{envRec.start();micUI(true)}catch(err){envRec=null;toast('Dictée impossible : '+err.message)}});
+if(!SRec)$('#envMic').title='Dictée non prise en charge par ce navigateur';
+{const _re17=renderEnvies;renderEnvies=function(){_re17();const t=$('#envTxt');if(t&&!t.value&&S.env.text)t.value=S.env.text}}
+$('#envTxt').addEventListener('change',e=>{S.env.text=e.target.value.trim();saveNow(true)});
+{const _rp17=resetProject;resetProject=function(){_rp17();const t=$('#envTxt');if(t)t.value='';const o=$('#envTxtOut');if(o)o.innerHTML=''}}
+window.__p17={envParse};
+
+
+/* ================= v17 : tutoriel adapté (particulier / professionnel), relancé tant qu’il n’est pas terminé ================= */
+const TUTO0=TUTO.map(x=>x.slice());
+const TUTO_PRO_START=['#audSw',null,'Particulier ou professionnel','Ce bouton choisit la version : particulier (parcours simple en 4 étapes) ou professionnel (tous les onglets, outils et détails).'];
+const TUTO_PUB=[TUTO_PRO_START,
+ ['#envTxt','envies','Dites ce que vous aimeriez','Écrivez ou dictez votre projet avec le bouton 🎤, ou répondez aux questions : tout se coche automatiquement.'],
+ ['.aiideas','envies','Pas encore d’idée ?','Ajoutez des photos de votre jardin : l’IA vous propose trois projets adaptés.'],
+ ['#steps',null,'Suivez les 4 étapes','Mes envies, Mon terrain, Mes résultats, Mon projet en main : seul ce qui est utile s’affiche.'],
+ ['#search',null,'Trouvez votre terrain','Tapez votre adresse ou cliquez sur « Ma position ».'],
+ ['#mapTools','carte','Dessinez sur la carte','Choisissez un outil, puis cliquez les angles sur la carte : votre terrain, la maison, le massif, la mare… Le cadenas 🔓 empêche la carte de bouger par erreur.'],
+ ['#exPdf','export','Votre rapport','Rapport résumé ou détaillé en PDF ou Word, budget, primes et professionnels près de chez vous.'],
+ ['#aiOpen',null,'Besoin d’aide ?','« Décrire mon projet » ouvre l’assistant. Le menu ☰ → « Aide : relancer le tutoriel » le relance à tout moment.']];
+function setTuto(){const L=AUD==='pub'?TUTO_PUB:[TUTO_PRO_START,...TUTO0];TUTO.splice(0,TUTO.length,...L.map(x=>x.slice()))}
+{const _tg17=tutoGo;tutoGo=function(i){if(i===0&&tutoI<0)setTuto();const el=TUTO[i]&&document.querySelector(TUTO[i][0]);if(i<TUTO.length&&i>=0&&!el){return tutoGo(i+(i>=tutoI?1:-1))}return _tg17(i)}}
+{const _te17=tutoEnd;tutoEnd=function(fin){const was=tutoI>=0;_te17(fin);if(was&&WZ.on){applyTabs(stepSecs(WZ.step));wizApply()}}}
+
 /* ---------- Démarrage ---------- */
 if(window.__noMap){
   $('#map').innerHTML='<div class="nomap"><p><b>La carte n’a pas pu se charger.</b></p><p>Ce fichier doit être ouvert dans un navigateur (Chrome, Edge, Firefox ou Safari sur ordinateur) avec une connexion internet. Un aperçu de fichier, une application de messagerie ou le mode hors ligne bloquent la carte et les données en ligne.</p><p>Vous pouvez quand même saisir des coordonnées au-dessus de la carte.</p></div>';
