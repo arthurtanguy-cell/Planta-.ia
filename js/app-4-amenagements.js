@@ -1249,37 +1249,91 @@ function grpVis(){const g=TGRP.find(x=>x[0]===TG),cur=curTabs();document.querySe
 $('#tabs').addEventListener('click',e=>{const b=e.target.closest('[data-tg]');if(!b)return;e.stopPropagation();TG=b.dataset.tg;const g=TGRP.find(x=>x[0]===TG);const sel=g[3].filter(t=>TABS.includes(t));applyTabs(oneTab?[sel[0]]:sel);const s=$('#'+sel[0]);if(s)s.scrollIntoView({behavior:'smooth',block:'start'})},true);
 if(!TG)TG=grpOf(curTabs()[0]||'carte');grpVis();
 
-/* --- 2. projet express (particuliers) --- */
-const EXW=[['massif','🌸 Des fleurs toute l’année'],['arbre','🌳 Un arbre pour l’ombre'],['potager','🥕 Un potager'],['pelouse','⚽ Une pelouse pour jouer'],['haie','🌿 Plus d’intimité (haie)'],['mare','💧 Une mare pour la biodiversité'],['terrasse','🪑 Une terrasse']];
-function expHtml(){const amb=ENVQ.find(q=>q.k==='amb').o,care=ENVQ.find(q=>q.k==='care').o;return `<div class="exphead"><h2>⚡ Projet express</h2><button type="button" class="welx" data-ex="x" aria-label="Fermer">×</button></div>
-  <p>Trois questions, et le site dessine pour vous un premier projet complet sur votre terrain : vous l’ajustez ensuite si besoin.</p>
-  <label class="expl">1. L’adresse du jardin<input type="text" id="expAddr" placeholder="${S.lat!=null?'Terrain déjà placé : laissez vide pour le garder':'Rue, numéro, commune'}" autocomplete="street-address"></label>
-  <fieldset class="expf"><legend>2. Ce que vous voulez (plusieurs choix)</legend><div class="expw">${EXW.map(([k,l])=>`<label class="expc"><input type="checkbox" value="${k}"${S.want.has(k)?' checked':''}> ${l}</label>`).join('')}</div></fieldset>
-  <div class="frow"><label class="expl">3. L’ambiance<select id="expAmb">${amb.map(([k,l])=>`<option value="${k}"${S.env.amb===k?' selected':''}>${esc(l)}</option>`).join('')}</select></label>
-  <label class="expl">Et le temps d’entretien<select id="expCare">${care.map(([k,l])=>`<option value="${k}"${S.env.care===k?' selected':''}>${esc(l)}</option>`).join('')}</select></label></div>
-  <p class="small muted">Le site place le terrain, retrouve la parcelle cadastrale et les bâtiments (OpenStreetMap), puis propose les aménagements aux bons endroits selon le soleil et la place.</p>
-  <p id="expMsg" class="small" role="status"></p>
-  <div class="welfoot"><span></span><span class="chips"><button type="button" data-ex="x">Annuler</button><button type="button" class="pri" data-ex="go">Créer mon projet</button></span></div>`}
-function expOpen(){let d=$('#expDlg');if(!d){document.body.insertAdjacentHTML('beforeend','<dialog id="expDlg" class="weldlg expdlg" aria-label="Projet express"><div id="expBody"></div></dialog>');d=$('#expDlg');
-    d.addEventListener('click',e=>{const b=e.target.closest('[data-ex]');if(!b)return;if(b.dataset.ex==='x'){d.close();return}if(b.dataset.ex==='go')expRun()})}
-  $('#expBody').innerHTML=expHtml();if(d.showModal&&!d.open)d.showModal();else d.setAttribute('open','')}
+/* --- 2. projet express (particuliers) : assistant en 4 étapes --- */
+const EXW=[['massif','🌸','Des fleurs','Un massif fleuri toute l’année'],['arbre','🌳','Un arbre','Pour l’ombre, les fleurs ou l’automne'],['pelouse','⚽','Une pelouse','Pour jouer et se détendre'],['potager','🥕','Un potager','Légumes et aromatiques au soleil'],
+ ['haie','🌿','Une haie','Intimité, abri pour les oiseaux'],['terrasse','🪑','Une terrasse','Contre la façade la plus ensoleillée'],['mare','💧','Une mare','Un point d’eau pour la faune'],['fruit','🍎','Des fruitiers','Pommes, poires, petits fruits']];
+const EXA={auto:'✨',ang:'🌼',nat:'🍃',jap:'🎋',gra:'🔲',med:'☀️',eco:'🐝',viv:'🥬',ros:'🌹',nw:'🌾'};
+const EXC=[['low','🪴','Le moins possible','Quelques heures par an'],['mid','🌿','Un peu chaque mois','Une demi-journée par mois'],['high','🧑‍🌾','J’adore jardiner','Un peu chaque semaine']];
+const EXT=[['Où se trouve votre jardin ?','Tapez l’adresse et choisissez-la dans la liste.'],['Que voulez-vous y faire ?','Choisissez une ou plusieurs envies.'],['Quel style vous ressemble ?','L’ambiance et le temps que vous voulez y consacrer.'],['Votre projet se prépare','Le site place chaque élément selon le soleil, le sol et la place.']];
+const EX={step:1,addr:null,keep:false,want:new Set(),amb:'auto',care:'low',sugg:[],busy:false,done:null};
+const hasDrawn=()=>!!(S.trees.length||S.shapes.length||S.plots.length||S.obs.length||S.bed||S.hedges.length||S.lawns.length||S.ponds.length||S.fruits.length||S.potagers.length||(S.amen||[]).length);
+function exShell(){document.body.insertAdjacentHTML('beforeend',`<dialog id="expDlg" class="exdlg" aria-labelledby="exTitle"><div class="exhero"><div><span class="exkick">⚡ Projet express</span><h2 id="exTitle"></h2><p id="exSub"></p></div><button type="button" class="exx" data-ex="x" aria-label="Fermer">×</button></div>
+  <ol class="exdots" aria-hidden="true">${[1,2,3,4].map(i=>`<li data-d="${i}"><span>${i}</span></li>`).join('')}</ol><div class="exbody" id="exBody"></div>
+  <div class="exfoot"><button type="button" class="exback" data-ex="back">← Retour</button><button type="button" class="pri exnext" data-ex="next">Continuer →</button></div></dialog>`);
+  const d=$('#expDlg');d.addEventListener('click',exClick);d.addEventListener('input',exInput);d.addEventListener('keydown',e=>{if(e.key==='Enter'&&e.target.id==='exQ'){e.preventDefault();if(EX.sugg[0])exPick(0)}});d.addEventListener('cancel',e=>{if(EX.busy)e.preventDefault()})}
+function exOpenStep(){const d=$('#expDlg'),n=EX.step;$('#exTitle').textContent=EXT[n-1][0];$('#exSub').textContent=EXT[n-1][1];d.querySelectorAll('.exdots li').forEach(li=>{const i=+li.dataset.d;li.className=i<n?'done':i===n?'cur':''});
+  const B=$('#exBody');
+  if(n===1)B.innerHTML=`${S.lat!=null&&!EX.addr?`<button type="button" class="excard exkeep${EX.keep?' on':''}" data-ex="keep"><span class="exi">📍</span><span><b>Garder le terrain déjà placé</b><small>${S.parcel?'Parcelle '+esc(S.parcel.id||'')+' · ':''}${nf(S.lat,5)}, ${nf(S.lon,5)}</small></span></button><p class="exor">ou cherchez une autre adresse</p>`:''}
+    <div class="exsearch"><span aria-hidden="true">🔎</span><input type="text" id="exQ" placeholder="Rue, numéro, commune" autocomplete="off" aria-label="Adresse du jardin" aria-controls="exSugg" value="${EX.addr?'':esc(EX.q||'')}"></div>
+    ${EX.addr?`<div class="excard exsel on"><span class="exi">📍</span><span><b>${esc(EX.addr.l1)}</b><small>${esc(EX.addr.l2)}</small></span><button type="button" class="exlink" data-ex="chg">Changer</button></div>`:`<ul class="exsugg" id="exSugg" role="listbox">${EX.sugg.map((x,i)=>`<li><button type="button" data-sg="${i}"><b>${esc(x.l1)}</b><small>${esc(x.l2)}</small></button></li>`).join('')}</ul><p class="exhint" id="exMsg">${EX.msg||''}</p>`}
+    <button type="button" class="exlink exgeo" data-ex="geo">📡 Utiliser ma position actuelle</button>`;
+  if(n===2)B.innerHTML=`<div class="exgrid">${EXW.map(([k,i,t,s])=>`<button type="button" class="excard${EX.want.has(k)?' on':''}" data-w="${k}" aria-pressed="${EX.want.has(k)}"><span class="exi">${i}</span><span><b>${t}</b><small>${s}</small></span><span class="exck" aria-hidden="true">✓</span></button>`).join('')}</div>`;
+  if(n===3){const amb=ENVQ.find(q=>q.k==='amb').o;B.innerHTML=`<h3 class="exh">L’ambiance</h3><div class="exgrid exsmall">${amb.map(([k,l])=>`<button type="button" class="excard${EX.amb===k?' on':''}" data-a="${k}" aria-pressed="${EX.amb===k}"><span class="exi">${EXA[k]||'🌱'}</span><span><b>${esc(l)}</b></span></button>`).join('')}</div>
+    <h3 class="exh">Le temps d’entretien</h3><div class="exseg">${EXC.map(([k,i,t,s])=>`<button type="button" class="excard${EX.care===k?' on':''}" data-c="${k}" aria-pressed="${EX.care===k}"><span class="exi">${i}</span><span><b>${t}</b><small>${s}</small></span></button>`).join('')}</div>`}
+  if(n===4)B.innerHTML=`<ul class="exprog">${[['site','Terrain placé'],['parcel','Limites de la parcelle'],['bat','Maison et bâtiments'],['props','Aménagements placés']].map(([k,t])=>`<li data-p="${k}" class="wait"><span class="exst" aria-hidden="true"></span><span><b>${t}</b><small></small></span></li>`).join('')}</ul><div id="exDone"></div>`;
+  const back=d.querySelector('.exback'),next=d.querySelector('.exnext');back.hidden=n===1||n===4;next.hidden=n===4;next.textContent=n===3?'Créer mon projet ✨':'Continuer →';
+  next.disabled=n===1?!(EX.addr||EX.keep):n===2?!EX.want.size:false;
+  if(n===1&&!EX.addr)setTimeout(()=>{const q=$('#exQ');if(q)q.focus()},60)}
+let exT=0,exTok=0;
+function exInput(e){if(e.target.id!=='exQ')return;EX.q=e.target.value;EX.keep=false;const k=$('#expDlg .exkeep');if(k)k.classList.remove('on');$('#expDlg .exnext').disabled=true;clearTimeout(exT);const q=EX.q.trim();if(q.length<3){EX.sugg=[];exSugg();return}exT=setTimeout(()=>exGeocode(q),350)}
+function exSugg(msg){const u=$('#exSugg');if(u)u.innerHTML=EX.sugg.map((x,i)=>`<li><button type="button" data-sg="${i}"><b>${esc(x.l1)}</b><small>${esc(x.l2)}</small></button></li>`).join('');const m=$('#exMsg');if(m)m.textContent=msg||''}
+async function exGeocode(q){const tk=++exTok;exSugg('Recherche…');let R_=[];
+  try{const r=await fetch(`https://photon.komoot.io/api/?q=${encodeURIComponent(q)}&limit=6&lang=fr&lat=50.6&lon=4.6`);if(r.ok)R_=((await r.json()).features||[]).map(f=>{const p=f.properties||{},st=[p.street||p.name,p.housenumber].filter(Boolean).join(' ');return{lat:f.geometry.coordinates[1],lon:f.geometry.coordinates[0],l1:st||p.name||p.city||'',l2:[[p.postcode,p.city||p.town||p.village||p.county].filter(Boolean).join(' '),p.country].filter(Boolean).join(', ')}}).filter(x=>x.l1)}catch(e){}
+  if(!R_.length){try{const r=await fetch(`https://nominatim.openstreetmap.org/search?format=jsonv2&limit=6&accept-language=fr&addressdetails=1&q=${encodeURIComponent(q)}`);if(r.ok)R_=(await r.json()).map(x=>{const a=x.address||{},st=[a.road||a.pedestrian||x.name,a.house_number].filter(Boolean).join(' ');return{lat:+x.lat,lon:+x.lon,l1:st||x.display_name.split(',')[0],l2:[[a.postcode,a.city||a.town||a.village||a.municipality].filter(Boolean).join(' '),a.country].filter(Boolean).join(', ')}})}catch(e){}}
+  if(tk!==exTok)return;const seen=new Set();EX.sugg=R_.filter(x=>{const k=x.l1+'|'+x.l2;if(seen.has(k))return false;seen.add(k);return true}).slice(0,6);exSugg(EX.sugg.length?'':'Aucune adresse trouvée : vérifiez l’orthographe, ou ajoutez la commune.')}
+function exPick(i){const x=EX.sugg[i];if(!x)return;EX.addr=x;EX.keep=false;exOpenStep()}
+function exClick(e){const t=e.target.closest('button');if(!t)return;const a=t.dataset.ex;
+  if(a==='x'){if(!EX.busy)$('#expDlg').close();return}
+  if(t.dataset.sg!=null){exPick(+t.dataset.sg);return}
+  if(a==='keep'){EX.keep=!EX.keep;EX.addr=null;exOpenStep();return}
+  if(a==='chg'){EX.addr=null;exOpenStep();return}
+  if(a==='geo'){const m=$('#exMsg');if(!navigator.geolocation){if(m)m.textContent='Position indisponible dans ce navigateur.';return}if(m)m.textContent='Localisation…';
+    navigator.geolocation.getCurrentPosition(p=>{EX.addr={lat:p.coords.latitude,lon:p.coords.longitude,l1:'Ma position actuelle',l2:`précision ± ${Math.round(p.coords.accuracy)} m`};EX.keep=false;exOpenStep()},err=>{const m2=$('#exMsg');if(m2)m2.textContent='Position refusée ou indisponible.'},{enableHighAccuracy:true,timeout:15000});return}
+  if(t.dataset.w){const k=t.dataset.w;EX.want.has(k)?EX.want.delete(k):EX.want.add(k);t.classList.toggle('on');t.setAttribute('aria-pressed',String(EX.want.has(k)));$('#expDlg .exnext').disabled=!EX.want.size;return}
+  if(t.dataset.a){EX.amb=t.dataset.a;$('#expDlg').querySelectorAll('[data-a]').forEach(b=>{b.classList.toggle('on',b===t);b.setAttribute('aria-pressed',String(b===t))});return}
+  if(t.dataset.c){EX.care=t.dataset.c;$('#expDlg').querySelectorAll('[data-c]').forEach(b=>{b.classList.toggle('on',b===t);b.setAttribute('aria-pressed',String(b===t))});return}
+  if(a==='back'){EX.step=Math.max(1,EX.step-1);exOpenStep();return}
+  if(a==='next'){if(EX.step<3){EX.step++;exOpenStep()}else expRun();return}
+  if(a==='map'||a==='res'){$('#expDlg').close();if(a==='map'){if(WZ.on)wizGo(1);else showTab('carte',true)}else{if(WZ.on)wizGo(4);else showTab(S.want.has('massif')?'massif':'projet',true)}try{const D=propDomain();if(D&&map.fitBounds)map.fitBounds(D,{padding:[30,30]})}catch(err){}}}
+function expOpen(){if(!$('#expDlg'))exShell();if(!EX.busy){EX.step=1;EX.addr=null;EX.keep=S.lat!=null;EX.sugg=[];EX.q='';EX.msg='';EX.want=new Set([...S.want].filter(k=>EXW.some(w=>w[0]===k)));EX.amb=S.env&&S.env.amb||'auto';EX.care=S.env&&S.env.care||'low'}
+  exOpenStep();const d=$('#expDlg');if(d.showModal&&!d.open)d.showModal();else d.setAttribute('open','')}
 const wait29=(f,ms)=>new Promise(ok=>{const t0=Date.now(),it=setInterval(()=>{if(f()||Date.now()-t0>ms){clearInterval(it);ok(f())}},200)});
-async function osmBuildings(lat,lon){const q=`[out:json][timeout:20];way["building"](around:90,${lat.toFixed(6)},${lon.toFixed(6)});out geom 60;`;const c=new AbortController(),t=setTimeout(()=>c.abort(),20000);
-  try{const r=await fetch('https://overpass-api.de/api/interpreter',{method:'POST',body:'data='+encodeURIComponent(q),headers:{'content-type':'application/x-www-form-urlencoded'},signal:c.signal});const j=await r.json();return(j.elements||[]).filter(w=>w.geometry&&w.geometry.length>3).map(w=>({pts:w.geometry.slice(0,-1).map(g=>[g.lat,g.lon]),tags:w.tags||{}}))}finally{clearTimeout(t)}}
-async function expRun(){const msg=t=>{const m=$('#expMsg');if(m)m.textContent=t},go=$('#expDlg [data-ex=go]');const W=[...document.querySelectorAll('#expBody .expw input:checked')].map(i=>i.value);if(!W.length){msg('Cochez au moins une envie.');return}
-  go.disabled=true;try{const addr=$('#expAddr').value.trim();if(addr){const lat0=S.lat,lon0=S.lon;msg('Recherche de l’adresse…');$('#q').value=addr;$('#search').requestSubmit?$('#search').requestSubmit():$('#search').dispatchEvent(new Event('submit',{cancelable:true}));await wait29(()=>S.lat!=null&&(S.lat!==lat0||S.lon!==lon0),12000)}
-    if(S.lat==null){msg('Adresse introuvable : vérifiez-la, ou placez le terrain sur la carte puis relancez.');return}
-    envApply({want:W,amb:$('#expAmb').value,care:$('#expCare').value},'express');
-    msg('Recherche de la parcelle cadastrale…');await wait29(()=>S.parcel||S.parcelErr,9000);
-    if(S.parcel&&!S.plots.length){const id=++itemId;S.plots.push({id,pts:S.parcel.ring.map(([x,y])=>[y,x]).slice(0,-1),name:'Parcelle'});initGeom(id)}
-    if(!S.shapes.some(s=>s.kind==='obsPoly'&&(!s.nat||s.nat==='bat'))){msg('Recherche des bâtiments…');try{const D=propDomain(),B=await osmBuildings(S.lat,S.lon),keep=B.filter(b=>{const c=cen(b.pts);return D?inPolyLL(c,D)||b.pts.some(p=>inPolyLL(p,D)):llDist(c,[S.lat,S.lon])<30}).sort((a,b)=>areaLL(b.pts)-areaLL(a.pts)).slice(0,6);
-      keep.forEach((b,i)=>{const id=++itemId;S.shapes.push({id,kind:'obsPoly',pts:b.pts,name:i?(b.tags.building==='garage'?'Garage':'Annexe '+i):'Maison',h:i?3:+(b.tags.height||0)||(+(b.tags['building:levels']||0)*3+2)||7,nat:'bat'});initGeom(id)})}catch(e){console.warn('bâtiments',e)}}
-    msg('Composition du projet…');S.phase='create';applyPhase();runProps();await new Promise(ok=>setTimeout(ok,200));const add=$('#propBox [data-pa=add]');let n=0;if(add&&PROP19&&PROP19.props.length){n=PROP19.props.length;add.click()}
-    S.samples=null;itemsChanged(true);sunUpdate();saveNow(true);$('#expDlg').close();
-    if(WZ.on)wizGo(4);else showTab('massif',true);toast(n?`Projet express créé : ${n} aménagement(s) placé(s) selon le soleil et la place. Cliquez-les sur la carte pour les ajuster.`:'Projet express : aucune place libre trouvée. Dessinez vos aménagements sur la carte.')}
-  catch(e){console.warn(e);msg('Un problème est survenu : '+(e.message||e))}finally{if(go)go.disabled=false}}
+async function osmBuildings(lat,lon){const q=`[out:json][timeout:20];way["building"](around:90,${lat.toFixed(6)},${lon.toFixed(6)});out geom 60;`;
+  for(const u of['https://overpass-api.de/api/interpreter','https://overpass.kumi.systems/api/interpreter']){const c=new AbortController(),t=setTimeout(()=>c.abort(),15000);
+    try{const r=await fetch(u,{method:'POST',body:'data='+encodeURIComponent(q),headers:{'content-type':'application/x-www-form-urlencoded'},signal:c.signal});if(!r.ok)continue;const j=await r.json();return(j.elements||[]).filter(w=>w.geometry&&w.geometry.length>3).map(w=>({pts:w.geometry.slice(0,-1).map(g=>[g.lat,g.lon]),tags:w.tags||{}}))}catch(e){}finally{clearTimeout(t)}}
+  throw new Error('Service des bâtiments indisponible')}
+async function expRun(){EX.step=4;exOpenStep();EX.busy=true;const st=(k,s,txt)=>{const li=$(`#exBody [data-p=${k}]`);if(!li)return;li.className=s;li.querySelector('small').textContent=txt||''};
+  const W=[...EX.want],notes=[];let n=0;
+  try{st('site','run','');
+    if(!EX.keep&&EX.addr){if(hasDrawn()){newProject();notes.push('Votre projet précédent est gardé dans « Mes projets ».')}setSite(EX.addr.lat,EX.addr.lon,true)}
+    if(S.lat==null)throw new Error('Terrain non placé');st('site','ok',EX.addr?`${EX.addr.l1}${EX.addr.l2?', '+EX.addr.l2:''}`:'Terrain déjà placé');
+    EXW.forEach(([k])=>{if(!W.includes(k)&&S.want.has(k))try{setWant(k,false)}catch(e){}});
+    envApply({want:W,amb:EX.amb,care:EX.care},'express');
+    st('parcel','run','Recherche dans le cadastre…');await wait29(()=>S.parcel||S.parcelErr,12000);
+    if(S.plots.length){st('parcel','ok',`Limite déjà dessinée (${nf(areaLL(S.plots[0].pts),0)} m²)`)}
+    else if(S.parcel){const id=++itemId;S.plots.push({id,pts:S.parcel.ring.map(([x,y])=>[y,x]).slice(0,-1),name:'Parcelle'});initGeom(id);st('parcel','ok',`Parcelle ${S.parcel.id||''} · ${nf(areaLL(S.plots[0].pts),0)} m²`)}
+    else{const mp=mPer(S.lat),h=12.5,P=[[-h,-h],[h,-h],[h,h],[-h,h]].map(([x,y])=>[S.lat+y/111320,S.lon+x/mp]),id=++itemId;S.plots.push({id,pts:P,name:'Terrain approximatif'});initGeom(id);st('parcel','warn','Parcelle introuvable : terrain approximatif de 25 × 25 m, à ajuster sur la carte');notes.push('Ajustez la limite du terrain sur la carte (outil « Modifier la forme »).')}
+    if(!S.shapes.some(s=>s.kind==='obsPoly'&&(!s.nat||s.nat==='bat'))){st('bat','run','Recherche sur OpenStreetMap…');
+      try{const D=propDomain(),B=await osmBuildings(S.lat,S.lon),keep=B.filter(b=>{const c=cen(b.pts);return D?inPolyLL(c,D)||b.pts.filter(p=>inPolyLL(p,D)).length>=2:llDist(c,[S.lat,S.lon])<30}).sort((a,b)=>areaLL(b.pts)-areaLL(a.pts)).slice(0,6);
+        keep.forEach((b,i)=>{const id=++itemId;S.shapes.push({id,kind:'obsPoly',pts:b.pts,name:i?(b.tags.building==='garage'?'Garage':'Annexe '+i):'Maison',h:i?3:+(b.tags.height||0)||(+(b.tags['building:levels']||0)*3+2)||7,nat:'bat'});initGeom(id)});
+        if(keep.length)st('bat','ok',`${keep.length===1?'Maison trouvée':`${keep.length} bâtiments trouvés`} (${nf(areaLL(keep[0].pts),0)} m² au sol)`);else{st('bat','warn','Aucun bâtiment trouvé : dessinez la maison pour des ombres exactes');notes.push('Dessinez la maison dans « 1. L’existant » : les ombres et la terrasse en dépendent.')}}
+      catch(e){st('bat','warn','Service indisponible : dessinez la maison sur la carte');notes.push('Dessinez la maison dans « 1. L’existant ».')}}
+    else st('bat','ok','Déjà dessinés');
+    st('props','run','Calcul du soleil et de la place libre…');await new Promise(ok=>setTimeout(ok,60));S.samples=null;
+    S.phase='create';applyPhase();runProps();await new Promise(ok=>setTimeout(ok,200));const add=$('#propBox [data-pa=add]');const P=(typeof PROP19!=='undefined'&&PROP19&&PROP19.props)||[];
+    const labs={};P.forEach(p=>{labs[p.lab]=(labs[p.lab]||0)+1});n=P.length;if(add&&n)add.click();
+    itemsChanged(true);sunUpdate();saveNow(true);
+    const miss=W.filter(k=>!P.some(p=>p.w===k||(k==='arbre'&&p.k==='tree')));
+    if(n)st('props','ok',`${n} élément${n>1?'s':''} placé${n>1?'s':''}`);else st('props','warn','Pas de place libre trouvée : dessinez vos aménagements sur la carte');
+    if(miss.length&&n)notes.push(`Pas trouvé de place pour : ${miss.map(k=>(EXW.find(w=>w[0]===k)||[0,0,k])[2].toLowerCase()).join(', ')}. Vous pouvez les dessiner vous-même.`);
+    $('#exDone').innerHTML=`<div class="exresult"><h3>${n?'🎉 Votre premier projet est prêt':'Votre terrain est prêt'}</h3>${n?`<div class="exchips">${Object.entries(labs).map(([l,c])=>`<span>${c>1?c+' × ':''}${esc(l)}</span>`).join('')}</div>`:''}
+      ${notes.length?`<ul class="exnotes">${notes.map(x=>`<li>${esc(x)}</li>`).join('')}</ul>`:''}<p class="small">Tout reste modifiable : cliquez un élément sur la carte pour le déplacer, le redimensionner ou le supprimer.</p>
+      <div class="exfoot2"><button type="button" data-ex="map">🗺️ Voir sur la carte</button><button type="button" class="pri" data-ex="res">Voir mes plantes et résultats →</button></div></div>`;
+    $('#exTitle').textContent=n?'C’est prêt !':'Presque prêt';$('#exSub').textContent='Voici ce qui a été préparé pour vous.';
+  }catch(e){console.warn(e);$('#exDone').innerHTML=`<div class="exresult"><h3>Un problème est survenu</h3><p>${esc(e.message||String(e))}</p><div class="exfoot2"><button type="button" data-ex="back">← Revenir</button></div></div>`;const b=$('#expDlg .exback');if(b)b.hidden=false}
+  finally{EX.busy=false}}
 {const ml=$('#menuList');if(ml)ml.insertAdjacentHTML('afterbegin','<button type="button" id="mExpress">⚡ Projet express</button>');const b=$('#mExpress');if(b)b.addEventListener('click',()=>{$('#menuList').hidden=true;$('#menuBtn').setAttribute('aria-expanded','false');expOpen()})}
-{const ev=$('#envies .in');if(ev)ev.insertAdjacentHTML('afterbegin','<div class="card expcard"><b>⚡ Pressé ?</b> <span class="small">Trois questions et un premier projet complet est dessiné pour vous.</span> <button type="button" class="pri" id="expOpenB">Projet express</button></div>');document.addEventListener('click',e=>{if(e.target.id==='expOpenB')expOpen()})}
+{const ev=$('#envies .in');if(ev)ev.insertAdjacentHTML('afterbegin','<div class="card expcard"><span class="exi">⚡</span><div><b>Pressé ?</b><span class="small"> Trois questions et un premier projet complet est dessiné pour vous, selon le soleil et la place.</span></div><button type="button" class="pri" id="expOpenB">Projet express</button></div>');document.addEventListener('click',e=>{if(e.target.id==='expOpenB')expOpen()})}
 {const _wh29=welHtml;welHtml=function(a){let h=_wh29(a);if(a==='pub')h=h.replace('<button type="button" data-wt="1">','<button type="button" data-wexp="1">⚡ Projet express (2 minutes)</button><button type="button" data-wt="1">');return h}}
 document.addEventListener('click',e=>{if(e.target.closest('[data-wexp]')){try{welClose(false)}catch(err){}setTimeout(expOpen,150)}});
 
@@ -1381,6 +1435,155 @@ function lawnProp(R){const D=propDomain();if(!D)return null;const o=D[0],mp=mPer
   if(best.a<20)return null;const q=[[best.i0,best.j0],[best.i1,best.j0],[best.i1,best.j1],[best.i0,best.j1]].map(([i,j])=>LL([x0+i,y0+j]));return{k:'lawn',w:'pelouse',lab:'Pelouse',pts:q,why:`${nf(best.a,0)} m² d’un seul tenant, la plus grande surface libre`}}
 {const _pl29=proposeLayout;proposeLayout=function(){const R=_pl29();try{if(R&&R.props&&wantOn('pelouse')&&!S.lawns.length&&!R.props.some(p=>p.k==='lawn')){const p=lawnProp(R);if(p)R.props.push(p)}}catch(e){console.warn(e)}return R}}
 window.__p29={grpVis,TG:()=>TG,expOpen,expRun,waterCalc:()=>{const W=waterCalc();return{roof:W.roof,sumS:W.sumS,sumG:W.sumG,rec:W.rec,recC:W.recC,cov:W.cov}},timeRows:y=>timeRows(y).map(r=>r.n+': '+r.txt),proTApply};
+
+/* ================= v30 : protection des projets (alerte, grande mémoire, sauvegarde, restauration), mentions légales et confidentialité, accord pour les photos ================= */
+/* --- 1. grande mémoire du navigateur (IndexedDB) quand la mémoire habituelle est pleine --- */
+const LS30=(()=>{try{return window.localStorage}catch(e){return null}})();
+const BIGK=k=>/^plantania:(p|plan):/.test(k);
+const IDBC=new Map(),STO={idb:null,ok:false,warn:{},persist:null};
+const idbReq=(mode,f)=>new Promise((ok,ko)=>{if(!STO.idb)return ko(new Error('IndexedDB indisponible'));try{const t=STO.idb.transaction('kv',mode),r=f(t.objectStore('kv'));t.oncomplete=()=>ok(r&&r.result);t.onerror=t.onabort=()=>ko(t.error||new Error('IndexedDB'))}catch(e){ko(e)}});
+if(LS30){const P=Storage.prototype,_set=P.setItem,_get=P.getItem,_rm=P.removeItem;
+  P.setItem=function(k,v){if(this!==LS30||!BIGK(k))return _set.call(this,k,v);
+    try{_set.call(this,k,v);if(IDBC.has(k)){IDBC.delete(k);idbReq('readwrite',s=>s.delete(k)).catch(()=>{})}}
+    catch(e){if(!STO.ok)throw e;try{_rm.call(this,k)}catch(_){}IDBC.set(k,String(v));idbReq('readwrite',s=>s.put(String(v),k)).catch(()=>stoAlert('fail'));stoAlert('over')}};
+  P.getItem=function(k){const v=_get.call(this,k);return v==null&&this===LS30&&IDBC.has(k)?IDBC.get(k):v};
+  P.removeItem=function(k){_rm.call(this,k);if(this===LS30&&IDBC.has(k)){IDBC.delete(k);idbReq('readwrite',s=>s.delete(k)).catch(()=>{})}}}
+(async()=>{try{if(!window.indexedDB)return;STO.idb=await new Promise((ok,ko)=>{const r=indexedDB.open('plantania',1);r.onupgradeneeded=()=>r.result.createObjectStore('kv');r.onsuccess=()=>ok(r.result);r.onerror=()=>ko(r.error)});
+  const ks=await idbReq('readonly',s=>s.getAllKeys()),vs=await idbReq('readonly',s=>s.getAll());(ks||[]).forEach((k,i)=>IDBC.set(k,vs[i]));STO.ok=true;
+  let id=null;try{id=LS30&&LS30.getItem('plantania:current')}catch(e){}
+  if(id&&((PRJ.id!==id&&IDBC.has('plantania:p:'+id))||(PRJ.id===id&&!PLANIMG&&IDBC.has('plantania:plan:'+id))))projBoot();
+}catch(e){console.warn('IndexedDB',e);STO.ok=false}})();
+function stoSize(){let a=0,b=0;try{for(let i=0;i<LS30.length;i++){const k=LS30.key(i);a+=k.length+(Storage.prototype.getItem.call(LS30,k)||'').length}}catch(e){}IDBC.forEach(v=>{b+=String(v).length});return{ls:a,idb:b}}
+const mo=n=>nf(n/1e6,n<1e5?2:1)+' Mo';
+
+/* --- 2. alertes visibles --- */
+{const bn=$('#banner');(bn||$('header')).insertAdjacentHTML('afterend','<div class="stobar" id="stoBar" role="alert" hidden><span id="stoTxt"></span><span class="chips"><button type="button" class="pri" data-sto="bk">💾 Télécharger une sauvegarde</button><button type="button" data-sto="pj">Mes projets</button><button type="button" class="tx" data-sto="x" aria-label="Masquer">×</button></span></div>')}
+const STOMSG={fail:'⚠️ Votre projet n’a pas pu être enregistré : la mémoire du navigateur est pleine. Téléchargez une sauvegarde maintenant, puis supprimez d’anciens projets ou des plans importés.',
+  near:'La mémoire du navigateur est presque pleine. Téléchargez une sauvegarde et supprimez les projets dont vous n’avez plus besoin.',
+  nostore:'⚠️ Ce navigateur n’enregistre pas vos projets (navigation privée ou stockage bloqué). Téléchargez votre projet avant de fermer la page.',
+  remind:''};
+function stoAlert(k,txt){if(k==='over'){if(!STO.warn.over){STO.warn.over=1;toast('La mémoire habituelle du navigateur est pleine : ce projet est maintenant gardé dans sa grande mémoire. Pensez à télécharger une sauvegarde.')}return}
+  const b=$('#stoBar');if(!b)return;if(STO.warn[k]==='x')return;STO.warn[k]=1;b.dataset.k=k;b.classList.toggle('info',k==='remind'||k==='near');$('#stoTxt').textContent=txt||STOMSG[k];b.hidden=false;
+  if(k==='fail'){const s=$('#saveState');if(s)s.classList.add('bad');if(!STO.warn.failT){STO.warn.failT=1;toast(STOMSG.fail)}}}
+$('#stoBar').addEventListener('click',e=>{const t=e.target.closest('[data-sto]');if(!t)return;const b=$('#stoBar'),k=b.dataset.k;
+  if(t.dataset.sto==='bk'){backupAll();if(k!=='fail')b.hidden=true}
+  if(t.dataset.sto==='pj'){try{renderProjDlg();$('#projDlg').showModal()}catch(err){}}
+  if(t.dataset.sto==='x'){b.hidden=true;STO.warn[k]='x';if(k==='remind')try{localStorage.setItem('plantania:bkSnooze',String(Date.now()+3*864e5))}catch(err){}}});
+{const _sn30=saveNow;let lastChk=0;saveNow=function(f){_sn30(f);const s=$('#saveState');if(!s)return;
+  if(/impossible/i.test(s.textContent))stoAlert('fail');else if(/Enregistr/.test(s.textContent)){s.classList.remove('bad');if(STO.warn.fail===1){STO.warn.fail=0;const b=$('#stoBar');if(b&&b.dataset.k==='fail')b.hidden=true}
+    if(STO.persist==null&&navigator.storage&&navigator.storage.persist){STO.persist='?';navigator.storage.persisted().then(p=>p||navigator.storage.persist()).then(p=>{STO.persist=!!p}).catch(()=>{STO.persist=false})}
+    if(Date.now()-lastChk>30000){lastChk=Date.now();if(stoSize().ls>4.2e6)stoAlert('near')}}}}
+try{LS30.setItem('plantania:test','1');LS30.removeItem('plantania:test')}catch(e){setTimeout(()=>stoAlert('nostore'),1200)}
+
+/* --- 3. sauvegarde et restauration de tous les projets --- */
+const BKSKIP=/^plantania:(ai|test|tuto|welcome|tg|wiz|tabs|site|current|lastBackup|bkSnooze|consent:photos)$/;
+function backupData(){const items={};try{for(let i=0;i<LS30.length;i++){const k=LS30.key(i);if(k&&k.startsWith('plantania:')&&!BKSKIP.test(k))items[k]=LS30.getItem(k)}}catch(e){}IDBC.forEach((v,k)=>{if(!(k in items))items[k]=v});
+  return{app:'Plantañ.ia',kind:'sauvegarde',v:1,date:new Date().toISOString(),items}}
+function backupAll(){try{saveNow(true)}catch(e){}const d=backupData(),n=Object.keys(d.items).filter(k=>k.startsWith('plantania:p:')).length;
+  download(new Blob([JSON.stringify(d)],{type:'application/json'}),`plantania-sauvegarde-${new Date().toISOString().slice(0,10)}.json`);
+  try{localStorage.setItem('plantania:lastBackup',String(Date.now()))}catch(e){}const b=$('#stoBar');if(b&&b.dataset.k==='remind')b.hidden=true;
+  toast(`Sauvegarde téléchargée : ${n} projet${n>1?'s':''}, vos réglages, votre identité professionnelle et vos clients. Gardez ce fichier en lieu sûr (clé USB, cloud…).`);try{renderProjDlg()}catch(e){}}
+function restoreBackup(file){const fr=new FileReader();fr.onload=()=>{let d;try{d=JSON.parse(fr.result)}catch(e){toast('Ce fichier n’est pas une sauvegarde Plantañ.ia');return}
+  if(d&&d.v===1&&d.draw){importProject(file);return}
+  if(!d||d.kind!=='sauvegarde'||!d.items){toast('Ce fichier n’est pas une sauvegarde Plantañ.ia');return}
+  const it=d.items,cur=pIdx();let bix={};try{bix=JSON.parse(it['plantania:projects']||'{}')}catch(e){}let n=0,same=0,reopen=false;
+  try{saveNow(true)}catch(e){}
+  Object.entries(bix).forEach(([id,m])=>{const pk='plantania:p:'+id;if(!it[pk])return;if(cur[id]&&(cur[id].updated||0)>=(m.updated||0)){same++;return}
+    try{localStorage.setItem(pk,it[pk]);if(it['plantania:plan:'+id])localStorage.setItem('plantania:plan:'+id,it['plantania:plan:'+id]);cur[id]={...m};n++;if(id===PRJ.id)reopen=true}catch(e){}});
+  pSetIdx(cur);
+  Object.entries(it).forEach(([k,v])=>{if(BIGK(k)||k==='plantania:projects'||BKSKIP.test(k))return;try{
+    if(k==='plantania:clients'){const a=JSON.parse(localStorage.getItem(k)||'[]'),b=JSON.parse(v||'[]'),key=c=>c.id||c.name;b.forEach(c=>{if(!a.some(x=>key(x)===key(c)))a.push(c)});localStorage.setItem(k,JSON.stringify(a));CLIENTS.length=0;a.forEach(c=>CLIENTS.push(c))}
+    else if(localStorage.getItem(k)==null)localStorage.setItem(k,v)}catch(e){}});
+  if(reopen){try{restoreState(JSON.parse(localStorage.getItem('plantania:p:'+PRJ.id)));lastSaved=JSON.stringify({...serialize(),saved:0})}catch(e){}}
+  else if(n&&(!PRJ.id||S.lat==null||!(S.trees.length||S.shapes.length||S.plots.length||S.obs.length||S.bed||S.hedges.length||S.lawns.length))){const ids=Object.keys(bix).filter(i=>cur[i]&&it['plantania:p:'+i]).sort((a,b)=>cur[b].updated-cur[a].updated);if(ids[0])openProject(ids[0])}
+  try{renderProjDlg()}catch(e){}toast(n?`${n} projet${n>1?'s':''} restauré${n>1?'s':''}${same?` ; ${same} déjà à jour dans ce navigateur`:''}.`:same?'Tous les projets de cette sauvegarde sont déjà à jour dans ce navigateur.':'Aucun projet dans cette sauvegarde.')};fr.readAsText(file)}
+document.body.insertAdjacentHTML('beforeend','<input type="file" id="bkFile" accept=".json,application/json" hidden>');
+$('#bkFile').addEventListener('change',e=>{const f=e.target.files[0];if(f)restoreBackup(f);e.target.value=''});
+/* rappel */
+setTimeout(()=>{try{const ix=pIdx(),ids=Object.keys(ix);if(!ids.length)return;const lb=+localStorage.getItem('plantania:lastBackup')||0,sn=+localStorage.getItem('plantania:bkSnooze')||0,now=Date.now();if(sn>now)return;
+  const newest=Math.max(...ids.map(i=>ix[i].updated||0)),oldest=Math.min(...ids.map(i=>ix[i].updated||now));if(newest<=lb)return;const ref=lb||oldest;if(now-ref<7*864e5)return;
+  const j=Math.floor((now-lb)/864e5);stoAlert('remind',lb?`💾 Dernière sauvegarde de vos projets il y a ${j} jours. Vos projets ne sont gardés que dans ce navigateur : téléchargez une sauvegarde de temps en temps.`:'💾 Vos projets ne sont gardés que dans ce navigateur : un nettoyage ou un changement d’appareil peut les effacer. Téléchargez une sauvegarde de temps en temps.')}catch(e){}},8000);
+/* dans « Mes projets » */
+{const pl=$('#projList');if(pl)pl.insertAdjacentHTML('afterend','<div class="stoinfo" id="stoInfo"></div><div class="chips"><button type="button" id="pBackup">💾 Sauvegarder tous mes projets</button><button type="button" id="pRestore">📂 Restaurer une sauvegarde</button></div>')}
+$('#projDlg').addEventListener('click',e=>{if(e.target.id==='pBackup')backupAll();if(e.target.id==='pRestore')$('#bkFile').click()});
+{const _rpd30=renderProjDlg;renderProjDlg=function(){_rpd30();const el=$('#stoInfo');if(!el)return;const z=stoSize(),lb=(()=>{try{return +localStorage.getItem('plantania:lastBackup')||0}catch(e){return 0}})(),pct=Math.min(100,Math.round(z.ls/5e6*100));
+  el.innerHTML=`<div class="stogauge" title="Mémoire habituelle du navigateur"><span style="width:${pct}%" class="${pct>84?'hi':''}"></span></div><p class="small">Mémoire utilisée : <b>${mo(z.ls)}</b> sur environ 5 Mo${z.idb?` · grande mémoire : ${mo(z.idb)}`:''} · dernière sauvegarde : <b>${lb?new Date(lb).toLocaleDateString('fr-BE'):'jamais'}</b>${STO.persist===true?' · protégés contre l’effacement automatique':''}.</p>
+   <p class="small muted">Vos projets restent dans ce navigateur, sur cet appareil. Ils peuvent disparaître si vous effacez les données de navigation, en navigation privée, ou sur iPhone et Mac (Safari) après plusieurs semaines sans visite : gardez une sauvegarde.</p>`}}
+{const ml=$('#menuList');if(ml){const r=$('#resetAll');r.insertAdjacentHTML('beforebegin','<button type="button" id="mBackup">💾 Sauvegarder tous mes projets</button><button type="button" id="mRestore">📂 Restaurer une sauvegarde</button><button type="button" id="mLegal">⚖️ Mentions légales</button><button type="button" id="mPriv">🔒 Confidentialité</button>')}}
+document.addEventListener('click',e=>{const id=e.target.id,map30={mBackup:()=>backupAll(),mRestore:()=>$('#bkFile').click(),mLegal:()=>legOpen('mentions'),mPriv:()=>legOpen('confidentialite')};if(!map30[id])return;$('#menuList').hidden=true;$('#menuBtn').setAttribute('aria-expanded','false');map30[id]()});
+
+/* --- 4. accord avant l’envoi d’une photo --- */
+let PHSESSION=false;
+const photoOK=()=>{if(PHSESSION)return true;try{return !!localStorage.getItem('plantania:consent:photos')}catch(e){return false}};
+function isPhotoReq(url,init){if(/my-api\.plantnet\.org/.test(url))return true;const b=init&&init.body;if(!b)return false;
+  if(typeof b==='string')return b.length>1500&&/data:image\/|"type"\s*:\s*"image"|"media_type"\s*:\s*"image|"image_url"|"input_image"/.test(b);
+  if(typeof FormData!=='undefined'&&b instanceof FormData){for(const [,v] of b.entries())if(v instanceof Blob&&/^image\//.test(v.type||'image/'))return true}return false}
+function askPhotoConsent(){return new Promise(ok=>{let d=$('#phDlg');if(!d){document.body.insertAdjacentHTML('beforeend',`<dialog class="dlg phdlg" id="phDlg" aria-labelledby="phT"><h3 id="phT">Envoyer votre photo ?</h3>
+   <p>Pour reconnaître une plante, une maladie ou un sol, proposer des idées ou réaliser un rendu, la photo est envoyée à un service extérieur :</p>
+   <ul class="small"><li><b>Pl@ntNet</b> (France) : reconnaissance des plantes et des maladies ;</li><li><b>Claude</b> (Anthropic, États-Unis), par notre relais : idées, diagnostic, assistant ;</li><li><b>OpenAI</b> (États-Unis), par notre relais : rendus réalistes sur photo.</li></ul>
+   <p class="small">Plantañ.ia ne garde pas vos photos. Évitez d’y montrer des personnes, des visages ou des plaques d’immatriculation. Détails dans <a href="#confidentialite">Confidentialité</a>.</p>
+   <label class="ck"><input type="checkbox" id="phRem" checked> Ne plus me le demander sur cet appareil</label>
+   <div class="chips"><button type="button" data-ph="0">Annuler</button><button type="button" class="pri" data-ph="1">Accepter et envoyer</button></div></dialog>`);d=$('#phDlg')}
+  const fin=v=>{d.removeEventListener('click',h);d.removeEventListener('cancel',c);if(d.open)d.close();if(v){if($('#phRem').checked){try{localStorage.setItem('plantania:consent:photos',new Date().toISOString())}catch(e){}}PHSESSION=true}ok(v)};
+  const h=e=>{const b=e.target.closest('[data-ph]');if(b)fin(b.dataset.ph==='1');if(e.target.closest('a[href="#confidentialite"]'))fin(false)},c=e=>{e.preventDefault();fin(false)};
+  d.addEventListener('click',h);d.addEventListener('cancel',c);if(d.showModal)d.showModal();else d.setAttribute('open','')})}
+{const _f30=window.fetch;window.fetch=async function(input,init){let url='';try{url=typeof input==='string'?input:(input&&input.url)||String(input)}catch(e){}
+  if(!photoOK()&&isPhotoReq(url,init)){const ok=await askPhotoConsent();if(!ok)throw new Error('Envoi de la photo annulé : votre accord est nécessaire.')}return _f30.call(window,input,init)}}
+
+/* --- 5. mentions légales et politique de confidentialité --- */
+const ED=typeof EDITEUR==='object'&&EDITEUR?EDITEUR:{};
+const edv=(k,lab)=>ED[k]?esc(ED[k]):`<span class="edtodo">${lab||'à compléter'}</span>`;
+const edMissing=()=>['nom','adresse','email'].filter(k=>!ED[k]);
+const LEGDATE='25 novembre 2026';
+function legHtml(which){const miss=edMissing().length?`<p class="legwarn">Informations à compléter par l’éditeur du site (bloc <code>EDITEUR</code> dans <code>js/app-2-modules.js</code>).</p>`:'';
+  const mail=ED.email?`<a href="mailto:${esc(ED.email)}">${esc(ED.email)}</a>`:edv('email');
+  if(which==='mentions')return `${miss}<h4>Éditeur du site</h4><table class="legt"><tbody>
+   <tr><th>Nom ou dénomination</th><td>${edv('nom')}</td></tr><tr><th>Statut</th><td>${edv('statut','personne physique, entreprise individuelle ou société (forme juridique)')}</td></tr>
+   <tr><th>Adresse</th><td>${edv('adresse')}</td></tr><tr><th>E-mail</th><td>${mail}</td></tr>${ED.telephone?`<tr><th>Téléphone</th><td>${esc(ED.telephone)}</td></tr>`:''}
+   <tr><th>Numéro d’entreprise (BCE)</th><td>${edv('bce','à compléter si vous êtes inscrit à la Banque-Carrefour des Entreprises')}</td></tr>${ED.tva?`<tr><th>Numéro de TVA</th><td>${esc(ED.tva)}</td></tr>`:''}
+   <tr><th>Responsable de la publication</th><td>${ED.responsable?esc(ED.responsable):ED.nom?esc(ED.nom):edv('responsable')}</td></tr></tbody></table>
+   <h4>Hébergement</h4><p>Site hébergé par GitHub Pages : GitHub, Inc., 88 Colin P. Kelly Jr. Street, San Francisco, CA 94107, États-Unis. Le relais vers les services d’intelligence artificielle fonctionne sur Cloudflare Workers (Cloudflare, Inc., États-Unis).</p>
+   <h4>Nature des informations</h4><p>Plantañ.ia fournit des estimations et des conseils indicatifs (climat, sol, ensoleillement, choix des plantes, quantités, budgets, règles régionales). Ils ne remplacent ni l’avis d’un professionnel, ni un relevé de géomètre, ni les règles et autorisations de votre commune et de votre région. Le plan cadastral n’a pas valeur de bornage. Les données publiques utilisées peuvent être incomplètes ou dépassées : vérifiez-les avant de commencer des travaux.</p>
+   <h4>Propriété intellectuelle</h4><p>Les textes, le logo et le code du site appartiennent à l’éditeur, sauf mention contraire. Les données et photos de tiers restent la propriété de leurs auteurs et sont utilisées selon leurs licences (voir « Sources de données » en bas de la page ; photos : auteur et licence indiqués sous chaque photo).</p>
+   <h4>Droit applicable</h4><p>Ces mentions sont régies par le droit belge.</p><p class="small muted">Mise à jour : ${LEGDATE}.</p>`;
+  const R=[['Recherche d’adresse','le texte de l’adresse','Nominatim (OpenStreetMap), Photon (Komoot, Allemagne), Open-Meteo (Suisse)'],
+   ['Climat','les coordonnées du terrain','Open-Meteo (Suisse)'],
+   ['Sol, cadastre, contraintes du site','les coordonnées du terrain','Service public de Wallonie, Digitaal Vlaanderen, SPF Finances, Agence européenne pour l’environnement, ISRIC (Pays-Bas)'],
+   ['Bâtiments (projet express)','les coordonnées du terrain','Overpass API (OpenStreetMap)'],
+   ['Fonds de carte','la zone affichée','Esri (États-Unis), CARTO, OpenStreetMap, Institut géographique national, services régionaux'],
+   ['Photos des plantes','le nom de la plante','iNaturalist (États-Unis), Wikipédia / Wikimedia, wsrv.nl'],
+   ['Reconnaissance des plantes et maladies','<b>vos photos</b>','Pl@ntNet (France)'],
+   ['Assistant, idées par photos, recherches, rendus','vos questions, la description du projet, la commune ou la position, <b>les photos que vous choisissez d’envoyer</b>','Claude (Anthropic, États-Unis) et OpenAI (États-Unis), par notre relais Cloudflare'],
+   ['Carte des professionnels','le type de recherche et la commune','Google Maps (États-Unis), seulement si vous l’affichez'],
+   ['Polices et bibliothèques','aucune donnée de projet','Google Fonts (États-Unis), unpkg et jsDelivr'],
+   ['Avis sur le site','votre message et, si vous la donnez, votre adresse e-mail',FEEDBACK&&FEEDBACK.endpoint?'le service de formulaire de l’éditeur':'votre messagerie (aucun envoi automatique)']];
+  const ph=photoOK();
+  return `${miss}<h4>En bref</h4><ul><li>Pas de compte, pas de publicité, pas de mesure d’audience, pas de cookie.</li><li>Vos projets, vos réglages et, pour les professionnels, vos coordonnées et votre carnet de clients sont enregistrés <b>uniquement dans votre navigateur</b>, sur votre appareil. L’éditeur n’y a pas accès.</li><li>Certaines fonctions envoient des informations à des services extérieurs, seulement quand vous les utilisez (tableau ci-dessous). Les photos ne partent qu’avec votre accord.</li></ul>
+   <h4>Responsable du traitement</h4><p>${edv('nom')}, ${edv('adresse')} — ${mail}</p>
+   <h4>Ce qui est envoyé, et à qui</h4><table class="legt"><thead><tr><th>Fonction</th><th>Information envoyée</th><th>Service</th></tr></thead><tbody>${R.map(r=>`<tr><td>${r[0]}</td><td>${r[1]}</td><td>${r[2]}</td></tr>`).join('')}</tbody></table>
+   <p class="small">Comme pour tout site, ces services reçoivent aussi votre adresse IP. Ils traitent les données selon leur propre politique de confidentialité. Certains sont situés aux États-Unis : ces transferts s’appuient sur les garanties prévues par le RGPD (cadre de protection des données UE–États-Unis ou clauses contractuelles types, selon le service).</p>
+   <h4>Le relais</h4><p>Le relais transmet vos demandes aux services d’intelligence artificielle sans en garder le contenu. Il retient votre adresse IP en mémoire pendant au plus 24 heures, uniquement pour limiter le nombre de demandes. Cloudflare peut tenir des journaux techniques selon sa propre politique.</p>
+   <h4>Photos</h4><p>Une photo n’est envoyée que lorsque vous lancez une reconnaissance, une idée ou un rendu, et après votre accord (demandé la première fois). Plantañ.ia ne la conserve pas. Évitez d’y montrer des personnes ou des informations privées.</p>
+   <h4>Bases légales</h4><p>Votre demande (fournir la fonction que vous utilisez, article 6.1.b du RGPD), votre consentement pour l’envoi de photos (article 6.1.a), et l’intérêt légitime de protéger le relais contre les abus (article 6.1.f).</p>
+   <h4>Durée de conservation</h4><p>Les données restent dans votre navigateur jusqu’à ce que vous les supprimiez (« Mes projets », « Remettre à zéro », bouton ci-dessous, ou effacement des données du site dans votre navigateur).</p>
+   <h4>Professionnels</h4><p>Si vous enregistrez des clients, vous êtes responsable du traitement de leurs données : informez-les et ne gardez que le nécessaire. Ces données ne quittent pas votre navigateur, sauf dans les rapports et fichiers que vous exportez.</p>
+   <h4>Vos droits</h4><p>Vous pouvez demander l’accès, la rectification, l’effacement, la limitation, l’opposition et la portabilité de vos données (la sauvegarde téléchargeable contient toutes les données gardées par le site), et retirer à tout moment votre accord pour les photos : écrivez à ${mail}. Vous pouvez aussi introduire une plainte auprès de l’Autorité de protection des données, rue de la Presse 35, 1000 Bruxelles, +32 2 274 48 00, <a href="https://www.autoriteprotectiondonnees.be" target="_blank" rel="noopener">autoriteprotectiondonnees.be</a>.</p>
+   <h4>Cookies et stockage</h4><p>Le site n’utilise pas de cookies. Il utilise le stockage du navigateur (localStorage et IndexedDB) uniquement pour garder vos projets et vos préférences, ce qui est nécessaire à son fonctionnement. La carte Google Maps des professionnels, si vous l’affichez, peut déposer des cookies de Google.</p>
+   <div class="chips legact"><button type="button" data-lg="ph"${ph?'':' disabled'}>${ph?'Retirer mon accord pour les photos':'Aucun accord donné pour les photos'}</button><button type="button" data-lg="bk">💾 Télécharger toutes mes données</button><button type="button" class="danger" data-lg="del">Supprimer toutes mes données de ce navigateur</button></div>
+   <p class="small muted">Mise à jour : ${LEGDATE}.</p>`}
+function legOpen(which){let d=$('#legDlg');if(!d){document.body.insertAdjacentHTML('beforeend','<dialog class="dlg legdlg" id="legDlg" aria-labelledby="legT"><div class="leghead"><h3 id="legT"></h3><button type="button" class="welx" data-lg="x" aria-label="Fermer">×</button></div><div class="chips legtabs"><button type="button" data-lgt="mentions">Mentions légales</button><button type="button" data-lgt="confidentialite">Confidentialité</button></div><div id="legBody" class="legbody"></div></dialog>');d=$('#legDlg');
+    d.addEventListener('click',e=>{const t=e.target.closest('[data-lg],[data-lgt]');if(!t)return;if(t.dataset.lgt){legOpen(t.dataset.lgt);return}const k=t.dataset.lg;
+      if(k==='x')d.close();if(k==='bk')backupAll();
+      if(k==='ph'){try{localStorage.removeItem('plantania:consent:photos')}catch(err){}PHSESSION=false;legOpen('confidentialite');toast('Accord retiré : il vous sera redemandé avant le prochain envoi de photo.')}
+      if(k==='del'){if(t.dataset.c!=='1'){t.dataset.c='1';t.textContent='Confirmer : tout supprimer (projets, réglages, clients)';return}
+        try{Object.keys(LS30).filter(x=>x.startsWith('plantania:')).forEach(x=>Storage.prototype.removeItem.call(LS30,x))}catch(err){}IDBC.clear();try{if(STO.idb)STO.idb.close();indexedDB.deleteDatabase('plantania')}catch(err){}window.__pboot=false;location.hash='';location.reload()}});
+    d.addEventListener('close',()=>{if(/^#(mentions-legales|confidentialite)$/.test(location.hash))history.replaceState(null,'',location.pathname+location.search)})}
+  $('#legT').textContent=which==='mentions'?'Mentions légales':'Confidentialité';d.querySelectorAll('[data-lgt]').forEach(b=>b.setAttribute('aria-pressed',String(b.dataset.lgt===which)));$('#legBody').innerHTML=legHtml(which);$('#legBody').scrollTop=0;if(!d.open){if(d.showModal)d.showModal();else d.setAttribute('open','')}}
+const legHash=()=>{const h=location.hash;if(h==='#mentions-legales')legOpen('mentions');else if(h==='#confidentialite')legOpen('confidentialite')};
+addEventListener('hashchange',legHash);setTimeout(legHash,300);
+document.addEventListener('click',e=>{const a=e.target.closest('a[href="#mentions-legales"],a[href="#confidentialite"]');if(!a)return;e.preventDefault();legOpen(a.getAttribute('href')==='#mentions-legales'?'mentions':'confidentialite')});
+{const f=document.querySelector('footer.foot .in');if(f)f.insertAdjacentHTML('beforeend',`<p class="leglinks"><a href="#mentions-legales">Mentions légales</a> · <a href="#confidentialite">Confidentialité</a> · <a href="#" id="fBackup">Sauvegarder mes projets</a>${ED.nom?` · © ${new Date().getFullYear()} ${esc(ED.nom)}`:''}</p>`);document.addEventListener('click',e=>{if(e.target.id==='fBackup'){e.preventDefault();backupAll()}})}
+window.__p30={backupData,backupAll,restoreBackup,stoSize,stoAlert,isPhotoReq,photoOK,legOpen,STO,IDBC};
 
 /* ---------- Démarrage ---------- */
 if(window.__noMap){

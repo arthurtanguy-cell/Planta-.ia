@@ -2240,6 +2240,9 @@ plantShape=function(p,x,base,w,h,col,rnd){
 /* ================= v10 : Pros et achats — Google Maps ================= */
 /* Clé facultative « Maps Embed API » (gratuite, sans limite d'usage) : collez-la entre les apostrophes et limitez-la à votre domaine dans Google Cloud. */
 const GOOGLE_MAPS_CLE_DU_SITE='';
+/* MENTIONS LÉGALES ET CONFIDENTIALITÉ : complétez ces champs (affichés dans « Mentions légales » et « Confidentialité », en bas de page et dans le Menu).
+   statut : « personne physique », « entreprise individuelle » ou la forme de la société (SRL, SA…). bce : numéro d’entreprise (0123.456.789), si vous en avez un. */
+const EDITEUR={nom:'',statut:'',adresse:'',email:'',telephone:'',bce:'',tva:'',responsable:''};
 const GCAT=[['paysagiste','Paysagistes'],['entrepreneur de jardins','Entrepreneurs de jardins'],['architecte de jardin','Architectes de jardin'],['pépinière','Pépinières'],['jardinerie','Jardineries'],['matériaux de construction clôture','Matériaux et clôtures'],['location de matériel de jardin','Location de matériel']];
 const GM={q:'paysagiste'};
 function gmWhere(){return PLACE.commune?`${PLACE.commune}${PLACE.cp?' '+PLACE.cp:''}, Belgique`:(S.lat!=null?`${S.lat.toFixed(5)},${S.lon.toFixed(5)}`:'Belgique')}
