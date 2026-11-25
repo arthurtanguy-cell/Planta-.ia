@@ -8,7 +8,7 @@
 <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,600&family=Figtree:wght@400;600;700&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="css/plantania.css?v=28">
+<link rel="stylesheet" href="css/plantania.css?v=29">
 <script>new MutationObserver(()=>{for(const c of document.querySelectorAll('.stack td:not([data-l])')){let i=0,p=c;while(p=p.previousElementSibling)i+=p.colSpan;c.dataset.l=c.closest('table').rows[0].cells[i]?.textContent||''}}).observe(document,{childList:true,subtree:true})</script>
 </head>
 <body>
@@ -33,7 +33,7 @@
 <div class="langnote" id="langnote" hidden>Interface traduite. Les conseils détaillés restent pour l’instant en français · Interface vertaald, gedetailleerd advies blijft voorlopig in het Frans · Interface translated; detailed advice is still in French for now.</div>
 <nav class="secnav scroll" id="tabs" aria-label="Onglets">
   <span class="tabhint">Onglets (plusieurs à la fois) :</span>
-  <button type="button" data-tab="envies" aria-pressed="false">Mes envies</button><button type="button" data-tab="carte" aria-pressed="true">Carte</button><button type="button" data-tab="projet" aria-pressed="false">Mon projet</button><button type="button" data-tab="synthese" aria-pressed="false">Synthèse du site</button><button type="button" data-tab="climat" aria-pressed="false">Climat</button><button type="button" data-tab="sol" aria-pressed="false">Sol</button><button type="button" data-tab="patri" aria-pressed="false">Patrimoine local</button><button type="button" data-tab="soleil" aria-pressed="false">Soleil et ombres</button><button type="button" data-tab="ident" aria-pressed="false">Identification</button><button type="button" data-tab="sante" aria-pressed="false">Santé des plantes</button><button type="button" data-tab="entretien" aria-pressed="false">Entretien</button><button type="button" data-tab="plantes" aria-pressed="false">Plantes</button><button type="button" data-tab="coherence" aria-pressed="false">Liens entre aménagements</button><button type="button" data-tab="massif" aria-pressed="false">Composition</button><button type="button" data-tab="jardinieres" aria-pressed="false">Jardinières</button><button type="button" data-tab="potager" aria-pressed="false">Potager</button><button type="button" data-tab="verger" aria-pressed="false">Verger</button><button type="button" data-tab="amenagements" aria-pressed="false">Haies, fruitiers, eau, talus</button><button type="button" data-tab="cloture" aria-pressed="false">Clôture</button><button type="button" data-tab="demo" aria-pressed="false">Démolition</button><button type="button" data-tab="arbres" aria-pressed="false">Arbres</button><button type="button" data-tab="fonct" aria-pressed="false">Terrasse, allées, piscine</button><button type="button" data-tab="arrosage" aria-pressed="false">Arrosage</button><button type="button" data-tab="diy" aria-pressed="false">Faire soi-même</button><button type="button" data-tab="rendu" aria-pressed="false">Rendus sur photo</button><button type="button" data-tab="pelouse" aria-pressed="false" hidden>Pelouse</button><button type="button" data-tab="zones" aria-pressed="false">Forêt, eau et fraîcheur</button><button type="button" data-tab="machines" aria-pressed="false">Matériel</button><button type="button" data-tab="pros" aria-pressed="false">Pros et achats</button><button type="button" data-tab="budget" aria-pressed="false">Budget</button><button type="button" data-tab="primes" aria-pressed="false">Primes et subsides</button><button type="button" data-tab="export" aria-pressed="false">Exporter</button>
+  <button type="button" data-tab="envies" aria-pressed="false">Mes envies</button><button type="button" data-tab="carte" aria-pressed="true">Carte</button><button type="button" data-tab="projet" aria-pressed="false">Mon projet</button><button type="button" data-tab="synthese" aria-pressed="false">Synthèse du site</button><button type="button" data-tab="climat" aria-pressed="false">Climat</button><button type="button" data-tab="sol" aria-pressed="false">Sol</button><button type="button" data-tab="patri" aria-pressed="false">Patrimoine local</button><button type="button" data-tab="soleil" aria-pressed="false">Soleil et ombres</button><button type="button" data-tab="ident" aria-pressed="false">Identification</button><button type="button" data-tab="sante" aria-pressed="false">Santé des plantes</button><button type="button" data-tab="entretien" aria-pressed="false">Entretien</button><button type="button" data-tab="temps" aria-pressed="false">Le jardin dans le temps</button><button type="button" data-tab="plantes" aria-pressed="false">Plantes</button><button type="button" data-tab="coherence" aria-pressed="false">Liens entre aménagements</button><button type="button" data-tab="massif" aria-pressed="false">Composition</button><button type="button" data-tab="jardinieres" aria-pressed="false">Jardinières</button><button type="button" data-tab="potager" aria-pressed="false">Potager</button><button type="button" data-tab="verger" aria-pressed="false">Verger</button><button type="button" data-tab="amenagements" aria-pressed="false">Haies, fruitiers, eau, talus</button><button type="button" data-tab="cloture" aria-pressed="false">Clôture</button><button type="button" data-tab="demo" aria-pressed="false">Démolition</button><button type="button" data-tab="arbres" aria-pressed="false">Arbres</button><button type="button" data-tab="fonct" aria-pressed="false">Terrasse, allées, piscine</button><button type="button" data-tab="eau" aria-pressed="false">Eau de pluie</button><button type="button" data-tab="arrosage" aria-pressed="false">Arrosage</button><button type="button" data-tab="diy" aria-pressed="false">Faire soi-même</button><button type="button" data-tab="rendu" aria-pressed="false">Rendus sur photo</button><button type="button" data-tab="pelouse" aria-pressed="false" hidden>Pelouse</button><button type="button" data-tab="zones" aria-pressed="false">Forêt, eau et fraîcheur</button><button type="button" data-tab="machines" aria-pressed="false">Matériel</button><button type="button" data-tab="pros" aria-pressed="false">Pros et achats</button><button type="button" data-tab="budget" aria-pressed="false">Budget</button><button type="button" data-tab="primes" aria-pressed="false">Primes et subsides</button><button type="button" data-tab="export" aria-pressed="false">Exporter</button>
   <button type="button" class="taball" id="tabAll">Tout afficher</button><button type="button" class="taball" id="tabOne">Un seul onglet</button>
 </nav>
 
@@ -311,6 +311,11 @@
   <div class="shead"><h2>Matériel d’entretien conseillé</h2><span class="src">Pour un particulier, selon ce qui est tracé et composé</span></div>
   <div class="card scroll"><table class="stack" id="mach"></table></div>
 </div></section>
+<section class="band alt" id="temps"><div class="in">
+  <div class="shead"><h2>Le jardin dans le temps</h2><span class="src">Taille des arbres, haies et massifs dans 1, 5, 10 ou 20 ans · ombre future</span></div>
+  <div id="timeBox"></div>
+</div></section>
+
 <section class="band" id="entretien"><div class="in">
   <div class="shead"><h2>Entretien de mon jardin</h2><span class="src">Photographiez vos plantes : Plantañ.ia les reconnaît et vous dit comment les entretenir</span></div>
   <div class="card"><div class="chips"><button type="button" class="pri" id="mtCam">📷 Prendre une photo</button><button type="button" id="mtLib">🖼️ Choisir dans ma photothèque</button>
@@ -320,6 +325,11 @@
   <div id="mtList"></div>
   <h3>Calendrier d’entretien de vos plantes</h3><div id="mtCal"><p class="empty">Le calendrier apparaît après l’analyse des photos.</p></div>
 </div></section>
+<section class="band alt" id="eau"><div class="in">
+  <div class="shead"><h2>Eau de pluie</h2><span class="src">Eau récoltée par le toit, besoins du jardin et de la maison mois par mois, taille de citerne conseillée</span></div>
+  <div id="waterBox"></div>
+</div></section>
+
 <section class="band" id="arrosage"><div class="in">
   <div class="shead"><h2>Arrosage automatique</h2><span class="src">Goutte-à-goutte et arroseurs dimensionnés sur vos plantations, eau de ville ou cuve</span></div>
   <div id="irrBox"></div>
@@ -425,7 +435,7 @@
 <div class="tutohl" id="tutoHl" hidden></div>
 <div class="tutobox" id="tutoBox" role="dialog" aria-labelledby="tutoT" hidden><small id="tutoN"></small><h4 id="tutoT"></h4><p id="tutoD"></p>
   <div class="tnav"><span><button type="button" id="tutoSkip" title="Le tutoriel reviendra à la prochaine ouverture">Plus tard</button> <button type="button" id="tutoNever" class="lnk">Ne plus afficher</button></span><span><button type="button" id="tutoPrev">Précédent</button> <button type="button" class="pri" id="tutoNext">Suivant</button></span></div></div>
-<script src="js/traductions.js?v=28"></script>
+<script src="js/traductions.js?v=29"></script>
 <footer class="band foot"><div class="in">
   <b>Sources de données</b>
   <ul>
@@ -451,11 +461,11 @@ if(!window.L){window.__noMap=true;(function(){
   window.L={map:()=>({on(){return this},setView(){return this},removeLayer(){},doubleClickZoom:{enable(){},disable(){}}}),tileLayer:mk,control:{layers:mk},layerGroup:()=>new G(),divIcon:o=>o,canvas:()=>({}),marker:mk,circle:mk,polygon:mk,polyline:mk,circleMarker:mk,rectangle:mk,DomEvent:{stopPropagation(){}}};
 })();}
 </script>
-<script src="js/coeur.js?v=28"></script>
-<script src="js/images.js?v=28"></script>
-<script src="js/app-1-base.js?v=28"></script>
-<script src="js/app-2-modules.js?v=28"></script>
-<script src="js/app-3-parcours.js?v=28"></script>
-<script src="js/app-4-amenagements.js?v=28"></script>
+<script src="js/coeur.js?v=29"></script>
+<script src="js/images.js?v=29"></script>
+<script src="js/app-1-base.js?v=29"></script>
+<script src="js/app-2-modules.js?v=29"></script>
+<script src="js/app-3-parcours.js?v=29"></script>
+<script src="js/app-4-amenagements.js?v=29"></script>
 </body>
 </html>
