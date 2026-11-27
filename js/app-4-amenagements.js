@@ -1673,6 +1673,28 @@ async function pool(fs,n,onp){const out=new Array(fs.length);let i=0,done=0;awai
 function hull(P){const p=P.slice().sort((a,b)=>a[0]-b[0]||a[1]-b[1]);if(p.length<3)return p;const cr=(o,a,b)=>(a[0]-o[0])*(b[1]-o[1])-(a[1]-o[1])*(b[0]-o[0]),lo=[],up=[];for(const q of p){while(lo.length>=2&&cr(lo[lo.length-2],lo[lo.length-1],q)<=0)lo.pop();lo.push(q)}for(const q of p.slice().reverse()){while(up.length>=2&&cr(up[up.length-2],up[up.length-1],q)<=0)up.pop();up.push(q)}return lo.slice(0,-1).concat(up.slice(0,-1))}
 function plane(pts){const n=pts.length;if(n<3)return()=>pts.length?pts.reduce((a,p)=>a+p[2],0)/n:0;let S_=[[0,0,0],[0,0,0],[0,0,0]],b=[0,0,0];pts.forEach(([x,y,z])=>{const v=[1,x,y];for(let i=0;i<3;i++){b[i]+=v[i]*z;for(let j=0;j<3;j++)S_[i][j]+=v[i]*v[j]}});
   const M=S_.map((r,i)=>[...r,b[i]]);for(let i=0;i<3;i++){let mx=i;for(let r=i+1;r<3;r++)if(Math.abs(M[r][i])>Math.abs(M[mx][i]))mx=r;[M[i],M[mx]]=[M[mx],M[i]];if(Math.abs(M[i][i])<1e-9){const m=pts.reduce((a,p)=>a+p[2],0)/n;return()=>m}for(let r=0;r<3;r++)if(r!==i){const f=M[r][i]/M[i][i];for(let c=i;c<4;c++)M[r][c]-=f*M[i][c]}}const c=M.map((r,i)=>r[3]/r[i]);return(x,y)=>c[0]+c[1]*x+c[2]*y}
+/* relief : plusieurs points par demande si le service l’accepte */
+let BATCH31=null;
+async function idMulti(base,lls){const lo=lls.map(p=>p[1]),la=lls.map(p=>p[0]),d=0.0005,body=new URLSearchParams({geometryType:'esriGeometryMultipoint',geometry:JSON.stringify({points:lls.map(p=>[+p[1].toFixed(7),+p[0].toFixed(7)]),spatialReference:{wkid:4326}}),sr:'4326',layers:'all',tolerance:'0',
+    mapExtent:[Math.min(...lo)-d,Math.min(...la)-d,Math.max(...lo)+d,Math.max(...la)+d].map(v=>v.toFixed(6)).join(','),imageDisplay:'100,100,96',returnGeometry:'true',f:'json'});
+  const j=await getJ(`${base}/identify`,20000,{method:'POST',body}),R_=j.results||[];if(R_.length!==lls.length||!R_.every(r=>r.geometry&&r.geometry.x!=null))throw new Error('nobatch');
+  return lls.map(p=>{let best=null,bd=1e9;R_.forEach(r=>{const dd=Math.abs(r.geometry.x-p[1])+Math.abs(r.geometry.y-p[0]);if(dd<bd){bd=dd;best=r}});if(!best||bd>2e-6)return NaN;const a=best.attributes||{},k=Object.keys(a).find(x=>/pixel value/i.test(x));const v=k?parseFloat(String(a[k]).replace(',','.')):NaN;return isFinite(v)?v:NaN})}
+async function pixMany(base,lls,tick){if(!lls.length)return[];const out=new Array(lls.length).fill(NaN);
+  if(BATCH31!==false){const C=25,ch=[];for(let i=0;i<lls.length;i+=C)ch.push(i);let k=0;
+    if(BATCH31===null){try{const v=await idMulti(base,lls.slice(0,Math.min(C,lls.length)));v.forEach((x,i)=>out[i]=x);BATCH31=true;k=1;if(tick)tick(Math.min(C,lls.length))}catch(e){BATCH31=false}}
+    if(BATCH31){await pool(ch.slice(k).map(i=>async()=>{const part=lls.slice(i,i+C);let v;try{v=await idMulti(base,part)}catch(e){v=await Promise.all(part.map(p=>pix(base,p[0],p[1]).catch(()=>NaN)))}v.forEach((x,j)=>out[i+j]=x);if(tick)tick(part.length)}),4);return out}}
+  const v=await pool(lls.map(p=>()=>pix(base,p[0],p[1]).finally(()=>tick&&tick(1))),8);return v}
+/* photos aériennes infrarouges (fausses couleurs : rouge = proche infrarouge, vert = rouge) */
+const IRS={su:['ORTHO_2025_ETE_IR','ORTHO_2023_ETE_IR','ORTHO_2022_ETE_IR'],sp:['ORTHO_2026_PRINTEMPS_IR','ORTHO_2025_PRINTEMPS_IR','ORTHO_2022_PRINTEMPS_IR']};
+async function irImg(svc,bb){const dLat=bb[2]-bb[0],dLon=bb[3]-bb[1],H=Math.min(900,Math.ceil(dLat*111320/0.25)),W=Math.max(1,Math.min(1400,Math.round(H*dLon/dLat)));
+  const u=`https://geoservices.wallonie.be/arcgis/rest/services/IMAGERIE/${svc}/MapServer/export?bbox=${bb[1].toFixed(7)},${bb[0].toFixed(7)},${bb[3].toFixed(7)},${bb[2].toFixed(7)}&bboxSR=4326&imageSR=4326&size=${W},${H}&format=png24&transparent=false&f=image`;
+  const img=await new Promise((ok,ko)=>{const im=new Image();im.crossOrigin='anonymous';const t=setTimeout(()=>ko(new Error('délai dépassé')),25000);im.onload=()=>{clearTimeout(t);ok(im)};im.onerror=()=>{clearTimeout(t);ko(new Error('image indisponible'))};im.src=u});
+  const c=document.createElement('canvas');c.width=W;c.height=H;const x=c.getContext('2d',{willReadFrequently:true});x.drawImage(img,0,0,W,H);let d;try{d=x.getImageData(0,0,W,H).data}catch(e){const er=new Error('lecture des pixels refusée par le serveur');er.cors=1;throw er}
+  let n=0,sm=0;for(let i=0;i<d.length;i+=4*41){sm+=d[i]+d[i+1]+d[i+2];n++}const mean=sm/n/3;if(mean>250||mean<3)throw new Error('image vide');return{W,H,bb,d,y:(svc.match(/\d{4}/)||[''])[0]}}
+async function irPair(bb){let su=null,sp=null,last=null;for(const s of IRS.su){try{su=await irImg(s,bb);break}catch(e){last=e;if(e.cors)throw e}}if(!su)throw last||new Error('indisponible');for(const s of IRS.sp){try{sp=await irImg(s,bb);break}catch(e){}}return{su,sp}}
+function ndviAt(I,ll,r){if(!I)return NaN;const fx=(ll[1]-I.bb[1])/(I.bb[3]-I.bb[1])*I.W,fy=(I.bb[2]-ll[0])/(I.bb[2]-I.bb[0])*I.H,mx=(I.bb[3]-I.bb[1])*mPer(ll[0])/I.W,my=(I.bb[2]-I.bb[0])*111320/I.H,rx=Math.max(0.5,r/mx),ry=Math.max(0.5,r/my);let a=0,n=0;
+  for(let y=Math.floor(fy-ry);y<=Math.ceil(fy+ry);y++)for(let x=Math.floor(fx-rx);x<=Math.ceil(fx+rx);x++){if(x<0||y<0||x>=I.W||y>=I.H)continue;if(((x+0.5-fx)/rx)**2+((y+0.5-fy)/ry)**2>1.2)continue;const k=(y*I.W+x)*4,R_=I.d[k],G=I.d[k+1];a+=(R_-G)/(R_+G+1);n++}return n?a/n:NaN}
+function leafOf(NV,ll,r){if(!NV||!NV.sp)return null;const s=ndviAt(NV.su,ll,r),p=ndviAt(NV.sp,ll,r);if(!isFinite(s)||!isFinite(p)||s<0.12)return null;if(p>0.2&&p>=0.6*s)return'pers';if(p<0.12||p<0.4*s)return'caduc';return null}
 async function detRun(prog){const D=propDomain();if(!D)throw new Error('Placez d’abord le terrain : la limite de la parcelle est nécessaire.');
   const o=cen(D),mp=mPer(o[0]),X=p=>[(p[1]-o[1])*mp,(p[0]-o[0])*111320],LL=([x,y])=>[o[0]+y/111320,o[1]+x/mp],DX=D.map(X),inD=p=>inPolyLL(p,D),dD=p=>inD(p)?0:distPtPoly(p,D);
   const xs=DX.map(p=>p[0]),ys=DX.map(p=>p[1]),pad=15,bb=[o[0]+(Math.min(...ys)-pad)/111320,o[1]+(Math.min(...xs)-pad)/mp,o[0]+(Math.max(...ys)+pad)/111320,o[1]+(Math.max(...xs)+pad)/mp];
@@ -1699,20 +1721,32 @@ async function detRun(prog){const D=propDomain();if(!D)throw new Error('Placez d
       else if(pts&&t.highway)C.push({cat:'path',pts,w:t.highway==='service'||t.highway==='track'?3:1.2,src:'OSM',conf:'probable'})})}
   else if(os&&os.e)log.push('OpenStreetMap indisponible');
   P('vec',src.size?'ok':'warn',src.size?[...src].join(', '):'Aucune carte disponible');
-  /* relief mesuré par avion (Wallonie) */
+  /* relief mesuré par avion (Wallonie) : maille large, puis maille fine autour de ce qui dépasse du sol */
   let grid=null,ground=null;const bPolys=[...bld.map(b=>b.pts),...S.shapes.filter(s=>s.kind==='obsPoly'&&s.nat==='bat').map(s=>s.pts)];
   if(reg!=='vla'&&reg!=='bxl'){P('lidar','run','Relief mesuré par avion : premier point…');
-    const z0=await pix(MNS,o[0],o[1]).catch(()=>NaN);
-    if(isFinite(z0)){src.add('Relief LiDAR 2021-2022 (Service public de Wallonie)');
-      const area=Math.abs(polyArea(DX)),s=Math.max(1.5,Math.sqrt(area/170)),pts=[];const x0=Math.min(...xs)-4,x1=Math.max(...xs)+4,y0=Math.min(...ys)-4,y1=Math.max(...ys)+4;
-      for(let y=y0+s/2,j=0;y<y1;y+=s,j++)for(let x=x0+s/2,i=0;x<x1;x+=s,i++){const ll=LL([x,y]);if(dD(ll)>4)continue;if(bPolys.some(b=>inPolyLL(ll,b)||distPtPoly(ll,b)<0.6))continue;pts.push({i,j,x,y,ll})}
-      const gp=[];for(const fx of[0.1,0.5,0.9])for(const fy of[0.1,0.5,0.9])gp.push([x0+(x1-x0)*fx,y0+(y1-y0)*fy]);
-      const tot=pts.length+gp.length;let done=0;const tick=()=>{done++;if(done%8===0)P('lidar','run',`Relief mesuré par avion : ${done} / ${tot} points…`)};
-      const gz=await pool(gp.map(p=>()=>pix(MNT,...LL(p)).finally(tick)),8);const gpts=gp.map((p,k)=>[p[0],p[1],gz[k]]).filter(p=>isFinite(p[2]));ground=plane(gpts);
-      const zs=await pool(pts.map(p=>()=>pix(MNS,p.ll[0],p.ll[1]).finally(tick)),8);pts.forEach((p,k)=>{p.h=isFinite(zs[k])&&gpts.length?zs[k]-ground(p.x,p.y):NaN});
-      grid={s,pts,idx:new Map(pts.map(p=>[p.i+','+p.j,p]))};P('lidar','ok',`${pts.filter(p=>isFinite(p.h)).length} points mesurés (maille ${nf(s,1)} m)`)}
+    const z0=(await pixMany(MNS,[o,[o[0]+0.00001,o[1]+0.00001]]).catch(()=>[NaN]))[0];
+    if(isFinite(z0)){const BIG=BATCH31===true;src.add('Relief LiDAR 2021-2022 (Service public de Wallonie)');
+      const x0=Math.min(...xs)-4,x1=Math.max(...xs)+4,y0=Math.min(...ys)-4,y1=Math.max(...ys)+4;
+      const area=(x1-x0)*(y1-y0),s=Math.max(1,Math.round(Math.sqrt(area/(BIG?700:400))*4)/4),okPt=ll=>dD(ll)<=4&&!bPolys.some(b=>inPolyLL(ll,b)||distPtPoly(ll,b)<0.6);
+      const coarse=[];for(let J=0;y0+s/2+J*s<y1;J++)for(let I=0;x0+s/2+I*s<x1;I++){const x=x0+s/2+I*s,y=y0+s/2+J*s,ll=LL([x,y]);if(okPt(ll))coarse.push({I,J,x,y,ll})}
+      const gs=Math.max(3,2*s),gp=[];for(let y=y0;y<=y1+0.01;y+=gs)for(let x=x0;x<=x1+0.01;x+=gs)gp.push([x,y]);
+      let done=0,tot=coarse.length+gp.length;const tick=n=>{done+=n||1;P('lidar','run',`Relief mesuré par avion : ${Math.min(done,tot)} / ${tot} points…`)};
+      const gz=await pixMany(MNT,gp.map(LL),tick),gpts=gp.map((p,k)=>[p[0],p[1],gz[k]]).filter(p=>isFinite(p[2]));
+      ground=gpts.length>=3?(x,y)=>{const nn=gpts.map(p=>[Math.hypot(p[0]-x,p[1]-y),p[2]]).sort((a,b)=>a[0]-b[0]).slice(0,6);if(nn[0][0]<0.05)return nn[0][1];let a=0,w=0;nn.forEach(([d,z])=>{const q=1/(d*d);a+=q*z;w+=q});return a/w}:plane(gpts);
+      const cz=await pixMany(MNS,coarse.map(p=>p.ll),tick);coarse.forEach((p,k)=>{p.h=isFinite(cz[k])&&gpts.length?cz[k]-ground(p.x,p.y):NaN});
+      /* maille fine : m subdivisions, la plus fine qui tient dans le budget */
+      const obj=coarse.filter(p=>p.h>0.6),cset=new Set(coarse.map(p=>p.I+','+p.J));let m=1,fill=[];
+      for(const mm of[Math.max(2,Math.round(s/0.5)),Math.max(2,Math.round(s/0.75)),Math.max(2,Math.round(s/1)),2]){const g=s/mm,keys=new Map();
+        obj.forEach(p=>{for(let a=-mm;a<=mm;a++)for(let b=-mm;b<=mm;b++){const i=p.I*mm+a,j=p.J*mm+b;if(i%mm===0&&j%mm===0&&cset.has((i/mm)+','+(j/mm)))continue;const k=i+','+j;if(keys.has(k))continue;const x=x0+s/2+i*g,y=y0+s/2+j*g,ll=LL([x,y]);if(okPt(ll))keys.set(k,{i,j,x,y,ll})}});
+        if(keys.size<=(BIG?1600:500)||mm===2){m=mm;fill=[...keys.values()];break}}
+      tot+=fill.length;const fz=await pixMany(MNS,fill.map(p=>p.ll),tick);fill.forEach((p,k)=>{p.h=isFinite(fz[k])&&gpts.length?fz[k]-ground(p.x,p.y):NaN});
+      const pts=[...coarse.map(p=>({i:p.I*m,j:p.J*m,x:p.x,y:p.y,ll:p.ll,h:p.h})),...fill];
+      grid={s:s/m,pts,idx:new Map(pts.map(p=>[p.i+','+p.j,p]))};grid.msg=`${pts.filter(p=>isFinite(p.h)).length} points mesurés (maille ${nf(s,2)} m, affinée à ${nf(s/m,2)} m autour des arbres, haies et massifs)`;P('lidar','ok',grid.msg)}
     else P('lidar','warn','Relief indisponible : hauteurs estimées')}
   else P('lidar','skip','Relief détaillé : seulement en Wallonie pour l’instant');
+  /* photos aériennes infrarouges : végétal ou non, feuillage en été et au printemps */
+  let NV=null;if(reg!=='vla'&&reg!=='bxl'){P('ir','run','Photos aériennes infrarouges…');try{NV=await irPair(bb);P('ir','ok',`Été ${NV.su.y}${NV.sp?` et printemps ${NV.sp.y} : feuillage caduc ou persistant`:' (printemps indisponible)'}`);src.add(`Orthophotos infrarouges ${NV.su.y}${NV.sp?' et '+NV.sp.y:''} (Service public de Wallonie)`)}catch(e){P('ir','warn','Photos infrarouges indisponibles : '+(e.message||e))}}
+  else P('ir','skip','Photos infrarouges : seulement en Wallonie pour l’instant');
   const hNear=(ll,r)=>{if(!grid)return NaN;const [x,y]=X(ll);let m=NaN;grid.pts.forEach(p=>{if(isFinite(p.h)&&Math.hypot(p.x-x,p.y-y)<=r&&!(p.h<=m))m=p.h});return m};
   /* arbres du relief : maxima locaux */
   const used=new Set();const lt=[];
@@ -1726,19 +1760,22 @@ async function detRun(prog){const D=propDomain();if(!D)throw new Error('Placez d
   trees.forEach(t=>{const [x,y]=X(t.pt);const m=lt.find(l=>!l.used&&Math.hypot(l.x-x,l.y-y)<3.5);if(m){m.used=1;t.h=m.h;t.w=m.w}else{const h=hNear(t.pt,2.5);t.h=isFinite(h)&&h>2?h:null}});
   lt.filter(l=>!l.used).forEach(l=>trees.push({pt:l.ll,h:l.h,w:l.w,src:'LiDAR',conf:'probable'}));
   const out=[];let nT=0,nV=0;
-  trees.forEach(t=>{const d=dD(t.pt);if(d>6)return;if(S.obs.some(o=>o.type!=='bat'&&llDist([o.lat,o.lng],t.pt)<3))return;const nb=d>0.5;const h=t.h||(nb?10:8),w=t.w||Math.max(3,Math.min(12,h*0.6));if(nb&&h<6)return;
-    out.push({cat:'tree',pt:t.pt,h,w,type:t.pers?'pers':'caduc',name:nb?`Arbre voisin ${++nV}`:`Arbre ${++nT}`,src:t.src,conf:t.conf,on:true})});
+  let nX=0;const tc=[];trees.forEach(t=>{const d=dD(t.pt);if(d>6)return;if(S.obs.some(o=>o.type!=='bat'&&llDist([o.lat,o.lng],t.pt)<3))return;const nb=d>0.5;const h=t.h||(nb?10:8),w=t.w||Math.max(3,Math.min(12,h*0.6));if(nb&&h<6)return;
+    const nd=NV?ndviAt(NV.su,t.pt,Math.min(2.5,w*0.3)):NaN;if(t.src==='LiDAR'&&isFinite(nd)&&nd<0.08){nX++;return}
+    tc.push({t,nb,h,w,leaf:t.pers?'pers':leafOf(NV,t.pt,Math.min(2.5,w*0.3)),veg:isFinite(nd)&&nd>0.15})});
+  const spOk=!(tc.length>=3&&tc.every(x=>x.leaf==='pers'));if(!spOk)log.push('photo de printemps feuillue : feuillage non déterminé');
+  tc.forEach(({t,nb,h,w,leaf,veg})=>{const lf=spOk?leaf:null;out.push({cat:'tree',pt:t.pt,h,w,type:lf==='pers'?'pers':'caduc',leaf:lf,name:nb?`Arbre voisin ${++nV}`:`Arbre ${++nT}`,src:t.src,conf:t.src==='LiDAR'&&veg?'sûr':t.conf,on:true})});
   /* bâtiments */
   const inB=bld.map(b=>{const c=cen(b.pts),fr=b.pts.filter(inD).length/b.pts.length;return{...b,c,a:areaLL(b.pts),inside:inD(c)||fr>=0.5,d:Math.min(...b.pts.map(dD))}}).filter(b=>b.inside||b.d<6).filter(b=>!S.shapes.some(s=>s.kind==='obsPoly'&&s.nat==='bat'&&(inPolyLL(b.c,s.pts)||inPolyLL(cen(s.pts),b.pts))));
   const mainB=inB.filter(b=>b.inside&&!/annexe|garage|abri|serre|carport/i.test(b.lbl)).sort((a,b)=>b.a-a.a)[0];
-  if(grid||ground){P('lidar','run','Hauteur des bâtiments…');await pool(inB.map(b=>async()=>{const c=X(b.c),zz=await Promise.all([b.c,...b.pts.slice(0,4).map(p=>[b.c[0]+(p[0]-b.c[0])*0.55,b.c[1]+(p[1]-b.c[1])*0.55])].map(p=>pix(MNS,p[0],p[1]).catch(()=>NaN)));const z=Math.max(...zz.filter(isFinite));if(isFinite(z)&&ground){const h=z-ground(c[0],c[1]);if(h>1.8&&h<40)b.h=h}}),6);if(grid)P('lidar','ok',`${grid.pts.filter(p=>isFinite(p.h)).length} points mesurés et hauteur des bâtiments`)}
+  if(grid||ground){P('lidar','run','Hauteur des bâtiments…');await pool(inB.map(b=>async()=>{const c=X(b.c),zz=await Promise.all([b.c,...b.pts.slice(0,4).map(p=>[b.c[0]+(p[0]-b.c[0])*0.55,b.c[1]+(p[1]-b.c[1])*0.55])].map(p=>pix(MNS,p[0],p[1]).catch(()=>NaN)));const z=Math.max(...zz.filter(isFinite));if(isFinite(z)&&ground){const h=z-ground(c[0],c[1]);if(h>1.8&&h<40)b.h=h}}),6);if(grid)P('lidar','ok',grid.msg+' ; hauteur des toits')}
   let nA=0;inB.forEach(b=>{let name;if(!b.inside)name='Bâtiment voisin';else if(b===mainB)name='Maison';else if(/garage|carport/i.test(b.lbl))name='Garage';else if(/serre/i.test(b.lbl))name='Serre';else if(b.a<15||/abri/i.test(b.lbl))name='Abri de jardin';else name='Annexe'+(++nA>1?' '+nA:'');
     const h=b.h||(name==='Maison'?7:name==='Bâtiment voisin'?7:name==='Abri de jardin'?2.4:3);out.push({cat:'bat',pts:b.pts,h,name,src:b.src,conf:b.src==='OSM'?'probable':'sûr',on:true})});
   /* haies, clôtures et chemins des cartes */
   const near=(pts,r)=>pts.some(p=>dD(p)<=r);let nH=0,nF=0,nP=0;
   const clip=pts=>{const q=pts.filter(p=>dD(p)<=1.5);return q.length>=2?q:null};
   C.filter(c=>c.cat==='hedge').forEach(c=>{const pts=clip(c.pts);if(!pts||lenLL(pts)<2)return;if(S.shapes.some(s=>s.kind==='obsLine'&&pts.every(p=>distPtLine(p,s.pts)<1.5)))return;let h=NaN;if(grid){const hs=grid.pts.filter(p=>isFinite(p.h)&&p.h>0.4&&distPtLine(LL([p.x,p.y]),pts)<grid.s*0.8);hs.forEach(p=>used.add(p));if(hs.length)h=hs.map(p=>p.h).sort((a,b)=>a-b)[Math.floor(hs.length/2)]}
-    out.push({cat:'hedge',pts,h:isFinite(h)?Math.min(6,h):1.8,w:1,nat:'haie',name:`Haie ${++nH}`,src:c.src,conf:c.conf,on:true})});
+    const lv=NV?pts.map(p=>leafOf(NV,p,0.6)).filter(Boolean):[],lf=lv.length?(lv.filter(x=>x==='pers').length>=lv.length/2?'pers':'caduc'):null;out.push({cat:'hedge',pts,h:isFinite(h)?Math.min(6,h):1.8,w:1,nat:lf==='caduc'?'caduc':'haie',leaf:lf,name:`Haie ${++nH}`,src:c.src,conf:c.conf,on:true})});
   C.filter(c=>c.cat==='fence').forEach(c=>{const pts=clip(c.pts);if(!pts||lenLL(pts)<2)return;if(S.shapes.some(s=>s.kind==='obsLine'&&pts.every(p=>distPtLine(p,s.pts)<1)))return;out.push({cat:'fence',pts,nat:c.nat,h:c.nat==='mur'?1:c.nat==='palissade'?1.8:1.5,name:c.nat==='mur'?`Muret ${++nF}`:c.nat==='palissade'?`Palissade ${++nF}`:`Clôture ${++nF}`,src:c.src,conf:c.conf,on:true})});
   C.filter(c=>c.cat==='path').forEach(c=>{const pts=c.pts.filter(p=>inD(p));if(pts.length<2||lenLL(pts)<3)return;const P2=pts.map(X),w=c.w/2,L2=[],R2=[];P2.forEach((p,k)=>{const a=P2[Math.max(0,k-1)],b=P2[Math.min(P2.length-1,k+1)],dx=b[0]-a[0],dy=b[1]-a[1],n=Math.hypot(dx,dy)||1;L2.push([p[0]-dy/n*w,p[1]+dx/n*w]);R2.push([p[0]+dy/n*w,p[1]-dx/n*w])});
     out.push({cat:'path',pts:[...L2,...R2.reverse()].map(LL),nat:c.w>2?'parking':'chemin',name:c.w>2?`Accès ${++nP}`:`Allée ${++nP}`,src:c.src,conf:c.conf,on:true})});
@@ -1747,25 +1784,30 @@ async function detRun(prog){const D=propDomain();if(!D)throw new Error('Placez d
     mid.forEach(p0=>{if(seen.has(p0))return;const comp=[],st=[p0];seen.add(p0);while(st.length){const p=st.pop();comp.push(p);for(let a=-1;a<=1;a++)for(let b=-1;b<=1;b++){const q=grid.idx.get((p.i+a)+','+(p.j+b));if(q&&!seen.has(q)&&mid.includes(q)){seen.add(q);st.push(q)}}}
       const A=comp.length*grid.s*grid.s;if(A<3)return;const mx=comp.reduce((a,p)=>a+p.x,0)/comp.length,my=comp.reduce((a,p)=>a+p.y,0)/comp.length;let sxx=0,syy=0,sxy=0;comp.forEach(p=>{sxx+=(p.x-mx)**2;syy+=(p.y-my)**2;sxy+=(p.x-mx)*(p.y-my)});
       const th=0.5*Math.atan2(2*sxy,sxx-syy),u=[Math.cos(th),Math.sin(th)],v=[-u[1],u[0]],pu=comp.map(p=>(p.x-mx)*u[0]+(p.y-my)*u[1]),pv=comp.map(p=>(p.x-mx)*v[0]+(p.y-my)*v[1]),Lx=Math.max(...pu)-Math.min(...pu)+grid.s,Wx=Math.max(...pv)-Math.min(...pv)+grid.s;
+      const ndv=NV?comp.map(p=>ndviAt(NV.su,p.ll||LL([p.x,p.y]),grid.s/2)).filter(isFinite):[],nmean=ndv.length?ndv.reduce((a,b)=>a+b,0)/ndv.length:NaN;if(isFinite(nmean)&&nmean<0.1){nX++;return}const vegOk=isFinite(nmean)&&nmean>0.18;
+      const lvs=NV?comp.map(p=>leafOf(NV,p.ll||LL([p.x,p.y]),grid.s/2)).filter(Boolean):[],clf=lvs.length?(lvs.filter(x=>x==='pers').length>=lvs.length/2?'pers':'caduc'):null;
       const hm=comp.map(p=>p.h).sort((a,b)=>a-b)[Math.floor(comp.length/2)],nearB=bPolys.some(b=>comp.some(p=>distPtPoly(LL([p.x,p.y]),b)<3)),edge=comp.some(p=>dD(LL([p.x,p.y]))<0.01)||comp.some(p=>distPtLine(LL([p.x,p.y]),[...D,D[0]])<2.5);
-      if(Lx>=5&&Lx/Wx>=2.5){const a=Math.min(...pu)+grid.s/2,b=Math.max(...pu)-grid.s/2;out.push({cat:'hedge',pts:[[mx+u[0]*a,my+u[1]*a],[mx+u[0]*b,my+u[1]*b]].map(LL),h:hm,w:Wx>grid.s*1.6?Math.min(3,Wx):Math.min(1.5,Wx),nat:'haie',name:`Haie ${++nH}`,src:'LiDAR',conf:edge?'probable':'à vérifier',on:edge})}
-      else{const sq=[];const hs=grid.s/2;comp.forEach(p=>sq.push([p.x-hs,p.y-hs],[p.x+hs,p.y-hs],[p.x+hs,p.y+hs],[p.x-hs,p.y+hs]));out.push({cat:'shrub',pts:hull(sq).map(LL),h:hm,nat:'arbu',name:`Massif arbustif ${++nS}`,src:'LiDAR',conf:'à vérifier',on:!nearB&&A>=4})}})}
-  out.forEach((c,i)=>c.n=i+1);DET.src=[...src];DET.log=log;return out}
+      if(Lx>=5&&Lx/Wx>=2.5){const a=Math.min(...pu)+grid.s/2,b=Math.max(...pu)-grid.s/2;out.push({cat:'hedge',pts:[[mx+u[0]*a,my+u[1]*a],[mx+u[0]*b,my+u[1]*b]].map(LL),h:hm,w:Wx>grid.s*1.6?Math.min(3,Wx):Math.min(1.5,Wx),nat:clf==='caduc'?'caduc':'haie',leaf:clf,name:`Haie ${++nH}`,src:'LiDAR',conf:vegOk?(edge?'sûr':'probable'):edge?'probable':'à vérifier',on:edge||vegOk})}
+      else{const sq=[];const hs=grid.s/2;comp.forEach(p=>sq.push([p.x-hs,p.y-hs],[p.x+hs,p.y-hs],[p.x+hs,p.y+hs],[p.x-hs,p.y+hs]));out.push({cat:'shrub',pts:hull(sq).map(LL),h:hm,nat:'arbu',leaf:clf,name:`Massif arbustif ${++nS}`,src:'LiDAR',conf:vegOk?'probable':'à vérifier',on:vegOk||(!NV&&!nearB&&A>=4)})}})}
+  if(nX)log.push(`${nX} objet${nX>1?'s':''} non végéta${nX>1?'ux':'l'} écarté${nX>1?'s':''} (voiture, abri, poteau…)`);
+  out.forEach((c,i)=>c.n=i+1);DET.NV=NV;DET.grid=grid;DET.src=[...src];DET.log=log;return out}
 function detDraw(){detLayer.clearLayers();DET.list.forEach(c=>{const col=c.on?'#ef6c00':'#9e9e9e',o={color:col,weight:c.on?2.5:1.5,dashArray:'6 5',fillColor:col,fillOpacity:c.on?0.18:0.05};let ly;
   if(c.cat==='tree')ly=L.circle(c.pt,{...o,radius:c.w/2});else if(c.cat==='hedge'||c.cat==='fence')ly=L.polyline(c.pts,{...o,weight:c.cat==='hedge'?Math.max(4,c.w*4):3});else ly=L.polygon(c.pts,o);
   ly.on('click',()=>{c.on=!c.on;detDraw();detList()});ly.addTo(detLayer);const p=c.pt||cen(c.pts);L.marker(p,{interactive:false,icon:L.divIcon({className:'detnum',html:`<span class="${c.on?'':'off'}">${c.n}</span>`,iconSize:[20,20],iconAnchor:[10,10]})}).addTo(detLayer)})}
-function detMeta(c){return c.cat==='tree'?`${nf(c.h,0)} m de haut, couronne ${nf(c.w,0)} m`:c.cat==='hedge'?`${nf(lenLL(c.pts),0)} m, ${nf(c.h,1)} m de haut`:c.cat==='fence'?`${nf(lenLL(c.pts),0)} m`:c.cat==='bat'?`${nf(areaLL(c.pts))} m², ${nf(c.h,0)} m de haut`:`${nf(areaLL(c.pts))} m²${c.h?`, ${nf(c.h,1)} m de haut`:''}`}
+const LEAFT={pers:'feuillage persistant',caduc:'feuillage caduc'};
+function detMeta(c){return (c.leaf?LEAFT[c.leaf]+' (photos), ':'')+_detMeta(c)}
+function _detMeta(c){return c.cat==='tree'?`${nf(c.h,0)} m de haut, couronne ${nf(c.w,0)} m`:c.cat==='hedge'?`${nf(lenLL(c.pts),0)} m, ${nf(c.h,1)} m de haut`:c.cat==='fence'?`${nf(lenLL(c.pts),0)} m`:c.cat==='bat'?`${nf(areaLL(c.pts))} m², ${nf(c.h,0)} m de haut`:`${nf(areaLL(c.pts))} m²${c.h?`, ${nf(c.h,1)} m de haut`:''}`}
 function detList(){const box=$('#detList');if(!box)return;const L_=DET.list,on=L_.filter(c=>c.on).length;
   box.innerHTML=L_.length?`<ul class="detl">${L_.map((c,i)=>{const opt=DOPT[c.cat],cur=c.cat==='bat'?c.name.replace(/ \d+$/,''):c.cat==='tree'?c.type:c.cat==='shrub'?c.nat:c.nat;return `<li class="${c.on?'':'off'}"><label class="detck"><input type="checkbox" data-dc="${i}"${c.on?' checked':''}><span class="detn">${c.n}</span></label><span class="deti">${DCAT[c.cat][0]}</span>
      <span class="detb"><b>${esc(c.name)}</b><small>${esc(detMeta(c))} · ${esc(c.src)}</small></span><select data-dt="${i}" aria-label="Type de ${esc(c.name)}">${opt.map(([k,l])=>`<option value="${k}"${cur===k?' selected':''}>${l}</option>`).join('')}</select><span class="conf c-${c.conf.replace(/[^a-z]/g,'')}">${c.conf}</span><button type="button" class="detz" data-dz="${i}" title="Voir sur la carte">◎</button></li>`}).join('')}</ul>`:'<p class="small">Rien de nouveau trouvé autour de ce terrain : dessinez l’existant à la main.</p>';
   const a=$('#detAdd');if(a){a.disabled=!on;a.textContent=`Ajouter ${on} élément${on>1?'s':''} à l’existant`}}
 function detOpen(auto){const c=$('#detCard');if(!c)return;if(S.lat==null){toast('Placez d’abord votre terrain.');return}c.hidden=false;
   c.innerHTML=`<div class="dethead"><h4>🔎 Détection de l’existant</h4><button type="button" class="welx" data-dx="close" aria-label="Fermer">×</button></div><p class="small">Bâtiments, arbres, haies, clôtures, allées et massifs repérés sur les cartes publiques et le relief mesuré par avion. <b>Rien n’est ajouté sans votre accord</b> : cochez ce qui est juste, corrigez le type, puis ajoutez.</p>
-   <ul class="exprog detprog"><li data-p="vec" class="wait"><span class="exst"></span><span><b>Cartes</b><small></small></span></li><li data-p="lidar" class="wait"><span class="exst"></span><span><b>Hauteurs (arbres, haies, toits)</b><small></small></span></li></ul><div id="detList"></div>
+   <ul class="exprog detprog"><li data-p="vec" class="wait"><span class="exst"></span><span><b>Cartes</b><small></small></span></li><li data-p="lidar" class="wait"><span class="exst"></span><span><b>Hauteurs (arbres, haies, toits)</b><small></small></span></li><li data-p="ir" class="wait"><span class="exst"></span><span><b>Photos infrarouges (végétal, feuillage)</b><small></small></span></li></ul><div id="detList"></div>
    <div class="detfoot"><span class="chips"><button type="button" data-dx="all">Tout cocher</button><button type="button" data-dx="none">Tout décocher</button></span><span class="chips"><button type="button" data-dx="close">Fermer</button><button type="button" class="pri" id="detAdd" data-dx="add" disabled>Ajouter à l’existant</button></span></div><p class="small muted" id="detSrc"></p>`;
   c.scrollIntoView({behavior:'smooth',block:'nearest'});detGo()}
 async function detGo(){if(DET.busy)return;DET.busy=true;const st=(k,s,t)=>{const li=$(`#detCard [data-p=${k}]`);if(!li)return;li.className=s==='skip'?'warn':s;li.querySelector('small').textContent=t||''};
-  try{DET.list=await detRun(st);detDraw();detList();const s=$('#detSrc');if(s)s.textContent=`Sources : ${DET.src.join(' ; ')||'aucune'}${DET.log.length?' · '+DET.log.join(', '):''}. Les relevés datent de 1 à 4 ans : un élément récent peut manquer.`;
+  try{DET.list=await detRun(st);detDraw();detList();const s=$('#detSrc');if(s)s.textContent=`Sources : ${DET.src.join(' ; ')||'aucune'}${DET.log.length?' · '+DET.log.join(', '):''}. Relief de 2021-2022, photos de 2022 à 2026 : un élément récent peut manquer.`;
     try{const all=DET.list.flatMap(c=>c.pt?[c.pt]:c.pts);if(all.length)map.fitBounds(all,{padding:[30,30],maxZoom:20})}catch(e){}}
   catch(e){const l=$('#detList');if(l)l.innerHTML=`<p class="small">${esc(e.message||String(e))}</p>`}finally{DET.busy=false}}
 function mkObs(lat,lng,type,h,w,name){$('#obsType').value=OBT[type]?type:'caduc';addObstacle(lat,lng);const o=S.obs[S.obs.length-1];o.type=OBT[type]?type:'caduc';o.h=h;o.w=w;o.name=name;styleObs(o);return o}
