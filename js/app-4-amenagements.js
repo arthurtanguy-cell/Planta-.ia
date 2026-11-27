@@ -1254,11 +1254,11 @@ const EXW=[['massif','🌸','Des fleurs','Un massif fleuri toute l’année'],['
  ['haie','🌿','Une haie','Intimité, abri pour les oiseaux'],['terrasse','🪑','Une terrasse','Contre la façade la plus ensoleillée'],['mare','💧','Une mare','Un point d’eau pour la faune'],['fruit','🍎','Des fruitiers','Pommes, poires, petits fruits']];
 const EXA={auto:'✨',ang:'🌼',nat:'🍃',jap:'🎋',gra:'🔲',med:'☀️',eco:'🐝',viv:'🥬',ros:'🌹',nw:'🌾'};
 const EXC=[['low','🪴','Le moins possible','Quelques heures par an'],['mid','🌿','Un peu chaque mois','Une demi-journée par mois'],['high','🧑‍🌾','J’adore jardiner','Un peu chaque semaine']];
-const EXT=[['Où se trouve votre jardin ?','Tapez l’adresse et choisissez-la dans la liste.'],['Que voulez-vous y faire ?','Choisissez une ou plusieurs envies.'],['Quel style vous ressemble ?','L’ambiance et le temps que vous voulez y consacrer.'],['Votre projet se prépare','Le site place chaque élément selon le soleil, le sol et la place.']];
-const EX={step:1,addr:null,keep:false,want:new Set(),amb:'auto',care:'low',sugg:[],busy:false,done:null};
+const EXT=[['Où se trouve votre jardin ?','Tapez l’adresse et choisissez-la dans la liste.'],['Que voulez-vous faire sur ce terrain ?','Partir de zéro, modifier ce qui existe ou tout changer.'],['Que voulez-vous y faire ?','Choisissez une ou plusieurs envies.'],['Quel style vous ressemble ?','L’ambiance et le temps que vous voulez y consacrer.'],['Votre projet se prépare','Le site place chaque élément selon le soleil, le sol et la place.']];
+const EX={step:1,pm:'create',addr:null,keep:false,want:new Set(),amb:'auto',care:'low',sugg:[],busy:false,done:null};
 const hasDrawn=()=>!!(S.trees.length||S.shapes.length||S.plots.length||S.obs.length||S.bed||S.hedges.length||S.lawns.length||S.ponds.length||S.fruits.length||S.potagers.length||(S.amen||[]).length);
 function exShell(){document.body.insertAdjacentHTML('beforeend',`<dialog id="expDlg" class="exdlg" aria-labelledby="exTitle"><div class="exhero"><div><span class="exkick">⚡ Projet express</span><h2 id="exTitle"></h2><p id="exSub"></p></div><button type="button" class="exx" data-ex="x" aria-label="Fermer">×</button></div>
-  <ol class="exdots" aria-hidden="true">${[1,2,3,4].map(i=>`<li data-d="${i}"><span>${i}</span></li>`).join('')}</ol><div class="exbody" id="exBody"></div>
+  <ol class="exdots" aria-hidden="true">${[1,2,3,4,5].map(i=>`<li data-d="${i}"><span>${i}</span></li>`).join('')}</ol><div class="exbody" id="exBody"></div>
   <div class="exfoot"><button type="button" class="exback" data-ex="back">← Retour</button><button type="button" class="pri exnext" data-ex="next">Continuer →</button></div></dialog>`);
   const d=$('#expDlg');d.addEventListener('click',exClick);d.addEventListener('input',exInput);d.addEventListener('keydown',e=>{if(e.key==='Enter'&&e.target.id==='exQ'){e.preventDefault();if(EX.sugg[0])exPick(0)}});d.addEventListener('cancel',e=>{if(EX.busy)e.preventDefault()})}
 function exOpenStep(){const d=$('#expDlg'),n=EX.step;$('#exTitle').textContent=EXT[n-1][0];$('#exSub').textContent=EXT[n-1][1];d.querySelectorAll('.exdots li').forEach(li=>{const i=+li.dataset.d;li.className=i<n?'done':i===n?'cur':''});
@@ -1267,12 +1267,13 @@ function exOpenStep(){const d=$('#expDlg'),n=EX.step;$('#exTitle').textContent=E
     <div class="exsearch"><span aria-hidden="true">🔎</span><input type="text" id="exQ" placeholder="Rue, numéro, commune" autocomplete="off" aria-label="Adresse du jardin" aria-controls="exSugg" value="${EX.addr?'':esc(EX.q||'')}"></div>
     ${EX.addr?`<div class="excard exsel on"><span class="exi">📍</span><span><b>${esc(EX.addr.l1)}</b><small>${esc(EX.addr.l2)}</small></span><button type="button" class="exlink" data-ex="chg">Changer</button></div>`:`<ul class="exsugg" id="exSugg" role="listbox">${EX.sugg.map((x,i)=>`<li><button type="button" data-sg="${i}"><b>${esc(x.l1)}</b><small>${esc(x.l2)}</small></button></li>`).join('')}</ul><p class="exhint" id="exMsg">${EX.msg||''}</p>`}
     <button type="button" class="exlink exgeo" data-ex="geo">📡 Utiliser ma position actuelle</button>`;
-  if(n===2)B.innerHTML=`<div class="exgrid">${EXW.map(([k,i,t,s])=>`<button type="button" class="excard${EX.want.has(k)?' on':''}" data-w="${k}" aria-pressed="${EX.want.has(k)}"><span class="exi">${i}</span><span><b>${t}</b><small>${s}</small></span><span class="exck" aria-hidden="true">✓</span></button>`).join('')}</div>`;
-  if(n===3){const amb=ENVQ.find(q=>q.k==='amb').o;B.innerHTML=`<h3 class="exh">L’ambiance</h3><div class="exgrid exsmall">${amb.map(([k,l])=>`<button type="button" class="excard${EX.amb===k?' on':''}" data-a="${k}" aria-pressed="${EX.amb===k}"><span class="exi">${EXA[k]||'🌱'}</span><span><b>${esc(l)}</b></span></button>`).join('')}</div>
+  if(n===2)B.innerHTML=`<div class="exgrid expm">${Object.entries(PM).map(([k,[i,t,d]])=>`<button type="button" class="excard${EX.pm===k?' on':''}" data-xpm="${k}" aria-pressed="${EX.pm===k}"><span class="exi">${i}</span><span><b>${t}</b><small>${d}</small></span><span class="exck" aria-hidden="true">✓</span></button>`).join('')}</div><p class="exhint">${EX.pm==='create'?'Le site repère quand même la maison et les arbres pour calculer les ombres.':'Le site repère la maison, les arbres, les haies et les clôtures : vous choisirez ensuite ce que vous gardez.'}</p>`;
+  if(n===3)B.innerHTML=`<div class="exgrid">${EXW.map(([k,i,t,s])=>`<button type="button" class="excard${EX.want.has(k)?' on':''}" data-w="${k}" aria-pressed="${EX.want.has(k)}"><span class="exi">${i}</span><span><b>${t}</b><small>${s}</small></span><span class="exck" aria-hidden="true">✓</span></button>`).join('')}</div>`;
+  if(n===4){const amb=ENVQ.find(q=>q.k==='amb').o;B.innerHTML=`<h3 class="exh">L’ambiance</h3><div class="exgrid exsmall">${amb.map(([k,l])=>`<button type="button" class="excard${EX.amb===k?' on':''}" data-a="${k}" aria-pressed="${EX.amb===k}"><span class="exi">${EXA[k]||'🌱'}</span><span><b>${esc(l)}</b></span></button>`).join('')}</div>
     <h3 class="exh">Le temps d’entretien</h3><div class="exseg">${EXC.map(([k,i,t,s])=>`<button type="button" class="excard${EX.care===k?' on':''}" data-c="${k}" aria-pressed="${EX.care===k}"><span class="exi">${i}</span><span><b>${t}</b><small>${s}</small></span></button>`).join('')}</div>`}
-  if(n===4)B.innerHTML=`<ul class="exprog">${[['site','Terrain placé'],['parcel','Limites de la parcelle'],['bat','Maison et bâtiments'],['props','Aménagements placés']].map(([k,t])=>`<li data-p="${k}" class="wait"><span class="exst" aria-hidden="true"></span><span><b>${t}</b><small></small></span></li>`).join('')}</ul><div id="exDone"></div>`;
-  const back=d.querySelector('.exback'),next=d.querySelector('.exnext');back.hidden=n===1||n===4;next.hidden=n===4;next.textContent=n===3?'Créer mon projet ✨':'Continuer →';
-  next.disabled=n===1?!(EX.addr||EX.keep):n===2?!EX.want.size:false;
+  if(n===5)B.innerHTML=`<ul class="exprog">${[['site','Terrain placé'],['parcel','Limites de la parcelle'],['bat','Existant : maison, arbres, haies…'],['props','Aménagements placés']].map(([k,t])=>`<li data-p="${k}" class="wait"><span class="exst" aria-hidden="true"></span><span><b>${t}</b><small></small></span></li>`).join('')}</ul><div id="exDone"></div>`;
+  const back=d.querySelector('.exback'),next=d.querySelector('.exnext');back.hidden=n===1||n===5;next.hidden=n===5;next.textContent=n===4?'Créer mon projet ✨':'Continuer →';
+  next.disabled=n===1?!(EX.addr||EX.keep):n===3?!EX.want.size:false;
   if(n===1&&!EX.addr)setTimeout(()=>{const q=$('#exQ');if(q)q.focus()},60)}
 let exT=0,exTok=0;
 function exInput(e){if(e.target.id!=='exQ')return;EX.q=e.target.value;EX.keep=false;const k=$('#expDlg .exkeep');if(k)k.classList.remove('on');$('#expDlg .exnext').disabled=true;clearTimeout(exT);const q=EX.q.trim();if(q.length<3){EX.sugg=[];exSugg();return}exT=setTimeout(()=>exGeocode(q),350)}
@@ -1289,23 +1290,24 @@ function exClick(e){const t=e.target.closest('button');if(!t)return;const a=t.da
   if(a==='chg'){EX.addr=null;exOpenStep();return}
   if(a==='geo'){const m=$('#exMsg');if(!navigator.geolocation){if(m)m.textContent='Position indisponible dans ce navigateur.';return}if(m)m.textContent='Localisation…';
     navigator.geolocation.getCurrentPosition(p=>{EX.addr={lat:p.coords.latitude,lon:p.coords.longitude,l1:'Ma position actuelle',l2:`précision ± ${Math.round(p.coords.accuracy)} m`};EX.keep=false;exOpenStep()},err=>{const m2=$('#exMsg');if(m2)m2.textContent='Position refusée ou indisponible.'},{enableHighAccuracy:true,timeout:15000});return}
+  if(t.dataset.xpm){EX.pm=t.dataset.xpm;exOpenStep();return}
   if(t.dataset.w){const k=t.dataset.w;EX.want.has(k)?EX.want.delete(k):EX.want.add(k);t.classList.toggle('on');t.setAttribute('aria-pressed',String(EX.want.has(k)));$('#expDlg .exnext').disabled=!EX.want.size;return}
   if(t.dataset.a){EX.amb=t.dataset.a;$('#expDlg').querySelectorAll('[data-a]').forEach(b=>{b.classList.toggle('on',b===t);b.setAttribute('aria-pressed',String(b===t))});return}
   if(t.dataset.c){EX.care=t.dataset.c;$('#expDlg').querySelectorAll('[data-c]').forEach(b=>{b.classList.toggle('on',b===t);b.setAttribute('aria-pressed',String(b===t))});return}
   if(a==='back'){EX.step=Math.max(1,EX.step-1);exOpenStep();return}
-  if(a==='next'){if(EX.step<3){EX.step++;exOpenStep()}else expRun();return}
+  if(a==='next'){if(EX.step<4){EX.step++;exOpenStep()}else expRun();return}
   if(a==='map'||a==='res'){$('#expDlg').close();if(a==='map'){if(WZ.on)wizGo(1);else showTab('carte',true)}else{if(WZ.on)wizGo(4);else showTab(S.want.has('massif')?'massif':'projet',true)}try{const D=propDomain();if(D&&map.fitBounds)map.fitBounds(D,{padding:[30,30]})}catch(err){}}}
-function expOpen(){if(!$('#expDlg'))exShell();if(!EX.busy){EX.step=1;EX.addr=null;EX.keep=S.lat!=null;EX.sugg=[];EX.q='';EX.msg='';EX.want=new Set([...S.want].filter(k=>EXW.some(w=>w[0]===k)));EX.amb=S.env&&S.env.amb||'auto';EX.care=S.env&&S.env.care||'low'}
+function expOpen(){if(!$('#expDlg'))exShell();if(!EX.busy){EX.step=1;EX.addr=null;EX.keep=S.lat!=null;EX.sugg=[];EX.q='';EX.msg='';EX.want=new Set([...S.want].filter(k=>EXW.some(w=>w[0]===k)));EX.amb=S.env&&S.env.amb||'auto';EX.care=S.env&&S.env.care||'low';EX.pm=S.pmode||(hasDrawn()&&exList().length?'modify':'create')}
   exOpenStep();const d=$('#expDlg');if(d.showModal&&!d.open)d.showModal();else d.setAttribute('open','')}
 const wait29=(f,ms)=>new Promise(ok=>{const t0=Date.now(),it=setInterval(()=>{if(f()||Date.now()-t0>ms){clearInterval(it);ok(f())}},200)});
 async function osmBuildings(lat,lon){const q=`[out:json][timeout:20];way["building"](around:90,${lat.toFixed(6)},${lon.toFixed(6)});out geom 60;`;
   for(const u of['https://overpass-api.de/api/interpreter','https://overpass.kumi.systems/api/interpreter']){const c=new AbortController(),t=setTimeout(()=>c.abort(),15000);
     try{const r=await fetch(u,{method:'POST',body:'data='+encodeURIComponent(q),headers:{'content-type':'application/x-www-form-urlencoded'},signal:c.signal});if(!r.ok)continue;const j=await r.json();return(j.elements||[]).filter(w=>w.geometry&&w.geometry.length>3).map(w=>({pts:w.geometry.slice(0,-1).map(g=>[g.lat,g.lon]),tags:w.tags||{}}))}catch(e){}finally{clearTimeout(t)}}
   throw new Error('Service des bâtiments indisponible')}
-async function expRun(){EX.step=4;exOpenStep();EX.busy=true;const st=(k,s,txt)=>{const li=$(`#exBody [data-p=${k}]`);if(!li)return;li.className=s;li.querySelector('small').textContent=txt||''};
+async function expRun(){EX.step=5;exOpenStep();EX.busy=true;const st=(k,s,txt)=>{const li=$(`#exBody [data-p=${k}]`);if(!li)return;li.className=s;li.querySelector('small').textContent=txt||''};
   const W=[...EX.want],notes=[];let n=0;
   try{st('site','run','');
-    if(!EX.keep&&EX.addr){if(hasDrawn()){newProject();notes.push('Votre projet précédent est gardé dans « Mes projets ».')}setSite(EX.addr.lat,EX.addr.lon,true)}
+    if(!EX.keep&&EX.addr){if(hasDrawn()&&EX.pm!=='modify'){newProject();notes.push('Votre projet précédent est gardé dans « Mes projets ».')}setSite(EX.addr.lat,EX.addr.lon,true)}
     if(S.lat==null)throw new Error('Terrain non placé');st('site','ok',EX.addr?`${EX.addr.l1}${EX.addr.l2?', '+EX.addr.l2:''}`:'Terrain déjà placé');
     EXW.forEach(([k])=>{if(!W.includes(k)&&S.want.has(k))try{setWant(k,false)}catch(e){}});
     envApply({want:W,amb:EX.amb,care:EX.care},'express');
@@ -1313,12 +1315,14 @@ async function expRun(){EX.step=4;exOpenStep();EX.busy=true;const st=(k,s,txt)=>
     if(S.plots.length){st('parcel','ok',`Limite déjà dessinée (${nf(areaLL(S.plots[0].pts),0)} m²)`)}
     else if(S.parcel){const id=++itemId;S.plots.push({id,pts:S.parcel.ring.map(([x,y])=>[y,x]).slice(0,-1),name:'Parcelle'});initGeom(id);st('parcel','ok',`Parcelle ${S.parcel.id||''} · ${nf(areaLL(S.plots[0].pts),0)} m²`)}
     else{const mp=mPer(S.lat),h=12.5,P=[[-h,-h],[h,-h],[h,h],[-h,h]].map(([x,y])=>[S.lat+y/111320,S.lon+x/mp]),id=++itemId;S.plots.push({id,pts:P,name:'Terrain approximatif'});initGeom(id);st('parcel','warn','Parcelle introuvable : terrain approximatif de 25 × 25 m, à ajuster sur la carte');notes.push('Ajustez la limite du terrain sur la carte (outil « Modifier la forme »).')}
-    if(!S.shapes.some(s=>s.kind==='obsPoly'&&(!s.nat||s.nat==='bat'))){st('bat','run','Recherche sur OpenStreetMap…');
-      try{const D=propDomain(),B=await osmBuildings(S.lat,S.lon),keep=B.filter(b=>{const c=cen(b.pts);return D?inPolyLL(c,D)||b.pts.filter(p=>inPolyLL(p,D)).length>=2:llDist(c,[S.lat,S.lon])<30}).sort((a,b)=>areaLL(b.pts)-areaLL(a.pts)).slice(0,6);
-        keep.forEach((b,i)=>{const id=++itemId;S.shapes.push({id,kind:'obsPoly',pts:b.pts,name:i?(b.tags.building==='garage'?'Garage':'Annexe '+i):'Maison',h:i?3:+(b.tags.height||0)||(+(b.tags['building:levels']||0)*3+2)||7,nat:'bat'});initGeom(id)});
-        if(keep.length)st('bat','ok',`${keep.length===1?'Maison trouvée':`${keep.length} bâtiments trouvés`} (${nf(areaLL(keep[0].pts),0)} m² au sol)`);else{st('bat','warn','Aucun bâtiment trouvé : dessinez la maison pour des ombres exactes');notes.push('Dessinez la maison dans « 1. L’existant » : les ombres et la terrasse en dépendent.')}}
-      catch(e){st('bat','warn','Service indisponible : dessinez la maison sur la carte');notes.push('Dessinez la maison dans « 1. L’existant ».')}}
-    else st('bat','ok','Déjà dessinés');
+    st('bat','run','Cartes publiques et relief…');S.pmode=EX.pm;renderPm();
+    try{const L_=await detRun((k,s_,t)=>{if(s_==='run')st('bat','run',t)});const acc=L_.filter(c=>c.on);detAccept(acc);const nb=acc.filter(c=>c.cat==='bat').length,nt=acc.filter(c=>c.cat==='tree').length,no=acc.length-nb-nt;
+      if(acc.length)st('bat','ok',[nb?`${nb} bâtiment${nb>1?'s':''}`:'',nt?`${nt} arbre${nt>1?'s':''}`:'',no?`${no} autre${no>1?'s':''} (haies, clôtures, allées…)`:''].filter(Boolean).join(', ')+(acc.length>1?' ajoutés':' ajouté')+' à l’existant');
+      else{st('bat','warn','Rien trouvé : dessinez la maison pour des ombres exactes');notes.push('Dessinez la maison dans « 1. L’existant » : les ombres et la terrasse en dépendent.')}
+      const left=L_.length-acc.length;if(left)notes.push(`${left} élément${left>1?'s':''} incertain${left>1?'s':''} non ajouté${left>1?'s':''} : relancez « 🔎 Détecter l’existant » sur la carte pour les vérifier.`)}
+    catch(e){st('bat','warn','Services indisponibles : dessinez la maison sur la carte');notes.push('Dessinez la maison dans « 1. L’existant ».')}
+    if(EX.pm==='redo'){const n=redoAll(false);if(n)notes.push(`${n} élément${n>1?'s':''} existant${n>1?'s':''} à retirer (bâtiments et arbres gardés) : ajustez dans « Que devient l’existant ? » sous la carte.`)}
+    if(EX.pm==='modify')notes.push('Choisissez ce que vous gardez, transformez ou retirez dans « Que devient l’existant ? », sous la carte.');
     st('props','run','Calcul du soleil et de la place libre…');await new Promise(ok=>setTimeout(ok,60));S.samples=null;
     S.phase='create';applyPhase();runProps();await new Promise(ok=>setTimeout(ok,200));const add=$('#propBox [data-pa=add]');const P=(typeof PROP19!=='undefined'&&PROP19&&PROP19.props)||[];
     const labs={};P.forEach(p=>{labs[p.lab]=(labs[p.lab]||0)+1});n=P.length;if(add&&n)add.click();
@@ -1584,6 +1588,205 @@ addEventListener('hashchange',legHash);setTimeout(legHash,300);
 document.addEventListener('click',e=>{const a=e.target.closest('a[href="#mentions-legales"],a[href="#confidentialite"]');if(!a)return;e.preventDefault();legOpen(a.getAttribute('href')==='#mentions-legales'?'mentions':'confidentialite')});
 {const f=document.querySelector('footer.foot .in');if(f)f.insertAdjacentHTML('beforeend',`<p class="leglinks"><a href="#mentions-legales">Mentions légales</a> · <a href="#confidentialite">Confidentialité</a> · <a href="#" id="fBackup">Sauvegarder mes projets</a>${ED.nom?` · © ${new Date().getFullYear()} ${esc(ED.nom)}`:''}</p>`);document.addEventListener('click',e=>{if(e.target.id==='fBackup'){e.preventDefault();backupAll()}})}
 window.__p30={backupData,backupAll,restoreBackup,stoSize,stoAlert,isPhotoReq,photoOK,legOpen,STO,IDBC};
+
+/* ================= v31 : créer / modifier / tout changer, devenir de l’existant, détection automatique de l’existant ================= */
+/* identifiants stables des obstacles ponctuels (les retraits y font référence) */
+{const _sd31=snapDrawings;snapDrawings=function(){const d=_sd31();(d.obs||[]).forEach((o,i)=>{if(S.obs[i])o.oid=S.obs[i].id});return d}}
+{const _rd31=restoreDrawings;restoreDrawings=function(d){_rd31(d);(d&&d.obs||[]).forEach((o,i)=>{if(S.obs[i]&&o.oid!=null)S.obs[i].id=o.oid});obsId=Math.max(obsId,0,...S.obs.map(o=>+o.id||0))}}
+
+function distPtLine(q,P){if(P.length<2)return P.length?llDist(q,P[0]):1e9;const mp=mPer(q[0]),T=p=>[(p[1]-q[1])*mp,(p[0]-q[0])*111320];let d=1e9;for(let i=0;i<P.length-1;i++){const a=T(P[i]),b=T(P[i+1]),vx=b[0]-a[0],vy=b[1]-a[1],L2=vx*vx+vy*vy,t=L2?Math.max(0,Math.min(1,-(a[0]*vx+a[1]*vy)/L2)):0;d=Math.min(d,Math.hypot(a[0]+vx*t,a[1]+vy*t))}return d}
+/* --- 1. type de projet --- */
+S.pmode=S.pmode||'';
+const PM={create:['🌱','Créer sur un terrain libre','Je garde ce qui existe et j’ajoute de nouveaux aménagements.'],modify:['✏️','Modifier mon jardin','Pour chaque élément existant : garder, transformer (taille, forme, revêtement) ou retirer.'],redo:['🔄','Tout changer','Tout l’existant est retiré, sauf les bâtiments et les arbres que vous gardez, puis on recrée.']};
+const isBld=(k,it)=>(k==='obs'&&it.type==='bat')||(k==='shapes'&&it.nat==='bat');
+const isTreeO=(k,it)=>k==='obs'&&(it.type==='caduc'||it.type==='pers');
+function exList(){const L_=[];S.obs.forEach((o,i)=>L_.push({k:'obs',it:o,id:String(o.id),n:obsName(o,i),ic:o.type==='bat'?'🏠':o.type==='haie'?'🌿':o.type==='arbu'?'🌳':'🌳',m:`${nf(o.h,1)} m de haut`}));
+  S.shapes.forEach(s=>{const line=s.kind==='obsLine';L_.push({k:'shapes',it:s,id:String(s.id),n:s.name||SHNAT[s.nat]||'Élément',ic:s.nat==='bat'?'🏠':s.nat==='mur'?'🧱':s.nat==='cloture'||s.nat==='palissade'?'🚧':s.nat==='viv'?'🌸':'🌿',m:line?`${nf(lenLL(s.pts),1)} m`:`${nf(areaLL(s.pts))} m²`})});
+  (S.paths||[]).filter(p=>p.nat!=='pasjap').forEach(p=>L_.push({k:'paths',it:p,id:String(p.id),n:p.label||PATHN[p.nat]||'Chemin',ic:p.nat==='terrasse'?'🪵':p.nat==='parking'?'🚗':'🛤️',m:`${nf(areaLL(p.pts))} m²`}));return L_}
+const demoOf=(k,id)=>(S.demo||[]).find(d=>d.ref&&d.ref.k===k&&String(d.ref.id)===String(id));
+function fateOf(k,it){return it.tf?'mod':demoOf(k,it.id)?'del':'keep'}
+function tfTarget(k,it){if(k==='paths')return it.nat==='terrasse'?{tool:'a_terrasse',kk:'amen',lab:'une nouvelle terrasse (taille, forme, revêtement)'}:{tool:'a_allee',kk:'amen',lab:'une nouvelle allée'};
+  if(k==='shapes'){if(it.kind==='obsPoly'&&(it.nat==='viv'||it.nat==='arbu'))return{tool:'bed',kk:'bed',lab:'un nouveau massif (forme, plantes)'};if(it.kind==='obsLine'&&(it.nat==='haie'||it.nat==='caduc'))return{tool:'hedge',kk:'hedges',lab:'une nouvelle haie',demo:1};if(it.kind==='obsLine'&&(it.nat==='cloture'||it.nat==='palissade'))return{tool:'fence',kk:'fences',lab:'une nouvelle clôture',demo:1}}
+  return null}
+function demoSilent(k,id){if(demoOf(k,id))return;const it=(S[k]||[]).find(x=>String(x.id)===String(id));if(!it)return;const type=demoTypeFor(k,it),geo=k==='obs'?'pt':(k==='shapes'&&it.kind==='obsLine')?'line':'area',pts=k==='obs'?[[it.lat,it.lng]]:it.pts.map(p=>p.slice());
+  S.demo.push({id:++itemId,side:DT[type].side,type,geo,pts,raw:pts.map(p=>p.slice()),ref:{k,id:String(id)},opts:dDef(type,it)})}
+function undoTf(it){if(!it.tf)return;const t=it.tf;delete it.tf;try{if(t.k==='bed'){if(S.bed)delItem('bed',0)}else{const L_=S[t.k]||[],i=L_.findIndex(x=>String(x.id)===String(t.id));if(i>=0)L_.splice(i,1)}}catch(e){}}
+function exFate(k,id,f){const it=(S[k]||[]).find(x=>String(x.id)===String(id));if(!it)return;pushUndo();const pu=pushUndo;pushUndo=()=>{};
+  try{const d=demoOf(k,id);
+    if(f==='keep'){undoTf(it);if(d)S.demo.splice(S.demo.indexOf(d),1)}
+    else if(f==='del'){undoTf(it);demoSilent(k,id)}
+    else if(f==='mod'){const T=tfTarget(k,it);if(!T)return;if(T.kk==='bed'&&S.bed&&!(it.tf&&it.tf.k==='bed')){toast('Votre projet a déjà un massif : supprimez-le d’abord, ou transformez ce massif plus tard.');return}
+      if(d)S.demo.splice(S.demo.indexOf(d),1);undoTf(it);if(curPhase()!=='create'){S.phase='create';applyPhase()}
+      const W_=TOOLWANT[T.tool];if(W_)setWant(W_,true);setMode(T.tool);S.drawPts=it.pts.map(p=>p.slice());const before=new Set((S[T.kk]||[]).map(x=>String(x.id)));finishShape();
+      let nid=null;if(T.kk==='bed'){if(S.bed)nid=0}else{const n=(S[T.kk]||[]).find(x=>!before.has(String(x.id)));if(n){nid=n.id;if(T.kk==='amen'&&k==='paths'&&n.opts)n.opts.base='old'}}
+      if(nid==null){toast('Transformation impossible pour cet élément.');return}it.tf={k:T.kk,id:String(nid)};if(T.demo)demoSilent(k,id);
+      setTimeout(()=>{try{openEditor(T.kk,nid)}catch(e){}toast(`Transformé en ${T.lab} : modifiez sa forme sur la carte et ses réglages ci-dessous.`)},50)}
+  }finally{pushUndo=pu}
+  S.samples=null;try{renderDemo()}catch(e){}itemsChanged(false);try{renderFonc()}catch(e){}sunUpdate();saveNow(true);renderFate()}
+function redoAll(trees){pushUndo();const pu=pushUndo;pushUndo=()=>{};let n=0;try{exList().forEach(x=>{if(isBld(x.k,x.it))return;if(isTreeO(x.k,x.it)&&!trees)return;if(fateOf(x.k,x.it)!=='keep')return;demoSilent(x.k,x.id);n++})}finally{pushUndo=pu}
+  S.samples=null;try{renderDemo()}catch(e){}itemsChanged(false);sunUpdate();saveNow(true);renderFate();return n}
+function setPmode(m){const was=S.pmode;S.pmode=m;renderPm();renderFate();saveNow(true);const ex=exList();
+  if(m==='redo'&&was!=='redo'){const n=redoAll(false);toast(n?`${n} élément(s) existant(s) à retirer (bâtiments et arbres gardés). Réglez-les dans « Que devient l’existant ? ».`:'Rien à retirer pour l’instant : dessinez ou détectez l’existant.')}
+  if((m==='modify'||m==='redo')&&!ex.filter(x=>!isBld(x.k,x.it)).length&&S.lat!=null)setTimeout(()=>detOpen(true),200)}
+function pmHtml(){return `<div class="pmhead"><b>Votre projet</b><span class="small">Que voulez-vous faire sur ce terrain ?</span></div><div class="pmopts" role="radiogroup" aria-label="Type de projet">${Object.entries(PM).map(([k,[i,t,d]])=>`<button type="button" role="radio" data-pm="${k}" aria-checked="${S.pmode===k}" class="${S.pmode===k?'on':''}"><span class="pmi">${i}</span><span><b>${t}</b><small>${d}</small></span></button>`).join('')}</div>`}
+function renderPm(){const c=$('#pmCard');if(c)c.innerHTML=pmHtml()}
+{const pb=$('#phaseBar');if(pb){pb.insertAdjacentHTML('beforebegin','<div class="pmcard" id="pmCard"></div>');{const ip=$('#itemsPanel');(ip||pb).insertAdjacentHTML(ip?'beforebegin':'afterend','<div class="detcard" id="detCard" hidden></div><div class="fatecard" id="fateCard" hidden></div>')}
+  pb.insertAdjacentHTML('beforeend','<button type="button" class="detbtn" id="detBtn" title="Bâtiments, arbres, haies, clôtures et massifs repérés sur les cartes officielles, OpenStreetMap et le relief mesuré par avion">🔎 Détecter l’existant</button>')}}
+renderPm();
+document.addEventListener('click',e=>{const b=e.target.closest('[data-pm]');if(b&&b.closest('#pmCard'))setPmode(b.dataset.pm);if(e.target.closest('#detBtn'))detOpen(false)});
+function renderFate(){const c=$('#fateCard');if(!c)return;const L_=exList();if(!(S.pmode==='modify'||S.pmode==='redo')){c.hidden=true;return}c.hidden=false;
+  if(!L_.length){c.innerHTML=`<h4>Que devient l’existant ?</h4><p class="small">Aucun élément existant n’est encore dessiné. <button type="button" class="exlink" data-det="1">🔎 Détecter l’existant automatiquement</button> ou dessinez-le dans « 1. L’existant ».</p>`;return}
+  const cnt={keep:0,mod:0,del:0};L_.forEach(x=>cnt[fateOf(x.k,x.it)]++);const trees=L_.filter(x=>isTreeO(x.k,x.it)),treesKept=trees.filter(x=>fateOf(x.k,x.it)!=='del').length;
+  c.innerHTML=`<div class="fhead"><h4>Que devient l’existant ?</h4><span class="small">${cnt.keep} gardé${cnt.keep>1?'s':''} · ${cnt.mod} transformé${cnt.mod>1?'s':''} · ${cnt.del} retiré${cnt.del>1?'s':''}</span></div>
+   <ul class="fatelist">${L_.map(x=>{const f=fateOf(x.k,x.it),T=tfTarget(x.k,x.it),b=isBld(x.k,x.it);return `<li class="f-${f}"><button type="button" class="fname" data-fz="${x.k}" data-fi="${x.id}"><span class="fi">${x.ic}</span><span><b>${esc(x.n)}</b><small>${esc(x.m)}${f==='mod'?' · transformé':f==='del'?(b?' · à démolir':' · à retirer'):''}</small></span></button>
+     <span class="fseg" role="group" aria-label="Devenir de ${esc(x.n)}"><button type="button" data-ff="keep" data-fk="${x.k}" data-fi="${x.id}" aria-pressed="${f==='keep'}">Garder</button>${T?`<button type="button" data-ff="mod" data-fk="${x.k}" data-fi="${x.id}" aria-pressed="${f==='mod'}" title="Le remplacer par ${esc(T.lab)}">Transformer</button>`:''}<button type="button" data-ff="del" data-fk="${x.k}" data-fi="${x.id}" aria-pressed="${f==='del'}">${b?'Démolir':isTreeO(x.k,x.it)?'Abattre':'Retirer'}</button></span></li>`}).join('')}</ul>
+   <div class="chips">${S.pmode==='redo'&&treesKept?`<button type="button" data-redotrees="1">Retirer aussi les ${treesKept} arbre${treesKept>1?'s':''}</button>`:''}<button type="button" class="exlink" data-det="1">🔎 Détecter d’autres éléments</button></div>
+   <p class="small muted">« Transformer » remplace l’élément par un nouvel aménagement à la même place, que vous pouvez agrandir, redessiner ou changer de revêtement ; la terrasse actuelle sert de base si vous gardez sa fondation. Les retraits et démolitions sont chiffrés dans l’onglet « Démolition ».</p>`}
+document.addEventListener('click',e=>{const t=e.target.closest('[data-ff],[data-fz],[data-redotrees],[data-det]');if(!t||!t.closest('#fateCard'))return;
+  if(t.dataset.det){detOpen(false);return}
+  if(t.dataset.redotrees){const n=redoAll(true);toast(`${n} élément(s) ajouté(s) aux retraits.`);return}
+  if(t.dataset.ff){exFate(t.dataset.fk,t.dataset.fi,t.dataset.ff);return}
+  if(t.dataset.fz){const it=(S[t.dataset.fz]||[]).find(x=>String(x.id)===t.dataset.fi);if(!it)return;const c=t.dataset.fz==='obs'?[it.lat,it.lng]:cen(it.pts);try{map.setView(c,Math.max(map.getZoom(),20))}catch(err){}}});
+{const _ic31=itemsChanged;itemsChanged=function(a){_ic31(a);renderFate()}}
+{const _ap31=applyPhase;applyPhase=function(){_ap31();renderFate();const d=$('#detBtn');if(d)d.hidden=curPhase()!=='exist'&&S.pmode!=='modify'&&S.pmode!=='redo'}}
+{const _ser31=serialize;serialize=function(){const d=_ser31();d.set.pmode=S.pmode;return d}}
+{const _rs31=restoreSettings;restoreSettings=function(t){_rs31(t);S.pmode=t&&t.pmode||'';renderPm();renderFate()}}
+
+/* --- 2. détection automatique de l’existant --- */
+const PICC='https://geoservices.wallonie.be/arcgis/rest/services/TOPOGRAPHIE/PICC_VDIFF/MapServer';
+const MNS='https://geoservices.wallonie.be/arcgis/rest/services/RELIEF/WALLONIE_MNS_2021_2022/MapServer',MNT='https://geoservices.wallonie.be/arcgis/rest/services/RELIEF/WALLONIE_MNT_2021_2022/MapServer';
+const DCAT={bat:['🏠','Bâtiment'],tree:['🌳','Arbre'],hedge:['🌿','Haie'],shrub:['🌳','Massif arbustif'],fence:['🚧','Clôture ou mur'],path:['🛤️','Allée ou accès']};
+const DOPT={bat:[['Maison','Maison'],['Annexe','Annexe'],['Garage','Garage'],['Abri de jardin','Abri de jardin'],['Bâtiment voisin','Bâtiment voisin']],tree:[['caduc','Arbre caduc'],['pers','Arbre persistant (conifère…)'],['arbu','Grand arbuste']],
+  hedge:[['haie','Haie persistante'],['caduc','Haie caduque']],shrub:[['arbu','Massif arbustif'],['viv','Massif de vivaces']],fence:[['cloture','Clôture ajourée'],['palissade','Palissade pleine'],['mur','Mur ou muret']],path:[['chemin','Chemin ou allée'],['parking','Accès ou parking'],['terrasse','Terrasse']]};
+let DET={list:[],busy:false,src:[],log:[]};const detLayer=L.layerGroup().addTo(map);
+const tmo=(ms)=>{const c=new AbortController();return[c,setTimeout(()=>c.abort(),ms)]};
+async function getJ(u,ms,opt){const [c,t]=tmo(ms||15000);try{const r=await fetch(u,{...(opt||{}),signal:c.signal});if(!r.ok)throw new Error('HTTP '+r.status);const j=await r.json();if(j&&j.error)throw new Error(j.error.message||'erreur');return j}finally{clearTimeout(t)}}
+const bbStr=bb=>`${bb[1]},${bb[0]},${bb[3]},${bb[2]}`;
+async function piccQ(id,bb,f){const j=await getJ(`${PICC}/${id}/query?geometry=${bbStr(bb)}&geometryType=esriGeometryEnvelope&inSR=4326&spatialRel=esriSpatialRelIntersects&outFields=${f||'NATUR_DESC'}&returnGeometry=true&outSR=4326&f=json`);return j.features||[]}
+async function grbQ(bb){const j=await getJ(`https://geo.api.vlaanderen.be/GRB/wfs?service=WFS&version=2.0.0&request=GetFeature&typeNames=GRB:GBG&outputFormat=application/json&srsName=EPSG:4326&bbox=${bb[0]},${bb[1]},${bb[2]},${bb[3]},urn:ogc:def:crs:EPSG::4326`);
+  const fix=c=>c[0]>40?[c[0],c[1]]:[c[1],c[0]];return(j.features||[]).filter(f=>f.geometry).map(f=>{const g=f.geometry,ring=g.type==='Polygon'?g.coordinates[0]:g.type==='MultiPolygon'?g.coordinates[0][0]:null;return ring?{pts:ring.slice(0,-1).map(fix),lbl:(f.properties||{}).LBLTYPE||''}:null}).filter(Boolean)}
+async function osmQ(bb){const b=`${bb[0]},${bb[1]},${bb[2]},${bb[3]}`,q=`[out:json][timeout:25];(way["building"](${b});node["natural"="tree"](${b});way["natural"="tree_row"](${b});way["barrier"~"^(hedge|fence|wall)$"](${b});way["highway"~"^(footway|path|service|track)$"](${b}););out geom 400;`;
+  for(const u of['https://overpass-api.de/api/interpreter','https://overpass.kumi.systems/api/interpreter']){try{const j=await getJ(u,25000,{method:'POST',body:'data='+encodeURIComponent(q),headers:{'content-type':'application/x-www-form-urlencoded'}});return j.elements||[]}catch(e){}}throw new Error('OpenStreetMap indisponible')}
+async function pix(base,lat,lon){const d=0.0005,j=await getJ(`${base}/identify?geometry=${lon.toFixed(7)},${lat.toFixed(7)}&geometryType=esriGeometryPoint&sr=4326&layers=all&tolerance=0&mapExtent=${(lon-d).toFixed(6)},${(lat-d).toFixed(6)},${(lon+d).toFixed(6)},${(lat+d).toFixed(6)}&imageDisplay=100,100,96&returnGeometry=false&f=json`,12000);
+  const r=(j.results||[])[0];if(!r)return NaN;const a=r.attributes||{},k=Object.keys(a).find(x=>/pixel value/i.test(x));const v=k?parseFloat(String(a[k]).replace(',','.')):NaN;return isFinite(v)?v:NaN}
+async function pool(fs,n,onp){const out=new Array(fs.length);let i=0,done=0;await Promise.all(Array.from({length:Math.min(n,fs.length)},async()=>{while(i<fs.length){const k=i++;try{out[k]=await fs[k]()}catch(e){out[k]=NaN}done++;if(onp)onp(done,fs.length)}}));return out}
+function hull(P){const p=P.slice().sort((a,b)=>a[0]-b[0]||a[1]-b[1]);if(p.length<3)return p;const cr=(o,a,b)=>(a[0]-o[0])*(b[1]-o[1])-(a[1]-o[1])*(b[0]-o[0]),lo=[],up=[];for(const q of p){while(lo.length>=2&&cr(lo[lo.length-2],lo[lo.length-1],q)<=0)lo.pop();lo.push(q)}for(const q of p.slice().reverse()){while(up.length>=2&&cr(up[up.length-2],up[up.length-1],q)<=0)up.pop();up.push(q)}return lo.slice(0,-1).concat(up.slice(0,-1))}
+function plane(pts){const n=pts.length;if(n<3)return()=>pts.length?pts.reduce((a,p)=>a+p[2],0)/n:0;let S_=[[0,0,0],[0,0,0],[0,0,0]],b=[0,0,0];pts.forEach(([x,y,z])=>{const v=[1,x,y];for(let i=0;i<3;i++){b[i]+=v[i]*z;for(let j=0;j<3;j++)S_[i][j]+=v[i]*v[j]}});
+  const M=S_.map((r,i)=>[...r,b[i]]);for(let i=0;i<3;i++){let mx=i;for(let r=i+1;r<3;r++)if(Math.abs(M[r][i])>Math.abs(M[mx][i]))mx=r;[M[i],M[mx]]=[M[mx],M[i]];if(Math.abs(M[i][i])<1e-9){const m=pts.reduce((a,p)=>a+p[2],0)/n;return()=>m}for(let r=0;r<3;r++)if(r!==i){const f=M[r][i]/M[i][i];for(let c=i;c<4;c++)M[r][c]-=f*M[i][c]}}const c=M.map((r,i)=>r[3]/r[i]);return(x,y)=>c[0]+c[1]*x+c[2]*y}
+async function detRun(prog){const D=propDomain();if(!D)throw new Error('Placez d’abord le terrain : la limite de la parcelle est nécessaire.');
+  const o=cen(D),mp=mPer(o[0]),X=p=>[(p[1]-o[1])*mp,(p[0]-o[0])*111320],LL=([x,y])=>[o[0]+y/111320,o[1]+x/mp],DX=D.map(X),inD=p=>inPolyLL(p,D),dD=p=>inD(p)?0:distPtPoly(p,D);
+  const xs=DX.map(p=>p[0]),ys=DX.map(p=>p[1]),pad=15,bb=[o[0]+(Math.min(...ys)-pad)/111320,o[1]+(Math.min(...xs)-pad)/mp,o[0]+(Math.max(...ys)+pad)/111320,o[1]+(Math.max(...xs)+pad)/mp];
+  const reg=regionKey(),C=[],src=new Set(),log=[];const P=(k,s,t)=>prog&&prog(k,s,t);
+  /* sources vectorielles */
+  P('vec','run','Cartes officielles et OpenStreetMap…');
+  const jobs=[];if(reg!=='vla'&&reg!=='bxl')jobs.push(Promise.all([piccQ(11,bb,'NATUR_DESC'),piccQ(14,bb),piccQ(15,bb),piccQ(5,bb)]).then(r=>({k:'picc',r})).catch(e=>({k:'picc',e})));
+  if(reg!=='wal'&&reg!=='bxl')jobs.push(grbQ(bb).then(r=>({k:'grb',r})).catch(e=>({k:'grb',e})));jobs.push(osmQ(bb).then(r=>({k:'osm',r})).catch(e=>({k:'osm',e})));
+  const R=await Promise.all(jobs),get=k=>R.find(x=>x.k===k);
+  const bld=[];const addB=(pts,lbl,s)=>{if(pts.length<3)return;const c=cen(pts);if(bld.some(b=>inPolyLL(c,b.pts)||inPolyLL(cen(b.pts),pts)))return;bld.push({pts,lbl,src:s})};
+  const pc=get('picc');if(pc&&pc.r){src.add('PICC (Service public de Wallonie)');const [B,T,H,F]=pc.r;
+    B.forEach(f=>{const rg=f.geometry&&f.geometry.rings&&f.geometry.rings[0];if(rg)addB(rg.slice(0,-1).map(([x,y])=>[y,x]),(f.attributes||{}).NATUR_DESC||'','PICC')});
+    T.forEach(f=>{const g=f.geometry;if(g&&g.x!=null)C.push({cat:'tree',pt:[g.y,g.x],src:'PICC',conf:'sûr'})});
+    H.forEach(f=>{const n=(f.attributes||{}).NATUR_DESC||'',p=f.geometry&&f.geometry.paths&&f.geometry.paths[0];if(!p)return;const pts=p.map(([x,y])=>[y,x]);if(/haie/i.test(n))C.push({cat:'hedge',pts,src:'PICC',conf:'sûr'});else if(/rang/i.test(n))C.push({cat:'row',pts,src:'PICC',conf:'sûr'})});
+    F.forEach(f=>{const n=(f.attributes||{}).NATUR_DESC||'',p=f.geometry&&f.geometry.paths&&f.geometry.paths[0];if(!p)return;const nat=/cl[oô]ture/i.test(n)?'cloture':/palissade/i.test(n)?'palissade':/muret/i.test(n)?'mur':null;if(nat)C.push({cat:'fence',pts:p.map(([x,y])=>[y,x]),nat,src:'PICC',conf:'sûr'})})}
+  else if(pc&&pc.e)log.push('PICC indisponible');
+  const gr=get('grb');if(gr&&gr.r){src.add('GRB (Digitaal Vlaanderen)');gr.r.forEach(b=>addB(b.pts,/bij/i.test(b.lbl)?'Annexe':'Habitation','GRB'))}else if(gr&&gr.e)log.push('GRB indisponible');
+  const os=get('osm');if(os&&os.r){src.add('OpenStreetMap');os.r.forEach(e=>{const t=e.tags||{};const pts=e.geometry?e.geometry.map(g=>[g.lat,g.lon]):null;
+      if(e.type==='way'&&t.building&&pts&&pts.length>3)addB(pts.slice(0,-1),t.building==='garage'||t.building==='garages'?'Garage':t.building==='shed'||t.building==='hut'?'Abri':t.building==='greenhouse'?'Serre':t.building==='carport'?'Carport':'',`OSM`);
+      else if(e.type==='node'&&t.natural==='tree')C.push({cat:'tree',pt:[e.lat,e.lon],src:'OSM',conf:'probable',pers:t.leaf_type==='needleleaved'||t.leaf_cycle==='evergreen'});
+      else if(pts&&t.natural==='tree_row')C.push({cat:'row',pts,src:'OSM',conf:'probable'});
+      else if(pts&&t.barrier==='hedge')C.push({cat:'hedge',pts,src:'OSM',conf:'probable'});
+      else if(pts&&(t.barrier==='fence'||t.barrier==='wall'))C.push({cat:'fence',pts,nat:t.barrier==='wall'?'mur':/wood|board|panel/.test(t.fence_type||'')?'palissade':'cloture',src:'OSM',conf:'probable'});
+      else if(pts&&t.highway)C.push({cat:'path',pts,w:t.highway==='service'||t.highway==='track'?3:1.2,src:'OSM',conf:'probable'})})}
+  else if(os&&os.e)log.push('OpenStreetMap indisponible');
+  P('vec',src.size?'ok':'warn',src.size?[...src].join(', '):'Aucune carte disponible');
+  /* relief mesuré par avion (Wallonie) */
+  let grid=null,ground=null;const bPolys=[...bld.map(b=>b.pts),...S.shapes.filter(s=>s.kind==='obsPoly'&&s.nat==='bat').map(s=>s.pts)];
+  if(reg!=='vla'&&reg!=='bxl'){P('lidar','run','Relief mesuré par avion : premier point…');
+    const z0=await pix(MNS,o[0],o[1]).catch(()=>NaN);
+    if(isFinite(z0)){src.add('Relief LiDAR 2021-2022 (Service public de Wallonie)');
+      const area=Math.abs(polyArea(DX)),s=Math.max(1.5,Math.sqrt(area/170)),pts=[];const x0=Math.min(...xs)-4,x1=Math.max(...xs)+4,y0=Math.min(...ys)-4,y1=Math.max(...ys)+4;
+      for(let y=y0+s/2,j=0;y<y1;y+=s,j++)for(let x=x0+s/2,i=0;x<x1;x+=s,i++){const ll=LL([x,y]);if(dD(ll)>4)continue;if(bPolys.some(b=>inPolyLL(ll,b)||distPtPoly(ll,b)<0.6))continue;pts.push({i,j,x,y,ll})}
+      const gp=[];for(const fx of[0.1,0.5,0.9])for(const fy of[0.1,0.5,0.9])gp.push([x0+(x1-x0)*fx,y0+(y1-y0)*fy]);
+      const tot=pts.length+gp.length;let done=0;const tick=()=>{done++;if(done%8===0)P('lidar','run',`Relief mesuré par avion : ${done} / ${tot} points…`)};
+      const gz=await pool(gp.map(p=>()=>pix(MNT,...LL(p)).finally(tick)),8);const gpts=gp.map((p,k)=>[p[0],p[1],gz[k]]).filter(p=>isFinite(p[2]));ground=plane(gpts);
+      const zs=await pool(pts.map(p=>()=>pix(MNS,p.ll[0],p.ll[1]).finally(tick)),8);pts.forEach((p,k)=>{p.h=isFinite(zs[k])&&gpts.length?zs[k]-ground(p.x,p.y):NaN});
+      grid={s,pts,idx:new Map(pts.map(p=>[p.i+','+p.j,p]))};P('lidar','ok',`${pts.filter(p=>isFinite(p.h)).length} points mesurés (maille ${nf(s,1)} m)`)}
+    else P('lidar','warn','Relief indisponible : hauteurs estimées')}
+  else P('lidar','skip','Relief détaillé : seulement en Wallonie pour l’instant');
+  const hNear=(ll,r)=>{if(!grid)return NaN;const [x,y]=X(ll);let m=NaN;grid.pts.forEach(p=>{if(isFinite(p.h)&&Math.hypot(p.x-x,p.y-y)<=r&&!(p.h<=m))m=p.h});return m};
+  /* arbres du relief : maxima locaux */
+  const used=new Set();const lt=[];
+  if(grid){const nb=p=>{const r=[];for(let a=-1;a<=1;a++)for(let b=-1;b<=1;b++){if(!a&&!b)continue;const q=grid.idx.get((p.i+a)+','+(p.j+b));if(q)r.push(q)}return r};
+    grid.pts.filter(p=>p.h>4.5&&nb(p).every(q=>!(q.h>p.h))).sort((a,b)=>b.h-a.h).forEach(p=>{if(lt.some(t=>Math.hypot(t.x-p.x,t.y-p.y)<3.2))return;lt.push({x:p.x,y:p.y,h:p.h,cells:[]})});
+    grid.pts.filter(p=>p.h>Math.max(2.5,0)).forEach(p=>{let best=null,bd=1e9;lt.forEach(t=>{const d=Math.hypot(t.x-p.x,t.y-p.y);if(d<bd&&d<8&&p.h>t.h*0.35){bd=d;best=t}});if(best){best.cells.push(p);used.add(p)}});
+    lt.forEach(t=>{const r=Math.max(grid.s/2,Math.sqrt(t.cells.length*grid.s*grid.s/Math.PI));t.w=Math.min(18,Math.max(2,2*r));t.ll=LL([t.x,t.y])})}
+  /* arbres des cartes + fusion */
+  const trees=[];C.filter(c=>c.cat==='row').forEach(c=>{const Lr=lenLL(c.pts),n=Math.max(1,Math.round(Lr/6));for(let k=0;k<=n;k++){const f=n?k/n:0.5;let acc=0,tgt=f*Lr;for(let q=0;q<c.pts.length-1;q++){const sg=llDist(c.pts[q],c.pts[q+1]);if(acc+sg>=tgt||q===c.pts.length-2){const u=sg?(tgt-acc)/sg:0;trees.push({pt:[c.pts[q][0]+(c.pts[q+1][0]-c.pts[q][0])*u,c.pts[q][1]+(c.pts[q+1][1]-c.pts[q][1])*u],src:c.src,conf:c.conf});break}acc+=sg}}});
+  C.filter(c=>c.cat==='tree').sort((a,b)=>(a.src==='PICC'?0:1)-(b.src==='PICC'?0:1)).forEach(c=>{if(!trees.some(t=>llDist(t.pt,c.pt)<3))trees.push(c)});
+  trees.forEach(t=>{const [x,y]=X(t.pt);const m=lt.find(l=>!l.used&&Math.hypot(l.x-x,l.y-y)<3.5);if(m){m.used=1;t.h=m.h;t.w=m.w}else{const h=hNear(t.pt,2.5);t.h=isFinite(h)&&h>2?h:null}});
+  lt.filter(l=>!l.used).forEach(l=>trees.push({pt:l.ll,h:l.h,w:l.w,src:'LiDAR',conf:'probable'}));
+  const out=[];let nT=0,nV=0;
+  trees.forEach(t=>{const d=dD(t.pt);if(d>6)return;if(S.obs.some(o=>o.type!=='bat'&&llDist([o.lat,o.lng],t.pt)<3))return;const nb=d>0.5;const h=t.h||(nb?10:8),w=t.w||Math.max(3,Math.min(12,h*0.6));if(nb&&h<6)return;
+    out.push({cat:'tree',pt:t.pt,h,w,type:t.pers?'pers':'caduc',name:nb?`Arbre voisin ${++nV}`:`Arbre ${++nT}`,src:t.src,conf:t.conf,on:true})});
+  /* bâtiments */
+  const inB=bld.map(b=>{const c=cen(b.pts),fr=b.pts.filter(inD).length/b.pts.length;return{...b,c,a:areaLL(b.pts),inside:inD(c)||fr>=0.5,d:Math.min(...b.pts.map(dD))}}).filter(b=>b.inside||b.d<6).filter(b=>!S.shapes.some(s=>s.kind==='obsPoly'&&s.nat==='bat'&&(inPolyLL(b.c,s.pts)||inPolyLL(cen(s.pts),b.pts))));
+  const mainB=inB.filter(b=>b.inside&&!/annexe|garage|abri|serre|carport/i.test(b.lbl)).sort((a,b)=>b.a-a.a)[0];
+  if(grid||ground){P('lidar','run','Hauteur des bâtiments…');await pool(inB.map(b=>async()=>{const c=X(b.c),zz=await Promise.all([b.c,...b.pts.slice(0,4).map(p=>[b.c[0]+(p[0]-b.c[0])*0.55,b.c[1]+(p[1]-b.c[1])*0.55])].map(p=>pix(MNS,p[0],p[1]).catch(()=>NaN)));const z=Math.max(...zz.filter(isFinite));if(isFinite(z)&&ground){const h=z-ground(c[0],c[1]);if(h>1.8&&h<40)b.h=h}}),6);if(grid)P('lidar','ok',`${grid.pts.filter(p=>isFinite(p.h)).length} points mesurés et hauteur des bâtiments`)}
+  let nA=0;inB.forEach(b=>{let name;if(!b.inside)name='Bâtiment voisin';else if(b===mainB)name='Maison';else if(/garage|carport/i.test(b.lbl))name='Garage';else if(/serre/i.test(b.lbl))name='Serre';else if(b.a<15||/abri/i.test(b.lbl))name='Abri de jardin';else name='Annexe'+(++nA>1?' '+nA:'');
+    const h=b.h||(name==='Maison'?7:name==='Bâtiment voisin'?7:name==='Abri de jardin'?2.4:3);out.push({cat:'bat',pts:b.pts,h,name,src:b.src,conf:b.src==='OSM'?'probable':'sûr',on:true})});
+  /* haies, clôtures et chemins des cartes */
+  const near=(pts,r)=>pts.some(p=>dD(p)<=r);let nH=0,nF=0,nP=0;
+  const clip=pts=>{const q=pts.filter(p=>dD(p)<=1.5);return q.length>=2?q:null};
+  C.filter(c=>c.cat==='hedge').forEach(c=>{const pts=clip(c.pts);if(!pts||lenLL(pts)<2)return;if(S.shapes.some(s=>s.kind==='obsLine'&&pts.every(p=>distPtLine(p,s.pts)<1.5)))return;let h=NaN;if(grid){const hs=grid.pts.filter(p=>isFinite(p.h)&&p.h>0.4&&distPtLine(LL([p.x,p.y]),pts)<grid.s*0.8);hs.forEach(p=>used.add(p));if(hs.length)h=hs.map(p=>p.h).sort((a,b)=>a-b)[Math.floor(hs.length/2)]}
+    out.push({cat:'hedge',pts,h:isFinite(h)?Math.min(6,h):1.8,w:1,nat:'haie',name:`Haie ${++nH}`,src:c.src,conf:c.conf,on:true})});
+  C.filter(c=>c.cat==='fence').forEach(c=>{const pts=clip(c.pts);if(!pts||lenLL(pts)<2)return;if(S.shapes.some(s=>s.kind==='obsLine'&&pts.every(p=>distPtLine(p,s.pts)<1)))return;out.push({cat:'fence',pts,nat:c.nat,h:c.nat==='mur'?1:c.nat==='palissade'?1.8:1.5,name:c.nat==='mur'?`Muret ${++nF}`:c.nat==='palissade'?`Palissade ${++nF}`:`Clôture ${++nF}`,src:c.src,conf:c.conf,on:true})});
+  C.filter(c=>c.cat==='path').forEach(c=>{const pts=c.pts.filter(p=>inD(p));if(pts.length<2||lenLL(pts)<3)return;const P2=pts.map(X),w=c.w/2,L2=[],R2=[];P2.forEach((p,k)=>{const a=P2[Math.max(0,k-1)],b=P2[Math.min(P2.length-1,k+1)],dx=b[0]-a[0],dy=b[1]-a[1],n=Math.hypot(dx,dy)||1;L2.push([p[0]-dy/n*w,p[1]+dx/n*w]);R2.push([p[0]+dy/n*w,p[1]-dx/n*w])});
+    out.push({cat:'path',pts:[...L2,...R2.reverse()].map(LL),nat:c.w>2?'parking':'chemin',name:c.w>2?`Accès ${++nP}`:`Allée ${++nP}`,src:c.src,conf:c.conf,on:true})});
+  /* massifs et haies du relief (1 à 4,5 m, hors arbres) */
+  if(grid){const mid=grid.pts.filter(p=>!used.has(p)&&p.h>1&&p.h<=4.5&&inD(LL([p.x,p.y]))),seen=new Set();let nS=0;
+    mid.forEach(p0=>{if(seen.has(p0))return;const comp=[],st=[p0];seen.add(p0);while(st.length){const p=st.pop();comp.push(p);for(let a=-1;a<=1;a++)for(let b=-1;b<=1;b++){const q=grid.idx.get((p.i+a)+','+(p.j+b));if(q&&!seen.has(q)&&mid.includes(q)){seen.add(q);st.push(q)}}}
+      const A=comp.length*grid.s*grid.s;if(A<3)return;const mx=comp.reduce((a,p)=>a+p.x,0)/comp.length,my=comp.reduce((a,p)=>a+p.y,0)/comp.length;let sxx=0,syy=0,sxy=0;comp.forEach(p=>{sxx+=(p.x-mx)**2;syy+=(p.y-my)**2;sxy+=(p.x-mx)*(p.y-my)});
+      const th=0.5*Math.atan2(2*sxy,sxx-syy),u=[Math.cos(th),Math.sin(th)],v=[-u[1],u[0]],pu=comp.map(p=>(p.x-mx)*u[0]+(p.y-my)*u[1]),pv=comp.map(p=>(p.x-mx)*v[0]+(p.y-my)*v[1]),Lx=Math.max(...pu)-Math.min(...pu)+grid.s,Wx=Math.max(...pv)-Math.min(...pv)+grid.s;
+      const hm=comp.map(p=>p.h).sort((a,b)=>a-b)[Math.floor(comp.length/2)],nearB=bPolys.some(b=>comp.some(p=>distPtPoly(LL([p.x,p.y]),b)<3)),edge=comp.some(p=>dD(LL([p.x,p.y]))<0.01)||comp.some(p=>distPtLine(LL([p.x,p.y]),[...D,D[0]])<2.5);
+      if(Lx>=5&&Lx/Wx>=2.5){const a=Math.min(...pu)+grid.s/2,b=Math.max(...pu)-grid.s/2;out.push({cat:'hedge',pts:[[mx+u[0]*a,my+u[1]*a],[mx+u[0]*b,my+u[1]*b]].map(LL),h:hm,w:Wx>grid.s*1.6?Math.min(3,Wx):Math.min(1.5,Wx),nat:'haie',name:`Haie ${++nH}`,src:'LiDAR',conf:edge?'probable':'à vérifier',on:edge})}
+      else{const sq=[];const hs=grid.s/2;comp.forEach(p=>sq.push([p.x-hs,p.y-hs],[p.x+hs,p.y-hs],[p.x+hs,p.y+hs],[p.x-hs,p.y+hs]));out.push({cat:'shrub',pts:hull(sq).map(LL),h:hm,nat:'arbu',name:`Massif arbustif ${++nS}`,src:'LiDAR',conf:'à vérifier',on:!nearB&&A>=4})}})}
+  out.forEach((c,i)=>c.n=i+1);DET.src=[...src];DET.log=log;return out}
+function detDraw(){detLayer.clearLayers();DET.list.forEach(c=>{const col=c.on?'#ef6c00':'#9e9e9e',o={color:col,weight:c.on?2.5:1.5,dashArray:'6 5',fillColor:col,fillOpacity:c.on?0.18:0.05};let ly;
+  if(c.cat==='tree')ly=L.circle(c.pt,{...o,radius:c.w/2});else if(c.cat==='hedge'||c.cat==='fence')ly=L.polyline(c.pts,{...o,weight:c.cat==='hedge'?Math.max(4,c.w*4):3});else ly=L.polygon(c.pts,o);
+  ly.on('click',()=>{c.on=!c.on;detDraw();detList()});ly.addTo(detLayer);const p=c.pt||cen(c.pts);L.marker(p,{interactive:false,icon:L.divIcon({className:'detnum',html:`<span class="${c.on?'':'off'}">${c.n}</span>`,iconSize:[20,20],iconAnchor:[10,10]})}).addTo(detLayer)})}
+function detMeta(c){return c.cat==='tree'?`${nf(c.h,0)} m de haut, couronne ${nf(c.w,0)} m`:c.cat==='hedge'?`${nf(lenLL(c.pts),0)} m, ${nf(c.h,1)} m de haut`:c.cat==='fence'?`${nf(lenLL(c.pts),0)} m`:c.cat==='bat'?`${nf(areaLL(c.pts))} m², ${nf(c.h,0)} m de haut`:`${nf(areaLL(c.pts))} m²${c.h?`, ${nf(c.h,1)} m de haut`:''}`}
+function detList(){const box=$('#detList');if(!box)return;const L_=DET.list,on=L_.filter(c=>c.on).length;
+  box.innerHTML=L_.length?`<ul class="detl">${L_.map((c,i)=>{const opt=DOPT[c.cat],cur=c.cat==='bat'?c.name.replace(/ \d+$/,''):c.cat==='tree'?c.type:c.cat==='shrub'?c.nat:c.nat;return `<li class="${c.on?'':'off'}"><label class="detck"><input type="checkbox" data-dc="${i}"${c.on?' checked':''}><span class="detn">${c.n}</span></label><span class="deti">${DCAT[c.cat][0]}</span>
+     <span class="detb"><b>${esc(c.name)}</b><small>${esc(detMeta(c))} · ${esc(c.src)}</small></span><select data-dt="${i}" aria-label="Type de ${esc(c.name)}">${opt.map(([k,l])=>`<option value="${k}"${cur===k?' selected':''}>${l}</option>`).join('')}</select><span class="conf c-${c.conf.replace(/[^a-z]/g,'')}">${c.conf}</span><button type="button" class="detz" data-dz="${i}" title="Voir sur la carte">◎</button></li>`}).join('')}</ul>`:'<p class="small">Rien de nouveau trouvé autour de ce terrain : dessinez l’existant à la main.</p>';
+  const a=$('#detAdd');if(a){a.disabled=!on;a.textContent=`Ajouter ${on} élément${on>1?'s':''} à l’existant`}}
+function detOpen(auto){const c=$('#detCard');if(!c)return;if(S.lat==null){toast('Placez d’abord votre terrain.');return}c.hidden=false;
+  c.innerHTML=`<div class="dethead"><h4>🔎 Détection de l’existant</h4><button type="button" class="welx" data-dx="close" aria-label="Fermer">×</button></div><p class="small">Bâtiments, arbres, haies, clôtures, allées et massifs repérés sur les cartes publiques et le relief mesuré par avion. <b>Rien n’est ajouté sans votre accord</b> : cochez ce qui est juste, corrigez le type, puis ajoutez.</p>
+   <ul class="exprog detprog"><li data-p="vec" class="wait"><span class="exst"></span><span><b>Cartes</b><small></small></span></li><li data-p="lidar" class="wait"><span class="exst"></span><span><b>Hauteurs (arbres, haies, toits)</b><small></small></span></li></ul><div id="detList"></div>
+   <div class="detfoot"><span class="chips"><button type="button" data-dx="all">Tout cocher</button><button type="button" data-dx="none">Tout décocher</button></span><span class="chips"><button type="button" data-dx="close">Fermer</button><button type="button" class="pri" id="detAdd" data-dx="add" disabled>Ajouter à l’existant</button></span></div><p class="small muted" id="detSrc"></p>`;
+  c.scrollIntoView({behavior:'smooth',block:'nearest'});detGo()}
+async function detGo(){if(DET.busy)return;DET.busy=true;const st=(k,s,t)=>{const li=$(`#detCard [data-p=${k}]`);if(!li)return;li.className=s==='skip'?'warn':s;li.querySelector('small').textContent=t||''};
+  try{DET.list=await detRun(st);detDraw();detList();const s=$('#detSrc');if(s)s.textContent=`Sources : ${DET.src.join(' ; ')||'aucune'}${DET.log.length?' · '+DET.log.join(', '):''}. Les relevés datent de 1 à 4 ans : un élément récent peut manquer.`;
+    try{const all=DET.list.flatMap(c=>c.pt?[c.pt]:c.pts);if(all.length)map.fitBounds(all,{padding:[30,30],maxZoom:20})}catch(e){}}
+  catch(e){const l=$('#detList');if(l)l.innerHTML=`<p class="small">${esc(e.message||String(e))}</p>`}finally{DET.busy=false}}
+function mkObs(lat,lng,type,h,w,name){$('#obsType').value=OBT[type]?type:'caduc';addObstacle(lat,lng);const o=S.obs[S.obs.length-1];o.type=OBT[type]?type:'caduc';o.h=h;o.w=w;o.name=name;styleObs(o);return o}
+function detAccept(L_){if(!L_.length)return 0;pushUndo();const pu=pushUndo;pushUndo=()=>{};let n=0;
+  try{L_.forEach(c=>{const id=++itemId,r1=v=>Math.round(v*10)/10;
+    if(c.cat==='bat'){S.shapes.push({id,kind:'obsPoly',pts:c.pts,name:c.name,h:r1(c.h),nat:'bat'});initGeom(id)}
+    else if(c.cat==='tree'){mkObs(c.pt[0],c.pt[1],c.type==='arbu'?'arbu':c.type,r1(c.h),r1(c.w),c.name)}
+    else if(c.cat==='hedge'){S.shapes.push({id,kind:'obsLine',pts:c.pts,name:c.name,h:r1(c.h),w:r1(c.w||1),nat:c.nat||'haie'});initGeom(id)}
+    else if(c.cat==='fence'){S.shapes.push({id,kind:'obsLine',pts:c.pts,name:c.name,h:r1(c.h),nat:c.nat});initGeom(id)}
+    else if(c.cat==='shrub'){S.shapes.push({id,kind:'obsPoly',pts:c.pts,name:c.nat==='viv'?c.name.replace('Massif arbustif','Massif de vivaces'):c.name,h:c.nat==='viv'?0.6:r1(c.h),nat:c.nat});initGeom(id)}
+    else if(c.cat==='path'){S.paths.push({id,pts:c.pts,nat:c.nat,label:c.name});initGeom(id)}n++})}
+  finally{pushUndo=pu}S.samples=null;itemsChanged(true);renderObs();sunUpdate();saveNow(true);return n}
+document.addEventListener('change',e=>{const t=e.target;if(t.dataset.dc!=null){const c=DET.list[+t.dataset.dc];if(c){c.on=t.checked;detDraw();detList()}}
+  if(t.dataset.dt!=null){const c=DET.list[+t.dataset.dt];if(!c)return;const v=t.value;if(c.cat==='bat')c.name=v;else if(c.cat==='tree')c.type=v;else{c.nat=v;if(c.cat==='shrub')c.name=(v==='viv'?'Massif de vivaces ':'Massif arbustif ')+c.n;if(c.cat==='path')c.name=(v==='terrasse'?'Terrasse ':v==='parking'?'Accès ':'Allée ')+c.n}c.on=true;detDraw();detList()}});
+document.addEventListener('click',e=>{const t=e.target.closest('[data-dx],[data-dz]');if(!t||!t.closest('#detCard'))return;
+  if(t.dataset.dz!=null){const c=DET.list[+t.dataset.dz];if(c)try{map.setView(c.pt||cen(c.pts),Math.max(map.getZoom(),20))}catch(err){}return}
+  const a=t.dataset.dx;if(a==='all'||a==='none'){DET.list.forEach(c=>c.on=a==='all');detDraw();detList()}
+  if(a==='close'){$('#detCard').hidden=true;detLayer.clearLayers()}
+  if(a==='add'){const L_=DET.list.filter(c=>c.on);if(curPhase()!=='exist'){S.phase='exist';applyPhase()}const n=detAccept(L_);detLayer.clearLayers();$('#detCard').hidden=true;DET.list=[];
+    toast(`${n} élément${n>1?'s':''} ajouté${n>1?'s':''} à l’existant. Vérifiez-les dans « Éléments sur la carte »${S.pmode==='modify'||S.pmode==='redo'?', puis choisissez ce que vous en faites dans « Que devient l’existant ? »':''}.`);if(S.pmode==='modify'||S.pmode==='redo'){if(S.pmode==='redo')redoAll(false);renderFate()}}});
+window.__p31={exList,fateOf:(k,id)=>{const it=(S[k]||[]).find(x=>String(x.id)===String(id));return it?fateOf(k,it):null},exFate,redoAll,setPmode,detRun,detAccept,detOpen,DET,hull,plane};
 
 /* ---------- Démarrage ---------- */
 if(window.__noMap){
